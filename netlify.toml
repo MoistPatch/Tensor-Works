@@ -1,0 +1,19 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/enquiry"
+  to = "/enquiry.html"
+  status = 200
+
+[[redirects]]
+  from = "/loi"
+  to = "/loi.html"
+  status = 200
