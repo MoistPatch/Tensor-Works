@@ -716,6 +716,7 @@
         </div>
 
         <form id="enquiryForm" novalidate>
+          <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
           <div class="form-row">
             <div class="form-group">
               <label for="name">Full Name *</label>
@@ -811,14 +812,13 @@
 </footer>
 
 <script>
-  // Form submission via Formspree
+  // Form submission via Web3Forms
   document.getElementById('enquiryForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     const form = this;
     const success = document.getElementById('successMsg');
 
-    // Basic validation
     const required = ['name', 'email', 'requirements', 'company'];
     let valid = true;
     required.forEach(id => {
@@ -832,19 +832,19 @@
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
 
     try {
-      const data = new FormData(form);
-      const res = await fetch('https://formspree.io/f/sam@vantyx.com.au', {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: data,
+        body: new FormData(form),
         headers: { 'Accept': 'application/json' }
       });
+      const json = await res.json();
 
-      if (res.ok) {
+      if (json.success) {
         success.classList.add('visible');
         form.reset();
         setTimeout(() => success.classList.remove('visible'), 8000);
       } else {
-        throw new Error('server error');
+        throw new Error(json.message || 'server error');
       }
     } catch {
       alert('Something went wrong. Please email sam@vantyx.com.au directly.');
