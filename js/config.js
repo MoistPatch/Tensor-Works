@@ -1,7 +1,7 @@
 window.TW = {
   shopify: {
-    domain: 'YOUR-STORE.myshopify.com', // e.g. tensorworks.myshopify.com
-    configured: false, // set to true once domain is set and variant IDs are filled in below
+    domain: 'ituspq-hc.myshopify.com',
+    configured: false, // set to true once variant IDs are filled in below
   },
   dickerData: {
     stockProxy: '/api/stock',
