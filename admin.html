@@ -261,6 +261,46 @@
     .price-table-wrap { overflow-x: auto; }
     .empty-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: var(--txt3); gap: 10px; text-align: center; }
     .empty-panel i { font-size: 32px; }
+
+    /* Simulations */
+    .sim-scenario-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+    .sim-scenario-item { display: flex; align-items: center; gap: 12px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--rsm); padding: 12px 16px; cursor: pointer; transition: border-color .2s; }
+    .sim-scenario-item:hover { border-color: var(--teal-dk); }
+    .sim-scenario-item input { accent-color: var(--teal-lt); }
+    .sim-scenario-item span:first-of-type { font-size: 14px; font-weight: 600; color: var(--txt); min-width: 160px; }
+    .sim-desc { font-size: 12px; color: var(--txt3); }
+    .sim-result-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 20px; margin-bottom: 12px; }
+    .sim-result-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .sim-confidence { font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 20px; background: rgba(13,115,119,.15); color: var(--teal-lt); border: 1px solid var(--teal-dk); }
+    .sim-result-body { font-size: 13px; color: var(--txt2); line-height: 1.6; margin-bottom: 10px; }
+    .sim-result-rec { font-size: 13px; font-weight: 600; color: var(--txt); padding: 10px 14px; background: var(--bg3); border-left: 3px solid var(--teal-dk); border-radius: 0 var(--rsm) var(--rsm) 0; }
+    .sim-history-item { display: flex; align-items: center; gap: 12px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--rsm); padding: 10px 14px; font-size: 13px; margin-bottom: 6px; }
+    .sim-history-scenario { font-weight: 600; color: var(--txt); flex: 1; }
+    .sim-history-date { font-size: 11px; color: var(--txt3); }
+
+    /* Campaigns */
+    .camp-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 20px; margin-bottom: 14px; }
+    .camp-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .camp-card-name { font-size: 15px; font-weight: 700; color: var(--white); }
+    .camp-card-type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; background: var(--bg3); border: 1px solid var(--bdr2); color: var(--txt3); padding: 3px 10px; border-radius: 20px; }
+    .camp-card-headline { font-size: 16px; font-weight: 800; color: var(--teal-lt); margin-bottom: 8px; }
+    .camp-card-message { font-size: 13px; color: var(--txt2); line-height: 1.6; margin-bottom: 12px; }
+    .camp-card-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--txt3); }
+    .camp-card-meta strong { color: var(--txt2); }
+
+    /* Brain */
+    .constraint-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--bdr); font-size: 13px; }
+    .constraint-row:last-child { border-bottom: none; }
+    .constraint-key { color: var(--txt3); }
+    .constraint-val { font-weight: 700; color: var(--teal-lt); }
+    .skill-group { margin-bottom: 12px; }
+    .skill-group-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); margin-bottom: 6px; }
+    .skill-item { font-size: 12px; color: var(--txt2); padding: 4px 0; }
+    .decision-row { display: flex; gap: 12px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--rsm); padding: 10px 14px; margin-bottom: 6px; font-size: 12px; }
+    .decision-type { color: var(--teal-lt); font-weight: 600; min-width: 140px; }
+    .decision-desc { color: var(--txt2); flex: 1; }
+    .decision-conf { color: var(--txt3); min-width: 60px; text-align: right; }
+    .note-item { background: var(--bg3); border-radius: var(--rsm); padding: 8px 12px; font-size: 13px; color: var(--txt2); }
     .ranking-name { color: var(--txt); flex: 1; }
     .ranking-handle { font-size: 11px; color: var(--txt3); }
     .bundle-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
@@ -301,6 +341,9 @@
   <button class="admin-tab" onclick="switchAdminTab('competitors')" id="tab-btn-competitors"><i class="fas fa-globe"></i> Competitors</button>
   <button class="admin-tab" onclick="switchAdminTab('analytics')" id="tab-btn-analytics"><i class="fas fa-chart-line"></i> Analytics</button>
   <button class="admin-tab" onclick="switchAdminTab('intelligence')" id="tab-btn-intelligence"><i class="fas fa-brain"></i> Intelligence</button>
+  <button class="admin-tab" onclick="switchAdminTab('simulations')" id="tab-btn-simulations"><i class="fas fa-flask"></i> Simulations</button>
+  <button class="admin-tab" onclick="switchAdminTab('campaigns')" id="tab-btn-campaigns"><i class="fas fa-bullhorn"></i> Campaigns</button>
+  <button class="admin-tab" onclick="switchAdminTab('brain')" id="tab-btn-brain"><i class="fas fa-database"></i> Brain</button>
 </div>
 
 <div id="tab-content-products" style="display:grid">
@@ -443,6 +486,91 @@
   <div id="intel-bundles-section" style="display:none" class="tab-section">
     <div class="tab-section-title"><i class="fas fa-boxes"></i> Bundle Suggestions</div>
     <div class="bundle-cards" id="intel-bundles"></div>
+  </div>
+</div>
+
+<!-- Simulations Tab -->
+<div id="tab-content-simulations" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div>
+      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-flask"></i> Simulation Engine</div>
+      <div class="intel-timestamp" id="sim-timestamp">Run simulations to model what-if scenarios</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" onclick="runSimulation('single')" id="sim-single-btn"><i class="fas fa-play"></i> Run Selected</button>
+      <button class="btn btn-primary" onclick="runSimulation('all')" id="sim-all-btn"><i class="fas fa-play-circle"></i> Run All</button>
+    </div>
+  </div>
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-list-ul"></i> Scenarios</div>
+    <div class="sim-scenario-list">
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Price Sensitivity" checked> <span>Price Sensitivity</span> <span class="sim-desc">Impact of reducing GPU prices 10%</span></label>
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Bundle Impact"> <span>Bundle Impact</span> <span class="sim-desc">Conversion lift from bundling top products at 8% discount</span></label>
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Competitor Response"> <span>Competitor Response</span> <span class="sim-desc">Our response strategy if competitor drops prices 20%</span></label>
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Demand Forecast"> <span>Demand Forecast</span> <span class="sim-desc">30-day demand forecast by product category</span></label>
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Stock Prioritisation"> <span>Stock Prioritisation</span> <span class="sim-desc">Which products to prioritise for restocking</span></label>
+    </div>
+  </div>
+  <div class="tab-section" id="sim-results-section" style="display:none">
+    <div class="tab-section-title"><i class="fas fa-chart-bar"></i> Results</div>
+    <div id="sim-results"></div>
+  </div>
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-history"></i> Previous Simulations</div>
+    <div id="sim-history"><div class="empty-panel"><p>No simulations run yet.</p></div></div>
+  </div>
+</div>
+
+<!-- Campaigns Tab -->
+<div id="tab-content-campaigns" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div>
+      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-bullhorn"></i> Campaign Strategist</div>
+      <div class="intel-timestamp" id="camp-timestamp">AI-generated marketing campaign strategies</div>
+    </div>
+    <button class="btn btn-primary" onclick="runCampaigns()" id="camp-run-btn"><i class="fas fa-magic"></i> Generate Campaigns</button>
+  </div>
+  <div id="camp-insight-bar" style="display:none" class="insight-item" style="margin-bottom:20px"><i class="fas fa-lightbulb"></i> <span id="camp-insight"></span></div>
+  <div id="camp-list"><div class="empty-panel"><i class="fas fa-bullhorn"></i><p>No campaigns generated yet. Click Generate Campaigns.</p></div></div>
+</div>
+
+<!-- Brain Tab -->
+<div id="tab-content-brain" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div>
+      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-database"></i> Knowledge Base (Brain)</div>
+      <div class="intel-timestamp" id="brain-timestamp">Central intelligence store — all agents read and write here</div>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="loadBrain()"><i class="fas fa-sync-alt"></i> Refresh</button>
+  </div>
+  <div class="stats-cards" style="margin-bottom:24px">
+    <div class="stat-card"><div class="stat-card-label">Total Runs</div><div class="stat-card-value teal" id="brain-runs">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Data Quality</div><div class="stat-card-value" id="brain-quality">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Learning Confidence</div><div class="stat-card-value teal" id="brain-confidence">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Last Updated</div><div class="stat-card-value" id="brain-updated" style="font-size:13px">—</div></div>
+  </div>
+  <div class="two-col-grid" style="margin-bottom:24px">
+    <div class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-shield-alt"></i> Safety Constraints</div>
+      <div id="brain-constraints"><div class="empty-panel" style="padding:16px"><p>Loading...</p></div></div>
+      <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="editConstraints()"><i class="fas fa-edit"></i> Edit Constraints</button>
+    </div>
+    <div class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-graduation-cap"></i> Learned Skills</div>
+      <div id="brain-skills"><div class="empty-panel" style="padding:16px"><p>Loading...</p></div></div>
+    </div>
+  </div>
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-history"></i> Decision Log <span style="font-weight:400;font-size:12px;color:var(--txt3);margin-left:8px">(last 20)</span></div>
+    <div id="brain-decisions"><div class="empty-panel"><p>No decisions logged yet.</p></div></div>
+  </div>
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-sticky-note"></i> Notes</div>
+    <div id="brain-notes" style="display:flex;flex-direction:column;gap:6px"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <input type="text" id="brain-note-input" placeholder="Add a note..." style="flex:1">
+      <button class="btn btn-outline btn-sm" onclick="addBrainNote()"><i class="fas fa-plus"></i> Add</button>
+    </div>
   </div>
 </div>
 
@@ -915,7 +1043,7 @@
 
   // ── Tab navigation ────────────────────────────────────────────────────────
   window.switchAdminTab = function(tab) {
-    ['products','competitors','analytics','intelligence'].forEach(function(t) {
+    ['products','competitors','analytics','intelligence','simulations','campaigns','brain'].forEach(function(t) {
       var content = document.getElementById('tab-content-' + t);
       var btn = document.getElementById('tab-btn-' + t);
       if (content) content.style.display = t === tab ? (t === 'products' ? 'grid' : 'block') : 'none';
@@ -924,6 +1052,185 @@
     if (tab === 'competitors') loadCompetitors();
     if (tab === 'analytics') loadAnalytics();
     if (tab === 'intelligence') loadIntelligence();
+    if (tab === 'simulations') loadSimulations();
+    if (tab === 'campaigns') loadCampaigns();
+    if (tab === 'brain') loadBrain();
+  };
+
+  // ── Simulations tab ───────────────────────────────────────────────────────
+  window.runSimulation = async function(mode) {
+    var allBtn = document.getElementById('sim-all-btn');
+    var singleBtn = document.getElementById('sim-single-btn');
+    [allBtn, singleBtn].forEach(function(b) { if (b) { b.disabled = true; } });
+    document.getElementById('sim-timestamp').textContent = 'Running simulation — this may take up to 60 seconds...';
+    var body = mode === 'all' ? { runAll: true } : { scenario: document.querySelector('input[name="scenario"]:checked')?.value };
+    try {
+      var r = await fetch('/api/simulate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      var results = Array.isArray(data) ? data : (data.results || [data]);
+      document.getElementById('sim-results-section').style.display = 'block';
+      document.getElementById('sim-results').innerHTML = results.map(function(s) {
+        var conf = Math.round((s.confidence || 0) * 100);
+        return '<div class="sim-result-card">' +
+          '<div class="sim-result-title">' + escHtml(s.scenario || 'Simulation') + '<span class="sim-confidence">' + conf + '% confidence</span></div>' +
+          '<div class="sim-result-body">' + escHtml(s.prediction || '') + '</div>' +
+          (s.recommendation ? '<div class="sim-result-rec"><i class="fas fa-lightbulb" style="color:var(--teal-lt);margin-right:8px"></i>' + escHtml(s.recommendation) + '</div>' : '') +
+          (s.risks ? '<div style="font-size:12px;color:var(--txt3);margin-top:8px"><strong>Risks:</strong> ' + escHtml(s.risks) + '</div>' : '') +
+        '</div>';
+      }).join('');
+      document.getElementById('sim-timestamp').textContent = 'Completed ' + new Date().toLocaleString('en-AU');
+      await loadSimulations();
+    } catch(e) {
+      document.getElementById('sim-timestamp').textContent = 'Error: ' + e.message;
+    }
+    [allBtn, singleBtn].forEach(function(b) { if (b) { b.disabled = false; } });
+    if (allBtn) allBtn.innerHTML = '<i class="fas fa-play-circle"></i> Run All';
+    if (singleBtn) singleBtn.innerHTML = '<i class="fas fa-play"></i> Run Selected';
+  };
+
+  async function loadSimulations() {
+    try {
+      var r = await fetch('/api/simulate');
+      var data = await r.json();
+      var sims = Array.isArray(data) ? data : (data.simulations || []);
+      document.getElementById('sim-history').innerHTML = sims.length
+        ? sims.slice(0,10).map(function(s) {
+            return '<div class="sim-history-item">' +
+              '<span class="sim-history-scenario">' + escHtml(s.scenario || 'Simulation') + '</span>' +
+              '<span class="sim-confidence">' + Math.round((s.confidence||0)*100) + '%</span>' +
+              '<span class="sim-history-date">' + (s.timestamp ? new Date(s.timestamp).toLocaleDateString('en-AU') : '') + '</span>' +
+            '</div>';
+          }).join('')
+        : '<div class="empty-panel"><p>No simulations run yet.</p></div>';
+    } catch(_) {}
+  }
+
+  // ── Campaigns tab ─────────────────────────────────────────────────────────
+  window.runCampaigns = async function() {
+    var btn = document.getElementById('camp-run-btn');
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+    document.getElementById('camp-timestamp').textContent = 'Calling campaign strategist — may take 30 seconds...';
+    try {
+      var r = await fetch('/api/campaign-strategist', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      if (data.marketInsight) {
+        document.getElementById('camp-insight-bar').style.display = 'flex';
+        document.getElementById('camp-insight').textContent = data.marketInsight;
+      }
+      renderCampaigns(data.campaigns || []);
+      document.getElementById('camp-timestamp').textContent = 'Generated ' + new Date().toLocaleString('en-AU');
+    } catch(e) { document.getElementById('camp-timestamp').textContent = 'Error: ' + e.message; }
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-magic"></i> Generate Campaigns';
+  };
+
+  async function loadCampaigns() {
+    try {
+      var r = await fetch('/api/campaign-strategist');
+      var data = await r.json();
+      var camps = Array.isArray(data) ? data : (data.campaigns || []);
+      if (camps.length) renderCampaigns(camps);
+    } catch(_) {}
+  }
+
+  function renderCampaigns(camps) {
+    document.getElementById('camp-list').innerHTML = camps.length
+      ? camps.map(function(c) {
+          var prods = (c.featuredProducts || []).map(function(h) {
+            var p = state.products.find(function(x){return x.handle===h;});
+            return p ? p.title : h;
+          });
+          var conf = Math.round((c.confidenceScore||0)*100);
+          return '<div class="camp-card">' +
+            '<div class="camp-card-header"><div class="camp-card-name">' + escHtml(c.name||'Campaign') + '</div><span class="camp-card-type">' + escHtml(c.type||'') + '</span></div>' +
+            '<div class="camp-card-headline">' + escHtml(c.headline||'') + '</div>' +
+            '<div class="camp-card-message">' + escHtml(c.keyMessage||'') + '</div>' +
+            '<div class="camp-card-meta">' +
+              '<span><strong>Audience:</strong> ' + escHtml(c.targetAudience||'') + '</span>' +
+              '<span><strong>CTA:</strong> ' + escHtml(c.callToAction||'') + '</span>' +
+              (c.suggestedTiming ? '<span><strong>Timing:</strong> ' + escHtml(c.suggestedTiming) + '</span>' : '') +
+              (prods.length ? '<span><strong>Products:</strong> ' + escHtml(prods.join(', ')) + '</span>' : '') +
+              '<span class="sim-confidence">' + conf + '% confidence</span>' +
+            '</div>' +
+            (c.reasoning ? '<div style="font-size:12px;color:var(--txt3);margin-top:10px;border-top:1px solid var(--bdr);padding-top:10px">' + escHtml(c.reasoning) + '</div>' : '') +
+          '</div>';
+        }).join('')
+      : '<div class="empty-panel"><i class="fas fa-bullhorn"></i><p>No campaigns yet.</p></div>';
+  }
+
+  // ── Brain tab ─────────────────────────────────────────────────────────────
+  window.loadBrain = async function() {
+    try {
+      var r = await fetch('/api/brain');
+      var data = await r.json();
+      var brain = data.brain || data;
+      var meta = brain.meta || {};
+      document.getElementById('brain-runs').textContent = meta.totalRunCount || 0;
+      document.getElementById('brain-quality').textContent = meta.dataQualityScore ? Math.round(meta.dataQualityScore*100)+'%' : '—';
+      document.getElementById('brain-confidence').textContent = meta.learningConfidence ? Math.round(meta.learningConfidence*100)+'%' : '—';
+      document.getElementById('brain-updated').textContent = meta.lastUpdated ? new Date(meta.lastUpdated).toLocaleString('en-AU') : 'Never';
+
+      var con = brain.constraints || {};
+      document.getElementById('brain-constraints').innerHTML = [
+        ['Max price change', (con.maxPriceChangePercent||15) + '%'],
+        ['Min confidence to auto-apply', ((con.minConfidenceToAutoApply||0.75)*100).toFixed(0) + '%'],
+        ['Min margin (AUD)', 'A$' + (con.minMarginAUD||500).toLocaleString('en-AU')],
+        ['Auto-ranking max shift', con.maxAutoRankingShift||3],
+        ['Require approval above', 'A$' + ((con.requireHumanApprovalAbove||{}).priceChangeAUD||5000).toLocaleString('en-AU')],
+        ['Frozen products', (con.frozenProducts||[]).length || 'None'],
+      ].map(function(row) {
+        return '<div class="constraint-row"><span class="constraint-key">' + row[0] + '</span><span class="constraint-val">' + row[1] + '</span></div>';
+      }).join('');
+
+      var skills = brain.skills || {};
+      document.getElementById('brain-skills').innerHTML = Object.keys(skills).map(function(k) {
+        var entries = Object.entries(skills[k]||{}).filter(function(e){return e[1] && (typeof e[1]==='string'||typeof e[1]==='number'||(Array.isArray(e[1])&&e[1].length));});
+        if (!entries.length) return '';
+        return '<div class="skill-group"><div class="skill-group-title">' + escHtml(k) + '</div>' +
+          entries.slice(0,4).map(function(e) {
+            var val = Array.isArray(e[1]) ? e[1].length + ' entries' : String(e[1]).slice(0,60);
+            return '<div class="skill-item"><strong>' + escHtml(e[0]) + ':</strong> ' + escHtml(val) + '</div>';
+          }).join('') + '</div>';
+      }).filter(Boolean).join('') || '<div class="empty-panel" style="padding:16px"><p>No skills learned yet.</p></div>';
+
+      var decisions = (brain.decisionLog || []).slice(-20).reverse();
+      document.getElementById('brain-decisions').innerHTML = decisions.length
+        ? decisions.map(function(d) {
+            return '<div class="decision-row">' +
+              '<span class="decision-type">' + escHtml(d.type||'') + '</span>' +
+              '<span class="decision-desc">' + escHtml(d.description||'') + '</span>' +
+              '<span class="decision-conf">' + (d.confidence ? Math.round(d.confidence*100)+'%' : '') + '</span>' +
+            '</div>';
+          }).join('')
+        : '<div class="empty-panel"><p>No decisions logged yet.</p></div>';
+
+      var notes = meta.notes || [];
+      document.getElementById('brain-notes').innerHTML = notes.map(function(n) {
+        return '<div class="note-item">' + escHtml(n) + '</div>';
+      }).join('') || '<div style="font-size:13px;color:var(--txt3)">No notes yet.</div>';
+    } catch(e) {
+      document.getElementById('brain-timestamp').textContent = 'Error loading brain: ' + e.message;
+    }
+  };
+
+  window.addBrainNote = async function() {
+    var input = document.getElementById('brain-note-input');
+    var note = input.value.trim();
+    if (!note) return;
+    try {
+      await fetch('/api/brain', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'add-note', note: note }) });
+      input.value = '';
+      await loadBrain();
+    } catch(e) { alert('Error: ' + e.message); }
+  };
+
+  window.editConstraints = function() {
+    var newMax = prompt('Max price change % (currently shown above):');
+    if (!newMax || isNaN(parseFloat(newMax))) return;
+    fetch('/api/brain', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'update-constraints', constraints: { maxPriceChangePercent: parseFloat(newMax) } })
+    }).then(function() { loadBrain(); }).catch(function(e) { alert('Error: ' + e.message); });
   };
 
   // ── Competitors tab ───────────────────────────────────────────────────────
