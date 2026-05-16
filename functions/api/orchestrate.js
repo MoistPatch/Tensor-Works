@@ -75,7 +75,10 @@ export async function onRequest(context) {
   await postStep('anomaly-detector', siteUrl + '/api/anomaly-detector');
   await postStep('intelligence', siteUrl + '/api/intelligence');
   await postStep('memory-manager', siteUrl + '/api/memory-manager');
+  await postStep('forex', siteUrl + '/api/forex');
+  await postStep('reporting', siteUrl + '/api/reporting', { action: 'generate' });
   await postStep('brain', siteUrl + '/api/brain', { action: 'update', path: 'meta.lastOrchestrationAt', value: new Date().toISOString() });
+  await postStep('monitor', siteUrl + '/api/monitor');
 
   const completedAt = new Date().toISOString();
   const totalDuration = Date.now() - pipelineStart;

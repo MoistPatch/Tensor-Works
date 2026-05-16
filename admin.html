@@ -293,6 +293,9 @@
   <button class="tab-btn" onclick="switchTab('campaigns')" id="tabnav-campaigns"><i class="fas fa-bullhorn"></i> Campaigns</button>
   <button class="tab-btn" onclick="switchTab('brain')" id="tabnav-brain"><i class="fas fa-robot"></i> Brain</button>
   <button class="tab-btn" onclick="switchTab('datahealth')" id="tabnav-datahealth"><i class="fas fa-shield-alt"></i> Data Health</button>
+  <button class="tab-btn" onclick="switchTab('quotes')" id="tabnav-quotes"><i class="fas fa-file-invoice-dollar"></i> Quotes</button>
+  <button class="tab-btn" onclick="switchTab('reporting')" id="tabnav-reporting"><i class="fas fa-chart-pie"></i> Reporting</button>
+  <button class="tab-btn" onclick="switchTab('monitor')" id="tabnav-monitor"><i class="fas fa-heartbeat"></i> Monitor</button>
 </nav>
 
 <div class="admin-body">
@@ -601,6 +604,115 @@
     </div>
   </div>
 
+  <!-- ── Quotes tab ──────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-quotes">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">Quote Pipeline</div><div class="panel-subtitle">B2B quote and RFQ management</div></div>
+        <button class="btn btn-primary btn-sm" onclick="showCreateQuote()"><i class="fas fa-plus"></i> New Quote</button>
+      </div>
+
+      <div class="stat-grid" style="margin-bottom:24px" id="quote-stats">
+        <div class="stat-card"><div class="stat-card-label">Total Quotes</div><div class="stat-card-value" id="q-total">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Pending</div><div class="stat-card-value" id="q-sent">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Accepted</div><div class="stat-card-value" id="q-accepted" style="color:var(--green)">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Pipeline Value</div><div class="stat-card-value" id="q-value" style="font-size:16px">—</div></div>
+      </div>
+
+      <div id="quote-create-form" style="display:none" class="card" style="margin-bottom:24px">
+        <div class="card-title">New Quote</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="form-group"><label>Customer Name *</label><input type="text" id="q-name" placeholder="Jane Smith" /></div>
+          <div class="form-group"><label>Email *</label><input type="text" id="q-email" placeholder="jane@company.com" /></div>
+          <div class="form-group"><label>Company</label><input type="text" id="q-company" placeholder="Acme Corp" /></div>
+          <div class="form-group"><label>Phone</label><input type="text" id="q-phone" placeholder="+61 4..." /></div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px"><label>Customer Message</label><textarea id="q-msg" rows="2" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);color:var(--white);padding:8px;border-radius:var(--rsm);font-size:13px;font-family:inherit"></textarea></div>
+        <div class="form-group" style="margin-bottom:12px"><label>Internal Notes</label><textarea id="q-notes" rows="2" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);color:var(--white);padding:8px;border-radius:var(--rsm);font-size:13px;font-family:inherit"></textarea></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="createQuote()"><i class="fas fa-save"></i> Create Draft</button>
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('quote-create-form').style.display='none'">Cancel</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="quote-filter-bar">
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('all')" id="qf-all">All</button>
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('draft')" id="qf-draft">Draft</button>
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('sent')" id="qf-sent">Sent</button>
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('accepted')" id="qf-accepted">Accepted</button>
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('rejected')" id="qf-rejected">Rejected</button>
+      </div>
+
+      <div id="quotes-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading quotes...</div></div>
+    </div>
+  </div>
+
+  <!-- ── Reporting tab ────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-reporting">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">Revenue &amp; Margin Reporting</div><div class="panel-subtitle" id="report-generated-at">Loading...</div></div>
+        <button class="btn btn-primary btn-sm" onclick="generateReport()"><i class="fas fa-sync-alt"></i> Generate Report</button>
+      </div>
+
+      <div class="two-col" style="margin-bottom:24px">
+        <div>
+          <div class="section-label">Quote Pipeline</div>
+          <div class="card" id="report-pipeline"><div class="panel-empty">Run report to see pipeline</div></div>
+        </div>
+        <div>
+          <div class="section-label">Lead → Quote Conversion</div>
+          <div class="card" id="report-conversion"><div class="panel-empty">Run report to see conversion</div></div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-bottom:24px">
+        <div>
+          <div class="section-label">Revenue by Product</div>
+          <div class="card" style="padding:0;overflow:hidden" id="report-revenue"><div class="panel-empty" style="padding:16px">No order data yet</div></div>
+        </div>
+        <div>
+          <div class="section-label">Margin by Product</div>
+          <div class="card" style="padding:0;overflow:hidden" id="report-margin"><div class="panel-empty" style="padding:16px">No cost data yet</div></div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-bottom:24px">
+        <div>
+          <div class="section-label">Funnel (30d)</div>
+          <div class="card" id="report-funnel"><div class="panel-empty">Run report to see funnel</div></div>
+        </div>
+        <div>
+          <div class="section-label">Top Customers by Quote Value</div>
+          <div class="card" style="padding:0;overflow:hidden" id="report-customers"><div class="panel-empty" style="padding:16px">No accepted quotes yet</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Monitor tab ──────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-monitor">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">System Monitor</div><div class="panel-subtitle" id="monitor-last-run">Loading...</div></div>
+        <button class="btn btn-primary btn-sm" onclick="runMonitor()"><i class="fas fa-play"></i> Run Check Now</button>
+      </div>
+
+      <div class="stat-grid" style="margin-bottom:24px">
+        <div class="stat-card"><div class="stat-card-label">Overall Status</div><div class="stat-card-value" id="mon-overall">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Endpoints Checked</div><div class="stat-card-value" id="mon-count">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Degraded</div><div class="stat-card-value" id="mon-degraded" style="color:var(--orange)">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Down</div><div class="stat-card-value" id="mon-down" style="color:var(--red)">—</div></div>
+      </div>
+
+      <div class="section-label">Endpoint Health</div>
+      <div id="monitor-checks"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
+
+      <div class="section-label" style="margin-top:24px">Recent Runs</div>
+      <div id="monitor-history"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
+    </div>
+  </div>
+
 </div>
 </div><!-- /tab-content-products -->
 
@@ -871,6 +983,9 @@
     else if (name === 'analytics') loadAnalytics();
     else if (name === 'campaigns') loadCampaigns();
     else if (name === 'brain') loadBrain();
+    else if (name === 'quotes') loadQuotes();
+    else if (name === 'reporting') loadReporting();
+    else if (name === 'monitor') loadMonitor();
     else if (name === 'simulations') loadSimHistory();
     else if (name === 'datahealth') loadDataHealth();
   };
@@ -1798,6 +1913,245 @@
       navigator.sendBeacon('/api/analytics', JSON.stringify(payload));
     });
   })();
+
+  /* ══════════════════════════════════════════════════════════════════
+     QUOTES TAB
+  ══════════════════════════════════════════════════════════════════ */
+  var _quoteFilter = 'all';
+  window.loadQuotes = async function(filter) {
+    if (filter) _quoteFilter = filter;
+    var el = document.getElementById('quotes-list');
+    el.innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div>';
+    try {
+      var url = '/api/quote' + (_quoteFilter && _quoteFilter !== 'all' ? '?status=' + _quoteFilter : '');
+      var r = await fetch(url);
+      var data = await r.json();
+      var quotes = data.quotes || [];
+      var by = data.byStatus || {};
+      document.getElementById('q-total').textContent = data.total || 0;
+      document.getElementById('q-sent').textContent = (by.sent || 0) + (by.viewed || 0);
+      document.getElementById('q-accepted').textContent = by.accepted || 0;
+      var pipelineVal = quotes.filter(function(q){ return q.status !== 'rejected' && q.status !== 'expired'; })
+        .reduce(function(s,q){ return s + (q.totalAUD||0); }, 0);
+      document.getElementById('q-value').textContent = 'A$' + Math.round(pipelineVal).toLocaleString('en-AU');
+      if (!quotes.length) { el.innerHTML = '<div class="panel-empty">No quotes found</div>'; return; }
+      var statusColor = { draft:'var(--txt3)', sent:'var(--teal-lt)', viewed:'var(--orange)', accepted:'var(--green)', rejected:'var(--red)', expired:'var(--txt3)' };
+      el.innerHTML = quotes.map(function(q) {
+        return '<div class="card" style="margin-bottom:12px">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">' +
+            '<div>' +
+              '<div style="font-weight:700;color:var(--white);font-size:15px">' + escHtml(q.reference) + ' — ' + escHtml(q.customerName) + '</div>' +
+              '<div style="font-size:12px;color:var(--txt3);margin-top:2px">' + escHtml(q.company||'') + (q.email ? ' · ' + escHtml(q.email) : '') + ' · ' + fmtDate(q.createdAt) + '</div>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:8px">' +
+              '<span style="font-size:13px;font-weight:700;color:var(--white)">A$' + (q.totalAUD||0).toLocaleString('en-AU',{minimumFractionDigits:2}) + '</span>' +
+              '<span class="chip" style="background:' + (statusColor[q.status]||'var(--txt3)') + '20;color:' + (statusColor[q.status]||'var(--txt3)') + ';padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase">' + escHtml(q.status) + '</span>' +
+            '</div>' +
+          '</div>' +
+          (q.customerMessage ? '<div style="font-size:13px;color:var(--txt2);margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr)">' + escHtml(q.customerMessage) + '</div>' : '') +
+          '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">' +
+            (q.status === 'draft' ? '<button class="btn btn-primary btn-sm" onclick="sendQuote(' + q.id + ')"><i class="fas fa-paper-plane"></i> Send</button>' : '') +
+            (q.status === 'sent' || q.status === 'viewed' ? '<button class="btn btn-outline btn-sm" onclick="updateQuoteStatus(' + q.id + ',\'accepted\')"><i class="fas fa-check"></i> Accept</button><button class="btn btn-outline btn-sm" onclick="updateQuoteStatus(' + q.id + ',\'rejected\')"><i class="fas fa-times"></i> Reject</button>' : '') +
+            '<button class="btn btn-outline btn-sm" onclick="addQuoteNote(' + q.id + ')"><i class="fas fa-sticky-note"></i> Note</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    } catch(e) {
+      el.innerHTML = '<div class="panel-empty" style="color:var(--red)">' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  window.showCreateQuote = function() {
+    var f = document.getElementById('quote-create-form');
+    f.style.display = f.style.display === 'none' ? 'block' : 'none';
+  };
+
+  window.createQuote = async function() {
+    var name = document.getElementById('q-name').value.trim();
+    var email = document.getElementById('q-email').value.trim();
+    if (!name || !email) { alert('Customer name and email are required.'); return; }
+    try {
+      var r = await fetch('/api/quote', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'create', customerName:name, email, company: document.getElementById('q-company').value.trim(), phone: document.getElementById('q-phone').value.trim(), customerMessage: document.getElementById('q-msg').value.trim(), notes: document.getElementById('q-notes').value.trim() }) });
+      var d = await r.json();
+      if (d.error) throw new Error(d.error);
+      document.getElementById('quote-create-form').style.display = 'none';
+      ['q-name','q-email','q-company','q-phone','q-msg','q-notes'].forEach(function(id){ document.getElementById(id).value=''; });
+      loadQuotes();
+    } catch(e) { alert('Failed: ' + e.message); }
+  };
+
+  window.sendQuote = async function(id) {
+    if (!confirm('Send this quote to the customer?')) return;
+    try {
+      var r = await fetch('/api/quote', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'send', id }) });
+      var d = await r.json();
+      if (d.error) throw new Error(d.error);
+      loadQuotes();
+    } catch(e) { alert('Failed: ' + e.message); }
+  };
+
+  window.updateQuoteStatus = async function(id, status) {
+    if (!confirm('Mark quote as ' + status + '?')) return;
+    try {
+      await fetch('/api/quote', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'update-status', id, status }) });
+      loadQuotes();
+    } catch(e) { alert('Failed: ' + e.message); }
+  };
+
+  window.addQuoteNote = async function(id) {
+    var note = prompt('Add a note to this quote:');
+    if (!note) return;
+    try {
+      await fetch('/api/quote', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'add-note', id, note }) });
+      loadQuotes();
+    } catch(e) { alert('Failed: ' + e.message); }
+  };
+
+  /* ══════════════════════════════════════════════════════════════════
+     REPORTING TAB
+  ══════════════════════════════════════════════════════════════════ */
+  window.loadReporting = async function() {
+    document.getElementById('report-generated-at').textContent = 'Loading...';
+    try {
+      var r = await fetch('/api/reporting');
+      var data = await r.json();
+      renderReport(data.report, data.lastGenerated);
+    } catch(e) {
+      document.getElementById('report-generated-at').textContent = 'Error: ' + e.message;
+    }
+  };
+
+  window.generateReport = async function() {
+    document.getElementById('report-generated-at').textContent = 'Generating...';
+    try {
+      var r = await fetch('/api/reporting', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'generate' }) });
+      var data = await r.json();
+      renderReport(data.report, data.report && data.report.generatedAt);
+    } catch(e) {
+      document.getElementById('report-generated-at').textContent = 'Error: ' + e.message;
+    }
+  };
+
+  function renderReport(report, generatedAt) {
+    document.getElementById('report-generated-at').textContent = generatedAt ? 'Generated ' + fmtDate(generatedAt) : 'No report generated yet — click Generate';
+    if (!report) return;
+
+    // Pipeline
+    var p = report.quotePipeline || {};
+    document.getElementById('report-pipeline').innerHTML =
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+        ['draft','sent','viewed','accepted','rejected','expired'].map(function(s) {
+          return '<div style="font-size:13px"><span style="color:var(--txt3)">' + s.charAt(0).toUpperCase()+s.slice(1) + ':</span> <strong>' + (p.byStatus&&p.byStatus[s]||0) + '</strong></div>';
+        }).join('') +
+      '</div>' +
+      '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bdr);font-size:13px">Pipeline value: <strong style="color:var(--teal-lt)">A$' + Math.round(p.totalValueAUD||0).toLocaleString('en-AU') + '</strong></div>' +
+      (p.acceptanceRate != null ? '<div style="font-size:13px;margin-top:4px">Acceptance rate: <strong>' + p.acceptanceRate.toFixed(1) + '%</strong></div>' : '');
+
+    // Conversion
+    var c = report.leadToQuote || {};
+    document.getElementById('report-conversion').innerHTML =
+      '<div style="font-size:13px;margin-bottom:8px">Leads: <strong>' + (c.totalLeads||0) + '</strong></div>' +
+      '<div style="font-size:13px;margin-bottom:8px">Quotes: <strong>' + (c.totalQuotes||0) + '</strong></div>' +
+      (c.conversionPct != null ? '<div style="font-size:13px;color:var(--teal-lt);font-weight:700">' + c.conversionPct.toFixed(1) + '% lead-to-quote</div>' : '<div style="color:var(--txt3);font-size:13px">No conversion data yet</div>');
+
+    // Revenue table
+    var rev = report.revenueByProduct || [];
+    document.getElementById('report-revenue').innerHTML = rev.length
+      ? '<table class="data-table"><thead><tr><th>Product</th><th>Units</th><th>Revenue</th></tr></thead><tbody>' +
+        rev.slice(0,10).map(function(p){ return '<tr><td>' + escHtml(p.title||p.sku) + '</td><td>' + p.unitsSold + '</td><td>A$' + Math.round(p.totalRevenueAUD).toLocaleString('en-AU') + '</td></tr>'; }).join('') + '</tbody></table>'
+      : '<div class="panel-empty" style="padding:16px">No order revenue data yet</div>';
+
+    // Margin table
+    var mar = report.marginByProduct || [];
+    document.getElementById('report-margin').innerHTML = mar.length
+      ? '<table class="data-table"><thead><tr><th>Product</th><th>Margin%</th><th>Margin $</th></tr></thead><tbody>' +
+        mar.slice(0,10).map(function(p){ return '<tr><td>' + escHtml(p.title||p.handle) + '</td><td style="color:' + (p.marginPct>20?'var(--green)':p.marginPct>10?'var(--orange)':'var(--red)') + '">' + p.marginPct.toFixed(1) + '%</td><td>A$' + Math.round(p.marginAUD).toLocaleString('en-AU') + '</td></tr>'; }).join('') + '</tbody></table>'
+      : '<div class="panel-empty" style="padding:16px">No cost data yet — add costExGst to products</div>';
+
+    // Funnel
+    var f = report.funnel || {};
+    var funnelSteps = ['product-view','add-to-cart','quote-started','checkout-started','purchase'];
+    document.getElementById('report-funnel').innerHTML = '<div style="font-size:13px">' +
+      funnelSteps.map(function(s){ return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bdr)"><span style="color:var(--txt3)">' + s + '</span><strong>' + (f[s]||0) + '</strong></div>'; }).join('') + '</div>';
+
+    // Top customers
+    var cust = report.topCustomers || [];
+    document.getElementById('report-customers').innerHTML = cust.length
+      ? '<table class="data-table"><thead><tr><th>Customer</th><th>Company</th><th>Total</th></tr></thead><tbody>' +
+        cust.map(function(c){ return '<tr><td>' + escHtml(c.email) + '</td><td>' + escHtml(c.company||'—') + '</td><td>A$' + Math.round(c.totalQuotedAUD).toLocaleString('en-AU') + '</td></tr>'; }).join('') + '</tbody></table>'
+      : '<div class="panel-empty" style="padding:16px">No accepted quotes yet</div>';
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MONITOR TAB
+  ══════════════════════════════════════════════════════════════════ */
+  window.loadMonitor = async function() {
+    document.getElementById('monitor-last-run').textContent = 'Loading...';
+    try {
+      var r = await fetch('/api/monitor');
+      var data = await r.json();
+      renderMonitor(data);
+    } catch(e) {
+      document.getElementById('monitor-last-run').textContent = 'Error: ' + e.message;
+    }
+  };
+
+  window.runMonitor = async function() {
+    document.getElementById('monitor-last-run').textContent = 'Running checks...';
+    document.getElementById('monitor-checks').innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Checking all endpoints...</div>';
+    try {
+      var r = await fetch('/api/monitor', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
+      var data = await r.json();
+      renderMonitor(data);
+    } catch(e) {
+      document.getElementById('monitor-last-run').textContent = 'Error: ' + e.message;
+    }
+  };
+
+  function renderMonitor(data) {
+    var checks = data.checks || [];
+    var lastChecked = data.lastRun || (checks[0] && checks[0].checkedAt);
+    document.getElementById('monitor-last-run').textContent = lastChecked ? 'Last run ' + fmtDate(lastChecked) : 'Never run — click Run Check Now';
+
+    // If it's a fresh run result (checks is endpoint list), use it; if it's the log, use last run
+    var endpointChecks = Array.isArray(checks) && checks[0] && checks[0].checks ? checks[0].checks : (data.checks || []);
+    if (endpointChecks[0] && endpointChecks[0].runId) {
+      // It's a log of runs — take the most recent
+      var latest = endpointChecks[0];
+      endpointChecks = latest.checks || [];
+    }
+
+    var overallStatus = data.overallStatus || 'unknown';
+    var statusColor = { ok:'var(--green)', degraded:'var(--orange)', down:'var(--red)', unknown:'var(--txt3)' };
+    document.getElementById('mon-overall').innerHTML = '<span style="color:' + (statusColor[overallStatus]||'var(--txt3)') + '">' + overallStatus.toUpperCase() + '</span>';
+    document.getElementById('mon-count').textContent = endpointChecks.length;
+    document.getElementById('mon-degraded').textContent = endpointChecks.filter(function(c){ return c.status==='degraded'; }).length;
+    document.getElementById('mon-down').textContent = endpointChecks.filter(function(c){ return c.status==='down'; }).length;
+
+    document.getElementById('monitor-checks').innerHTML = endpointChecks.length
+      ? '<div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>Endpoint</th><th>Status</th><th>Response Time</th><th>Detail</th></tr></thead><tbody>' +
+        endpointChecks.map(function(c) {
+          return '<tr><td style="font-weight:600">' + escHtml(c.name) + '</td>' +
+            '<td><span style="color:' + (statusColor[c.status]||'var(--txt3)') + ';font-weight:700">' + escHtml(c.status||'—') + '</span></td>' +
+            '<td>' + (c.responseTimeMs != null ? c.responseTimeMs + 'ms' : '—') + '</td>' +
+            '<td style="color:var(--txt3);font-size:12px">' + escHtml(c.error || (c.httpStatus ? 'HTTP ' + c.httpStatus : '')) + '</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '<div class="panel-empty">No check data — run a check first</div>';
+
+    // History (last 5 runs)
+    var log = Array.isArray(data.checks) && data.checks[0] && data.checks[0].runId ? data.checks : [];
+    document.getElementById('monitor-history').innerHTML = log.length
+      ? log.slice(0,5).map(function(run) {
+          var ok = (run.checks||[]).filter(function(c){ return c.status==='ok'; }).length;
+          var total = (run.checks||[]).length;
+          return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:13px">' +
+            '<span style="color:var(--txt3)">' + fmtDate(run.checkedAt) + '</span>' +
+            '<span>' + ok + '/' + total + ' ok</span>' +
+            '<span style="color:' + (statusColor[run.overallStatus]||'var(--txt3)') + ';font-weight:700">' + (run.overallStatus||'—') + '</span>' +
+          '</div>';
+        }).join('')
+      : '<div class="panel-empty">No history yet</div>';
+  }
 
   /* ── Init ─────────────────────────────────────────────────────── */
   loadProducts(); loadDashboard();
