@@ -1,0 +1,11 @@
+name: Monthly System Update
+on:
+  schedule:
+    - cron: '0 4 1 * *'
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run monthly system update
+        run: curl -s -X POST https://tensorworks.online/api/system-update -H 'Content-Type: application/json' -d '{}'

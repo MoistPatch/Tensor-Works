@@ -1,0 +1,11 @@
+name: Daily Orchestration
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run full agent pipeline
+        run: curl -s -X POST https://tensorworks.online/api/orchestrate -H 'Content-Type: application/json' -d '{}'

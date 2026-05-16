@@ -1,0 +1,14 @@
+name: Daily Intelligence
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger intelligence pipeline
+        run: |
+          curl -s -X POST https://tensorworks.online/api/competitor-crawl -H 'Content-Type: application/json' -d '{}'
+          sleep 10
+          curl -s -X POST https://tensorworks.online/api/intelligence -H 'Content-Type: application/json' -d '{}'
