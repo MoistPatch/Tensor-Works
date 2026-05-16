@@ -69,7 +69,7 @@
           '</div>' +
         '</div>' +
         '<div class="footer-bottom">' +
-          '<p>© 2026 Tensor Works. All rights reserved. ABN listed on request.</p>' +
+          '<p>© 2026 Tensor Works Pty Ltd. ABN 84 544 119 830. All rights reserved.</p>' +
           '<div style="display:flex;gap:16px">' +
             '<a href="/privacy.html">Privacy</a>' +
             '<a href="/terms.html">Terms</a>' +
