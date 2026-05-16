@@ -284,7 +284,8 @@
 </header>
 
 <nav class="admin-tabs">
-  <button class="tab-btn active" onclick="switchTab('products')" id="tabnav-products"><i class="fas fa-box"></i> Products</button>
+  <button class="tab-btn active" onclick="switchTab('dashboard')" id="tabnav-dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('products')" id="tabnav-products"><i class="fas fa-box"></i> Products</button>
   <button class="tab-btn" onclick="switchTab('competitors')" id="tabnav-competitors"><i class="fas fa-crosshairs"></i> Competitors</button>
   <button class="tab-btn" onclick="switchTab('analytics')" id="tabnav-analytics"><i class="fas fa-chart-bar"></i> Analytics</button>
   <button class="tab-btn" onclick="switchTab('intelligence')" id="tabnav-intelligence"><i class="fas fa-brain"></i> Intelligence</button>
@@ -296,8 +297,66 @@
 
 <div class="admin-body">
 
+  <!-- ── Dashboard tab ────────────────────────────────────────────────── -->
+  <div class="tab-panel active" id="tab-dashboard">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">Command Centre</div><div class="panel-subtitle" id="dash-last-refreshed">Loading...</div></div>
+        <button class="btn btn-outline btn-sm" onclick="loadDashboard()"><i class="fas fa-sync-alt"></i> Refresh</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-card-label">Sessions (7d)</div><div class="stat-card-value" id="dash-s7">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Sessions (30d)</div><div class="stat-card-value" id="dash-s30">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Data Quality</div><div class="stat-card-value" id="dash-quality">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Brain Confidence</div><div class="stat-card-value" id="dash-confidence">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Products Listed</div><div class="stat-card-value" id="dash-products">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Last AI Run</div><div class="stat-card-value" id="dash-last-run" style="font-size:13px">—</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-title">Quick Actions</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn btn-primary btn-sm" onclick="runIntelligence()"><i class="fas fa-brain"></i> Run Intelligence</button>
+          <button class="btn btn-outline btn-sm" onclick="runOrchestrate()"><i class="fas fa-cogs"></i> Orchestrate Now</button>
+          <button class="btn btn-outline btn-sm" onclick="runDataValidator()"><i class="fas fa-check-circle"></i> Validate Data</button>
+          <button class="btn btn-outline btn-sm" onclick="runSimulations(null)"><i class="fas fa-flask"></i> Run Simulations</button>
+          <button class="btn btn-outline btn-sm" onclick="snapshotBrain()"><i class="fas fa-camera"></i> Snapshot Brain</button>
+          <span id="dash-action-status" style="font-size:13px;color:var(--txt3);margin-left:8px"></span>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-title">Top Products (7d)</div>
+            <div class="bar-list" id="dash-top-products"><div class="panel-empty" style="padding:16px">No data yet</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Recent Anomalies</div>
+            <div id="dash-anomalies"><div class="panel-empty" style="padding:12px">No anomalies detected</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-title">System Status</div>
+            <div id="dash-system-status"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
+          </div>
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-title">Competitor Alerts</div>
+            <div id="dash-comp-alerts"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Pending Recommendations</div>
+            <div id="dash-pending-recs"><div class="panel-empty" style="padding:12px">Run Intelligence to see recommendations</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Products tab ─────────────────────────────────────────────────── -->
-  <div class="tab-panel active" id="tab-products">
+  <div class="tab-panel" id="tab-products">
     <aside class="sidebar">
       <div class="sidebar-header">
         <h3>Products (<span id="product-count">0</span>)</h3>
@@ -807,7 +866,8 @@
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
     document.getElementById('tab-' + name).classList.add('active');
     document.getElementById('tabnav-' + name).classList.add('active');
-    if (name === 'competitors') loadCompetitors();
+    if (name === 'dashboard') loadDashboard();
+    else if (name === 'competitors') loadCompetitors();
     else if (name === 'analytics') loadAnalytics();
     else if (name === 'campaigns') loadCampaigns();
     else if (name === 'brain') loadBrain();
@@ -879,6 +939,12 @@
     var catOpts = CATEGORIES.map(function(c) { return '<option value="' + c + '"' + (p.category === c ? ' selected' : '') + '>' + c + '</option>'; }).join('');
 
     form.innerHTML =
+      '<div style="width:100%;max-width:800px;height:200px;background:var(--bg3);border:1px solid var(--bdr2);border-radius:var(--r);margin-bottom:24px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;">' +
+        (p.image
+          ? '<img src="' + escAttr(p.image) + '" alt="' + escAttr(p.title) + '" style="max-height:200px;max-width:100%;object-fit:contain;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+            '<div style="display:none;flex-direction:column;align-items:center;gap:8px;color:var(--txt3)"><i class="fas ' + escAttr(p.icon||'fa-microchip') + '" style="font-size:48px"></i><span style="font-size:12px">Image failed to load</span></div>'
+          : '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--txt3)"><div style="width:72px;height:72px;border-radius:16px;background:rgba(13,115,119,.15);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--teal-lt)"><i class="fas ' + escAttr(p.icon||'fa-microchip') + '"></i></div><span style="font-size:12px">No image set — paste a URL below</span></div>') +
+      '</div>' +
       '<div class="form-header">' +
         '<div class="form-title">' + escHtml(p.title || 'New Product') + '</div>' +
         '<button class="btn btn-outline btn-sm" onclick="openResearch()"><i class="fas fa-robot"></i> Research with AI</button>' +
@@ -895,7 +961,7 @@
         fg('Icon (FontAwesome)', '<input type="text" value="' + escAttr(p.icon || 'fa-microchip') + '" oninput="updateField(\'icon\',this.value)">') +
         '<div class="form-group full">' +
           '<label>Product Image URL <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--txt3)">(optional)</span></label>' +
-          '<input type="text" id="image-url-input" value="' + escAttr(p.image || '') + '" oninput="updateField(\'image\',this.value||null)" placeholder="https://...">' +
+          '<input type="text" id="image-url-input" value="' + escAttr(p.image || '') + '" oninput="updateField(\'image\',this.value||null);document.querySelector(\'.product-form\').scrollTop=0" placeholder="https://...">' +
         '</div>' +
         '<div class="form-group full"><label>Description</label><textarea oninput="updateField(\'description\',this.value)">' + escHtml(p.description || '') + '</textarea></div>' +
         '<div class="form-group full"><label>Tags (comma-separated)</label><input type="text" id="tags-input" value="' + escAttr((p.tags || []).join(', ')) + '" oninput="updateField(\'tags\',this.value.split(\',\').map(function(t){return t.trim();}).filter(Boolean))"></div>' +
@@ -1454,6 +1520,117 @@
   };
 
   /* ══════════════════════════════════════════════════════════════════
+     DASHBOARD TAB
+  ══════════════════════════════════════════════════════════════════ */
+  window.loadDashboard = async function() {
+    document.getElementById('dash-last-refreshed').textContent = 'Refreshing...';
+    try {
+      // Load analytics + brain in parallel
+      var [analyticsR, brainR] = await Promise.all([
+        fetch('/api/analytics').then(function(r){return r.json();}).catch(function(){return {};}),
+        fetch('/api/brain').then(function(r){return r.json();}).catch(function(){return {};}),
+      ]);
+
+      // Stat cards
+      document.getElementById('dash-s7').textContent = analyticsR.sessions7d != null ? analyticsR.sessions7d : '—';
+      document.getElementById('dash-s30').textContent = analyticsR.sessions30d != null ? analyticsR.sessions30d : '—';
+      document.getElementById('dash-quality').textContent = brainR.meta && brainR.meta.dataQualityScore != null ? Math.round(brainR.meta.dataQualityScore * 100) + '%' : '—';
+      document.getElementById('dash-confidence').textContent = brainR.meta && brainR.meta.learningConfidence != null ? Math.round(brainR.meta.learningConfidence * 100) + '%' : '—';
+      document.getElementById('dash-products').textContent = state.products.length || '—';
+      document.getElementById('dash-last-run').textContent = brainR.meta && brainR.meta.lastOrchestrationAt ? fmtDate(brainR.meta.lastOrchestrationAt) : 'Never';
+
+      // Top products bar chart
+      var top = analyticsR.topProducts || [];
+      var maxV = top.length ? top[0].views : 1;
+      document.getElementById('dash-top-products').innerHTML = top.length
+        ? top.slice(0,8).map(function(p) { return '<div class="bar-row"><div class="bar-label">' + escHtml(p.handle) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + Math.round(p.views/maxV*100) + '%"></div></div><div class="bar-val">' + p.views + '</div></div>'; }).join('')
+        : '<div class="panel-empty">No view data yet</div>';
+
+      // System status
+      var now = Date.now();
+      function statusDot(isoDate) {
+        if (!isoDate) return '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:6px"></span>';
+        var age = (now - new Date(isoDate).getTime()) / 3600000; // hours
+        var color = age < 24 ? 'var(--green)' : age < 168 ? 'var(--orange)' : 'var(--red)';
+        return '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + color + ';margin-right:6px"></span>';
+      }
+      var h = brainR.history || {};
+      var m = brainR.meta || {};
+      var lastIntel = (h.intelligenceRuns || [])[0] ? (h.intelligenceRuns[0].timestamp || null) : null;
+      var lastAnomaly = (h.anomaliesDetected || [])[0] ? (h.anomaliesDetected[0].detectedAt || null) : null;
+      document.getElementById('dash-system-status').innerHTML =
+        '<table class="data-table" style="font-size:12px"><tbody>' +
+        [
+          ['Intelligence', lastIntel],
+          ['Orchestration', m.lastOrchestrationAt || null],
+          ['System Update', m.lastSystemUpdateAt || null],
+          ['Anomaly Detector', lastAnomaly],
+        ].map(function(row) {
+          return '<tr><td style="color:var(--txt2)">' + row[0] + '</td><td>' + statusDot(row[1]) + (row[1] ? fmtDate(row[1]) : '<span style="color:var(--txt3)">Never run</span>') + '</td></tr>';
+        }).join('') +
+        '</tbody></table>';
+
+      // Recent anomalies
+      var anomalies = (h.anomaliesDetected || []).slice(0, 5);
+      document.getElementById('dash-anomalies').innerHTML = anomalies.length
+        ? anomalies.map(function(a) {
+            var sev = a.severity || 'low';
+            var color = sev === 'critical' ? 'var(--red)' : sev === 'high' ? 'var(--orange)' : 'var(--txt3)';
+            return '<div style="padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px"><div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:' + color + ';display:inline-block;flex-shrink:0"></span><span style="color:var(--txt2)">' + escHtml(a.type || a.flag || 'Anomaly') + '</span><span style="color:var(--txt3);font-size:11px;margin-left:auto">' + fmtDate(a.detectedAt || a.timestamp) + '</span></div>' + (a.businessImpact ? '<div style="color:var(--txt3);font-size:12px;padding-left:16px;margin-top:2px">' + escHtml(a.businessImpact) + '</div>' : '') + '</div>';
+          }).join('')
+        : '<div class="panel-empty" style="padding:12px">No anomalies detected</div>';
+
+      // Pending recommendations from last intelligence run
+      var lastRun = (h.intelligenceRuns || [])[0] || {};
+      var recs = (lastRun.priceRecommendations || []).slice(0, 3);
+      document.getElementById('dash-pending-recs').innerHTML = recs.length
+        ? recs.map(function(r) {
+            var chg = r.changePercent || 0;
+            var dir = chg >= 0 ? 'var(--red)' : 'var(--green)';
+            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bdr);gap:12px"><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--white)">' + escHtml(r.handle) + '</div><div style="font-size:12px;color:var(--txt3)">A$' + (r.currentPrice||0).toLocaleString('en-AU') + ' → A$' + (r.recommendedPrice||0).toLocaleString('en-AU') + ' <span style="color:' + dir + '">(' + (chg>=0?'+':'') + chg.toFixed(1) + '%)</span></div></div>' + confPill(r.confidence||0) + '<button class="btn btn-primary btn-sm" style="flex-shrink:0" onclick="applyPriceRec(\'' + escAttr(r.handle) + '\',' + (r.recommendedPrice||0) + ')"><i class="fas fa-check"></i> Apply</button></div>';
+          }).join('')
+        : '<div class="panel-empty" style="padding:12px">Run Intelligence to see recommendations</div>';
+
+      // Competitor alerts — price changes where competitor is cheaper than us
+      try {
+        var compR = await fetch('/api/competitors').then(function(r){return r.json();}).catch(function(){return {products:[]};});
+        var products = compR.products || [];
+        var alerts = [];
+        products.forEach(function(p) {
+          (p.competitors || []).forEach(function(c) {
+            if (p.ourPrice && c.price < p.ourPrice) {
+              var diff = ((c.price - p.ourPrice) / p.ourPrice * 100).toFixed(1);
+              alerts.push({ handle: p.handle, ourPrice: p.ourPrice, compPrice: c.price, site: c.site, diff: diff });
+            }
+          });
+        });
+        document.getElementById('dash-comp-alerts').innerHTML = alerts.length
+          ? alerts.slice(0,5).map(function(a) {
+              return '<div style="padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600;color:var(--white)">' + escHtml(a.handle) + '</span><span style="color:var(--red);font-weight:700">' + a.diff + '%</span></div><div style="color:var(--txt3);font-size:12px;margin-top:2px">Us: A$' + a.ourPrice.toLocaleString('en-AU') + ' · ' + escHtml(a.site) + ': A$' + a.compPrice.toLocaleString('en-AU') + '</div></div>';
+            }).join('')
+          : '<div class="panel-empty" style="padding:12px">No competitor undercuts found</div>';
+      } catch(_) {}
+
+      document.getElementById('dash-last-refreshed').textContent = 'Last updated ' + new Date().toLocaleTimeString('en-AU');
+    } catch(e) {
+      document.getElementById('dash-last-refreshed').textContent = 'Error: ' + e.message;
+    }
+  };
+
+  window.runOrchestrate = async function() {
+    var statusEl = document.getElementById('dash-action-status');
+    statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running orchestration pipeline...';
+    try {
+      var r = await fetch('/api/orchestrate', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
+      var d = await r.json();
+      statusEl.innerHTML = '<span style="color:var(--green)"><i class="fas fa-check"></i> Pipeline complete — ' + (d.steps||[]).filter(function(s){return s.success;}).length + '/' + (d.steps||[]).length + ' steps passed</span>';
+      setTimeout(function(){ statusEl.textContent=''; loadDashboard(); }, 4000);
+    } catch(e) {
+      statusEl.innerHTML = '<span style="color:var(--red)">Failed: ' + escHtml(e.message) + '</span>';
+    }
+  };
+
+  /* ══════════════════════════════════════════════════════════════════
      DATA HEALTH TAB
   ══════════════════════════════════════════════════════════════════ */
   async function loadDataHealth() {
@@ -1629,7 +1806,7 @@
   })();
 
   /* ── Init ─────────────────────────────────────────────────────── */
-  loadProducts();
+  loadProducts(); loadDashboard();
 })();
 </script>
 
