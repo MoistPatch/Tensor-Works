@@ -55,7 +55,7 @@ window.TW = {
       category: 'DGX Systems',
       sku: 'NV-DGX-H200',
       priceDisplay: 'POA',
-      shopifyVariantId: null,
+      shopifyVariantId: '43751354597454',
       image: null,
       iconClass: 'orange',
       icon: 'fa-server',
