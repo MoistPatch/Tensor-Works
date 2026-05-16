@@ -190,7 +190,7 @@
       if (checkoutUrl) {
         checkoutHTML = '<a href="' + checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center">Checkout <i class="fas fa-arrow-right"></i></a>';
       } else if (items.length > 0) {
-        checkoutHTML = '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fas fa-envelope"></i> Enquire to Order</a>';
+        checkoutHTML = '<a href="/cart.html" class="btn btn-primary" style="width:100%;justify-content:center" onclick="Cart.closeDrawer()">View Basket <i class="fas fa-arrow-right"></i></a>';
       }
 
       drawer.innerHTML =
@@ -248,7 +248,10 @@
       var checkoutUrl = buildCheckoutUrl(items);
       var checkoutBtn = checkoutUrl
         ? '<a href="' + checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px">Proceed to Checkout <i class="fas fa-arrow-right"></i></a>'
-        : '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px"><i class="fas fa-envelope"></i> Enquire to Order</a>';
+        : '<div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;margin-bottom:12px;text-align:center">' +
+            '<p style="font-size:13px;color:var(--txt2);margin-bottom:10px"><i class="fas fa-info-circle" style="color:var(--teal-lt)"></i> Online checkout coming soon — Shopify integration in progress.</p>' +
+            '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fas fa-envelope"></i> Send Enquiry for Quote &amp; Invoice</a>' +
+          '</div>';
 
       el.innerHTML = '<div class="cart-layout">' +
         '<div class="cart-main">' +

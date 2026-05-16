@@ -1,0 +1,9 @@
+Handle,Title,Vendor,Type,Tags,Published,Option1 Name,Option1 Value,Option2 Name,Option2 Value,Option3 Name,Option3 Value,Variant SKU,Variant Price,Status
+nvidia-h100-sxm5,NVIDIA H100 SXM5 80GB,NVIDIA,GPU,"GPU,NVIDIA,H100,AI Hardware",TRUE,Title,Default Title,,,,,NV-H100-SXM5-80,1.00,active
+nvidia-h200-sxm5,NVIDIA H200 SXM5 141GB,NVIDIA,GPU,"GPU,NVIDIA,H200,AI Hardware",TRUE,Title,Default Title,,,,,NV-H200-SXM5,1.00,active
+nvidia-dgx-h200,NVIDIA DGX H200,NVIDIA,DGX System,"DGX,NVIDIA,H200,AI Hardware",TRUE,Title,Default Title,,,,,NV-DGX-H200,1.00,active
+nvidia-rtx-6000-ada,NVIDIA RTX 6000 Ada Generation,NVIDIA,Workstation GPU,"GPU,NVIDIA,RTX,AI Hardware",TRUE,Title,Default Title,,,,,NV-RTX6000-ADA,1.00,active
+nvidia-bluefield-3-dpu,NVIDIA BlueField-3 DPU,NVIDIA,DPU,"DPU,NVIDIA,BlueField,AI Hardware",TRUE,Title,Default Title,,,,,NV-BF3-400,1.00,active
+nvidia-ai-enterprise,NVIDIA AI Enterprise Software Suite,NVIDIA,Software Suite,"Software,NVIDIA,AI Hardware",TRUE,Title,Default Title,,,,,NV-AIE-SUITE,1.00,active
+dell-poweredge-xe9680,Dell PowerEdge XE9680,Dell,Server Platform,"Server,Dell,AI Hardware",TRUE,Title,Default Title,,,,,DELL-PE-XE9680,1.00,active
+mellanox-infiniband-ndr400,Mellanox InfiniBand NDR400 Switch,Mellanox,Networking,"Networking,InfiniBand,AI Hardware",TRUE,Title,Default Title,,,,,MLX-IB-NDR400,1.00,active
