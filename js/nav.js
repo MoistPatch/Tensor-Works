@@ -7,9 +7,9 @@
 
     var links = [
       { href: '/', label: 'Home', key: 'home' },
-      { href: '/products.html', label: 'Products', key: 'products' },
+      { href: '/products', label: 'Products', key: 'products' },
       { href: '/#enquiry', label: 'Enquire', key: 'enquiry' },
-      { href: '/account.html', label: 'Account', key: 'account' },
+      { href: '/account', label: 'Account', key: 'account' },
     ];
 
     var navLinksHTML = links.map(function (l) {
@@ -27,7 +27,7 @@
               '<i class="fas fa-shopping-cart" aria-hidden="true"></i>' +
               '<span class="cart-count" data-count="0">0</span>' +
             '</button>' +
-            '<a href="/products.html" class="btn btn-primary">Shop Now</a>' +
+            '<a href="/products" class="btn btn-primary">Shop Now</a>' +
             '<button class="hamburger" aria-label="Toggle navigation" onclick="document.getElementById(\'nav\').classList.toggle(\'open\')">' +
               '<i class="fas fa-bars" aria-hidden="true"></i>' +
             '</button>' +
@@ -52,27 +52,27 @@
           '</div>' +
           '<div class="footer-col">' +
             '<h4>Hardware</h4>' +
-            '<a href="/products.html">H100 GPU</a>' +
-            '<a href="/products.html">DGX H200</a>' +
-            '<a href="/products.html">RTX 6000 Ada</a>' +
-            '<a href="/products.html">BlueField-3 DPU</a>' +
-            '<a href="/products.html">AI Enterprise</a>' +
-            '<a href="/products.html">PowerEdge XE9680</a>' +
+            '<a href="/products">H100 GPU</a>' +
+            '<a href="/products">DGX H200</a>' +
+            '<a href="/products">RTX 6000 Ada</a>' +
+            '<a href="/products">BlueField-3 DPU</a>' +
+            '<a href="/products">AI Enterprise</a>' +
+            '<a href="/products">PowerEdge XE9680</a>' +
           '</div>' +
           '<div class="footer-col">' +
             '<h4>Company</h4>' +
             '<a href="/#features">Why Tensor Works</a>' +
             '<a href="/#enquiry">Contact</a>' +
-            '<a href="/privacy.html">Privacy Policy</a>' +
-            '<a href="/terms.html">Terms of Service</a>' +
+            '<a href="/privacy">Privacy Policy</a>' +
+            '<a href="/terms">Terms of Service</a>' +
             '<a href="mailto:sam@vantyx.com.au">sam@vantyx.com.au</a>' +
           '</div>' +
         '</div>' +
         '<div class="footer-bottom">' +
           '<p>© 2026 Tensor Works. All rights reserved. ABN listed on request.</p>' +
           '<div style="display:flex;gap:16px">' +
-            '<a href="/privacy.html">Privacy</a>' +
-            '<a href="/terms.html">Terms</a>' +
+            '<a href="/privacy">Privacy</a>' +
+            '<a href="/terms">Terms</a>' +
             '<a href="mailto:sam@vantyx.com.au">sam@vantyx.com.au</a>' +
           '</div>' +
         '</div>' +
