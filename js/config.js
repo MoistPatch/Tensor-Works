@@ -19,7 +19,7 @@ window.TW = {
       image: null,
       iconClass: 'teal',
       icon: 'fa-microchip',
-      description: 'The world\'s most powerful AI training GPU — transformer engine, NVLink 4, SXM5 and PCIe form factors available. Purpose-built for large language model training and inference at scale.',
+      description: 'The world\'s most powerful AI training GPU - transformer engine, NVLink 4, SXM5 and PCIe form factors available. Purpose-built for large language model training and inference at scale.',
       specs: [
         { key: 'Memory', value: '80GB HBM3' },
         { key: 'Bandwidth', value: '3.35TB/s' },
@@ -61,10 +61,10 @@ window.TW = {
       icon: 'fa-server',
       description: 'The definitive AI supercomputer in a box. Eight H200 GPUs connected by NVLink with 1.1TB aggregate HBM3e memory and full InfiniBand networking for multi-node scale-out.',
       specs: [
-        { key: 'GPUs', value: '8× H200 SXM' },
+        { key: 'GPUs', value: '8x H200 SXM' },
         { key: 'Total Memory', value: '1.1TB HBM3e' },
         { key: 'NVLink', value: '900GB/s' },
-        { key: 'Networking', value: '8× 400Gb IB' },
+        { key: 'Networking', value: '8x 400Gb IB' },
       ],
       inStock: false,
       tags: ['DGX', 'NVIDIA', 'H200', 'System', 'HPC'],
@@ -102,7 +102,7 @@ window.TW = {
       description: 'Data Processing Unit for AI-powered cloud infrastructure. Offloads networking, storage, and security processing from host CPUs for maximum efficiency.',
       specs: [
         { key: 'Bandwidth', value: '400Gb/s' },
-        { key: 'Cores', value: '16× Arm A78' },
+        { key: 'Cores', value: '16x Arm A78' },
         { key: 'DRAM', value: '32GB LPDDR5' },
         { key: 'PCIe', value: 'Gen 5' },
       ],
@@ -141,8 +141,8 @@ window.TW = {
       icon: 'fa-hdd',
       description: '8-way GPU server optimised for AI and HPC workloads. Supports up to eight SXM5 GPUs with NVLink Switch, dual Xeon Scalable processors and up to 8TB DDR5 memory.',
       specs: [
-        { key: 'GPU Slots', value: '8× SXM / PCIe' },
-        { key: 'CPU', value: '2× Xeon Scalable' },
+        { key: 'GPU Slots', value: '8x SXM / PCIe' },
+        { key: 'CPU', value: '2x Xeon Scalable' },
         { key: 'Memory', value: 'Up to 8TB DDR5' },
         { key: 'Networking', value: 'IB / Ethernet' },
       ],
@@ -161,8 +161,8 @@ window.TW = {
       icon: 'fa-network-wired',
       description: 'High-performance NDR InfiniBand switch for AI and HPC clusters. 64 ports at 400Gb/s with sub-microsecond latency, RDMA support, and full management capabilities.',
       specs: [
-        { key: 'Ports', value: '64× 400Gb/s' },
-        { key: 'Latency', value: 'Sub-µs' },
+        { key: 'Ports', value: '64x 400Gb/s' },
+        { key: 'Latency', value: 'Sub-us' },
         { key: 'Protocol', value: 'RDMA / RoCE' },
         { key: 'Management', value: 'Managed' },
       ],
