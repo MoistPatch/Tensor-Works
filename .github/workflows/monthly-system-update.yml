@@ -1,35 +1,11 @@
 name: Monthly System Update
-
 on:
   schedule:
-    - cron: '0 4 1 * *'   # 4am UTC on the 1st of every month
+    - cron: '0 4 1 * *'
   workflow_dispatch:
-
 jobs:
-  system-update:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - name: Run comprehensive system update
-        run: |
-          echo "Starting monthly system update..."
-          STATUS=$(curl -sf -o /tmp/update-result.json -w "%{http_code}" \
-            -X POST "${{ vars.SITE_URL }}/api/system-update" \
-            -H "X-Sync-Secret: ${{ secrets.SYNC_SECRET }}" \
-            -H "Content-Type: application/json" \
-            -d '{}')
-          echo "HTTP status: $STATUS"
-          cat /tmp/update-result.json | python3 -m json.tool 2>/dev/null || cat /tmp/update-result.json
-          if [ "$STATUS" = "200" ]; then
-            echo "✓ System update completed successfully"
-          elif [ "$STATUS" = "409" ]; then
-            echo "⚠ Bug check blocked implementation — requires investigation"
-            exit 1
-          else
-            REQUIRES_REVIEW=$(cat /tmp/update-result.json | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('requiresHumanReview','false'))" 2>/dev/null)
-            if [ "$REQUIRES_REVIEW" = "True" ]; then
-              echo "⚠ System update requires human review before implementation"
-            else
-              echo "✗ System update failed"
-              exit 1
-            fi
-          fi
+      - name: Run monthly system update
+        run: curl -s -X POST https://tensorworks.online/api/system-update -H 'Content-Type: application/json' -d '{}'

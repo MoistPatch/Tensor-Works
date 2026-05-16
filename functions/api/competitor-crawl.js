@@ -1,15 +1,8 @@
-const OWNER = 'MoistPatch';
-const REPO = 'Tensor-Works';
-const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
-const CLAUDE_MODEL = 'claude-opus-4-7';
+const OWNER = 'MoistPatch', REPO = 'Tensor-Works';
 
 async function ghGet(path, token) {
-  const r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path, {
-    headers: {
-      'Authorization': 'Bearer ' + token,
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'TensorWorks-Admin',
-    },
+  const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
+    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'TensorWorks' },
   });
   if (!r.ok) throw new Error('GitHub GET ' + path + ' failed: ' + r.status);
   return r.json();
@@ -19,250 +12,146 @@ async function ghPut(path, content, sha, message, token) {
   const encoded = btoa(unescape(encodeURIComponent(content)));
   const body = { message, content: encoded };
   if (sha) body.sha = sha;
-  const r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path, {
+  const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
     method: 'PUT',
-    headers: {
-      'Authorization': 'Bearer ' + token,
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'TensorWorks-Admin',
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'TensorWorks', 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
-  if (!r.ok) {
-    const e = await r.json().catch(() => ({}));
-    throw new Error(e.message || 'GitHub PUT failed: ' + r.status);
-  }
+  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.message || 'GitHub PUT failed'); }
   return r.json();
 }
 
-function jsonResponse(data, status) {
-  return new Response(JSON.stringify(data), {
-    status: status || 200,
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-  });
+async function loadJSON(path, token, fallback = null) {
+  try { const f = await ghGet(path, token); return { data: JSON.parse(atob(f.content.replace(/\s/g, ''))), sha: f.sha }; }
+  catch (_) { return { data: fallback, sha: null }; }
 }
 
-async function callClaude(apiKey, systemPrompt, userContent) {
-  const r = await fetch(ANTHROPIC_API, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: CLAUDE_MODEL,
-      max_tokens: 4096,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userContent }],
-    }),
-  });
-  if (!r.ok) {
-    const e = await r.json().catch(() => ({}));
-    throw new Error(e.error?.message || 'Anthropic API failed: ' + r.status);
-  }
-  const data = await r.json();
-  return data.content[0].text;
+function jsonResponse(data, status = 200) {
+  return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
 }
 
-function parseJsonSafe(text) {
-  const match = text.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
-  if (!match) return null;
-  try {
-    return JSON.parse(match[0]);
-  } catch {
-    return null;
-  }
-}
-
-async function fetchHTML(url, apiKey) {
-  if (apiKey) {
+async function fetchHTML(siteUrl, scrapingBeeKey) {
+  if (scrapingBeeKey) {
     try {
-      const sbUrl = 'https://app.scrapingbee.com/api/v1/?api_key=' + encodeURIComponent(apiKey) + '&url=' + encodeURIComponent(url) + '&render_js=true&premium_proxy=false';
-      const r = await fetch(sbUrl, { headers: { 'User-Agent': 'TensorWorks-Bot/1.0' } });
-      if (r.ok) {
-        const html = await r.text();
-        if (html.length > 500) return { html, method: 'scrapingbee' };
-      }
+      const sbUrl = `https://app.scrapingbee.com/api/v1/?api_key=${scrapingBeeKey}&url=${encodeURIComponent(siteUrl)}&render_js=true`;
+      const r = await fetch(sbUrl);
+      if (r.ok) return await r.text();
     } catch (_) {}
   }
-  // Fallback: plain fetch
   try {
-    const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' } });
-    if (r.ok) {
-      const html = await r.text();
-      if (html.length > 500) return { html, method: 'direct' };
-    }
+    const r = await fetch(siteUrl, { headers: { 'User-Agent': 'Mozilla/5.0 TensorWorks' } });
+    if (r.ok) return await r.text();
   } catch (_) {}
   return null;
 }
 
-async function crawlSite(site, products, apiKey, scrapingBeeKey) {
-  const result = {
-    id: site.id,
-    name: site.name,
-    status: 'ok',
-    fetchMethod: null,
-    productCount: 0,
-    matched: 0,
-    error: null,
-  };
-
-  let html = '';
-  const fetched = await fetchHTML(site.catalogueUrl, scrapingBeeKey);
-  if (!fetched) {
-    result.status = 'blocked';
-    result.fetchMethod = 'blocked';
-    result.error = 'All fetch methods failed or returned insufficient HTML';
-    return result;
-  }
-  html = fetched.html;
-  result.fetchMethod = fetched.method;
-
-  const truncatedHtml = html.slice(0, 15000);
-
-  const extractSystemPrompt = 'You are a web scraping specialist. Extract product listings from this HTML. Return JSON array of products found: [{title, price, url, availability}]. Price should be a number (AUD, ex-GST if possible). Return [] if no products found. Return ONLY valid JSON, no commentary.';
-
-  let extractedProducts = [];
-  try {
-    const extractText = await callClaude(apiKey, extractSystemPrompt, truncatedHtml);
-    extractedProducts = parseJsonSafe(extractText) || [];
-    if (!Array.isArray(extractedProducts)) extractedProducts = [];
-  } catch (e) {
-    result.error = 'Extraction failed: ' + e.message;
-  }
-
-  result.productCount = extractedProducts.length;
-
-  if (extractedProducts.length === 0) {
-    return result;
-  }
-
-  const matchSystemPrompt = 'Match these competitor products to our catalogue. Return JSON: [{ourHandle, competitorTitle, competitorPrice, competitorUrl, confidence}]. Only include matches with confidence > 0.7. Return ONLY valid JSON.';
-  const matchUserContent = 'Competitor products:\n' + JSON.stringify(extractedProducts, null, 2) +
-    '\n\nOur catalogue:\n' + JSON.stringify(products.map(function(p) { return { handle: p.handle, title: p.title, sku: p.sku, category: p.category }; }), null, 2);
-
-  let matches = [];
-  try {
-    const matchText = await callClaude(apiKey, matchSystemPrompt, matchUserContent);
-    matches = parseJsonSafe(matchText) || [];
-    if (!Array.isArray(matches)) matches = [];
-  } catch (e) {
-    result.error = (result.error ? result.error + '; ' : '') + 'Matching failed: ' + e.message;
-  }
-
-  result.matched = matches.length;
-  result.matchData = matches.map(function(m) {
-    return {
-      matchedHandle: m.ourHandle,
-      competitorTitle: m.competitorTitle,
-      competitorPrice: m.competitorPrice,
-      competitorUrl: m.competitorUrl || site.catalogueUrl,
-      crawledAt: new Date().toISOString(),
-    };
+async function claudeExtract(html, anthropicKey) {
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-opus-4-7',
+      max_tokens: 2048,
+      system: 'You are a product data extractor. Extract all product names and prices from this HTML. Return ONLY valid JSON array: [{name, price, currency, url}]',
+      messages: [{ role: 'user', content: html.slice(0, 15000) }],
+    }),
   });
+  if (!r.ok) throw new Error('Claude extract failed: ' + r.status);
+  const j = await r.json();
+  const text = j.content?.[0]?.text || '[]';
+  try { return JSON.parse(text); } catch (_) { return []; }
+}
 
-  return result;
+async function claudeMatch(extracted, catalogue, anthropicKey) {
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-opus-4-7',
+      max_tokens: 2048,
+      system: 'Match competitor products to our catalogue. Return ONLY valid JSON array: [{handle: ourProductHandle, competitorName, competitorPrice, matchConfidence}] Only include confident matches (>0.6).',
+      messages: [{ role: 'user', content: JSON.stringify({ extracted, catalogue }) }],
+    }),
+  });
+  if (!r.ok) throw new Error('Claude match failed: ' + r.status);
+  const j = await r.json();
+  const text = j.content?.[0]?.text || '[]';
+  try { return JSON.parse(text); } catch (_) { return []; }
 }
 
 export async function onRequest(context) {
   const { request, env } = context;
 
   if (request.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, X-Sync-Secret',
-      },
-    });
+    return new Response(null, { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } });
   }
 
-  const syncSecret = env.SYNC_SECRET;
-  if (syncSecret) {
-    const provided = request.headers.get('X-Sync-Secret');
-    if (provided !== syncSecret) {
-      return jsonResponse({ error: 'Unauthorized' }, 401);
-    }
-  }
+  if (request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405);
 
   const token = env.GITHUB_PAT;
-  if (!token) return jsonResponse({ error: 'GITHUB_PAT not configured' }, 500);
+  const scrapingBeeKey = env.SCRAPINGBEE_API_KEY;
+  const anthropicKey = env.ANTHROPIC_API_KEY;
 
-  const apiKey = env.ANTHROPIC_API_KEY;
-  if (!apiKey) return jsonResponse({ error: 'ANTHROPIC_API_KEY not configured' }, 500);
+  const [sitesResult, productsResult, pricesResult] = await Promise.all([
+    loadJSON('data/competitor-sites.json', token, { sites: [] }),
+    loadJSON('data/products.json', token, []),
+    loadJSON('data/competitor-prices.json', token, { lastCrawled: null, products: [] }),
+  ]);
 
-  if (request.method === 'GET') {
+  const sites = sitesResult.data.sites;
+  const catalogue = (Array.isArray(productsResult.data) ? productsResult.data : []).map(p => ({ handle: p.handle, name: p.name, priceIncGst: p.priceIncGst }));
+  const pricesData = pricesResult.data;
+  const pricesSha = pricesResult.sha;
+  const sitesSha = sitesResult.sha;
+
+  const sitesToCrawl = sites.slice(0, 3);
+  const errors = [];
+  let matchesFound = 0;
+  const crawledAt = new Date().toISOString();
+
+  const productsMap = {};
+  for (const p of pricesData.products) {
+    productsMap[p.handle] = p;
+  }
+
+  for (const site of sitesToCrawl) {
     try {
-      const pricesFile = await ghGet('data/competitor-prices.json', token);
-      const prices = JSON.parse(atob(pricesFile.content.replace(/\n/g, '')));
-      return jsonResponse(prices);
-    } catch (e) {
-      return jsonResponse({ error: e.message }, 500);
+      const html = await fetchHTML(site.url, scrapingBeeKey);
+      if (!html) {
+        errors.push({ site: site.url, error: 'blocked' });
+        continue;
+      }
+
+      const extracted = await claudeExtract(html, anthropicKey);
+      const matches = await claudeMatch(extracted, catalogue, anthropicKey);
+
+      for (const match of matches) {
+        const { handle, competitorName, competitorPrice, matchConfidence } = match;
+        if (!handle || matchConfidence <= 0.6) continue;
+        if (!productsMap[handle]) {
+          const ourProduct = catalogue.find(p => p.handle === handle);
+          productsMap[handle] = { handle, ourPrice: ourProduct?.priceIncGst ?? null, competitors: [] };
+        }
+        const entry = productsMap[handle];
+        const idx = entry.competitors.findIndex(c => c.site === site.url);
+        const competitorEntry = { site: site.url, price: competitorPrice, url: site.url, crawledAt };
+        if (idx >= 0) { entry.competitors[idx] = competitorEntry; } else { entry.competitors.push(competitorEntry); }
+        matchesFound++;
+      }
+
+      site.lastCrawledAt = crawledAt;
+    } catch (err) {
+      errors.push({ site: site.url, error: err.message });
     }
   }
 
-  if (request.method === 'POST') {
-    let body = {};
-    try {
-      body = await request.json();
-    } catch {
-      body = {};
-    }
+  pricesData.products = Object.values(productsMap);
+  pricesData.lastCrawled = crawledAt;
 
-    try {
-      const [sitesFile, pricesFile, productsFile] = await Promise.all([
-        ghGet('data/competitor-sites.json', token),
-        ghGet('data/competitor-prices.json', token),
-        ghGet('data/products.json', token),
-      ]);
+  await Promise.all([
+    ghPut('data/competitor-prices.json', JSON.stringify(pricesData, null, 2), pricesSha, 'Update competitor prices', token),
+    ghPut('data/competitor-sites.json', JSON.stringify({ sites }, null, 2), sitesSha, 'Update competitor site crawl timestamps', token),
+  ]);
 
-      let sites = JSON.parse(atob(sitesFile.content.replace(/\n/g, '')));
-      let prices = JSON.parse(atob(pricesFile.content.replace(/\n/g, '')));
-      const products = JSON.parse(atob(productsFile.content.replace(/\n/g, '')));
-
-      const targetSites = body.id ? sites.filter(function(s) { return s.id === body.id; }) : sites;
-
-      if (targetSites.length === 0) {
-        return jsonResponse({ error: 'No competitor sites found' }, 404);
-      }
-
-      const summary = [];
-      for (const site of targetSites) {
-        const crawlResult = await crawlSite(site, products, apiKey, env.SCRAPINGBEE_API_KEY);
-        summary.push({ id: crawlResult.id, name: crawlResult.name, status: crawlResult.status, fetchMethod: crawlResult.fetchMethod, productCount: crawlResult.productCount, matched: crawlResult.matched });
-
-        const siteIdx = sites.findIndex(function(s) { return s.id === site.id; });
-        if (siteIdx !== -1) {
-          sites[siteIdx].lastCrawled = new Date().toISOString();
-          sites[siteIdx].lastStatus = crawlResult.status;
-          sites[siteIdx].lastFetchMethod = crawlResult.fetchMethod;
-          sites[siteIdx].productCount = crawlResult.productCount;
-        }
-
-        if (crawlResult.matchData && crawlResult.matchData.length > 0) {
-          prices[site.id] = crawlResult.matchData;
-        }
-      }
-
-      const updatedSitesFile = await ghGet('data/competitor-sites.json', token);
-      const updatedPricesFile = await ghGet('data/competitor-prices.json', token);
-
-      await Promise.all([
-        ghPut('data/competitor-sites.json', JSON.stringify(sites, null, 2), updatedSitesFile.sha, 'Update competitor crawl results', token),
-        ghPut('data/competitor-prices.json', JSON.stringify(prices, null, 2), updatedPricesFile.sha, 'Update competitor prices from crawl', token),
-      ]);
-
-      return jsonResponse({ success: true, crawled: targetSites.length, summary });
-    } catch (e) {
-      return jsonResponse({ error: e.message }, 500);
-    }
-  }
-
-  return jsonResponse({ error: 'Method not allowed' }, 405);
+  return jsonResponse({ success: true, sitesCrawled: sitesToCrawl.length - errors.length, matchesFound, errors });
 }

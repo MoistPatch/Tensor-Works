@@ -1,7 +1,13 @@
+/**
+ * Brain — central knowledge store for the AI agent ecosystem.
+ * GET: read brain.json. POST actions: update, log-decision, update-constraints, add-note.
+ */
+
 const OWNER = 'MoistPatch', REPO = 'Tensor-Works';
+
 async function ghGet(path, token) {
   const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
-    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'TensorWorks-Admin' }
+    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'TensorWorks-Brain' },
   });
   if (!r.ok) throw new Error('GitHub GET ' + path + ' failed: ' + r.status);
   return r.json();
@@ -12,146 +18,97 @@ async function ghPut(path, content, sha, message, token) {
   if (sha) body.sha = sha;
   const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
     method: 'PUT',
-    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'TensorWorks-Admin', 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
+    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'TensorWorks-Brain', 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
-  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.message || 'GitHub PUT failed: ' + r.status); }
+  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.message || 'GitHub PUT failed'); }
   return r.json();
 }
-async function loadJSON(path, token, fallback = null) {
-  try { const f = await ghGet(path, token); return { data: JSON.parse(atob(f.content.replace(/\s/g,''))), sha: f.sha }; }
-  catch (_) { return { data: fallback, sha: null }; }
+async function loadBrain(token) {
+  try {
+    const f = await ghGet('data/brain.json', token);
+    return { data: JSON.parse(atob(f.content.replace(/\s/g, ''))), sha: f.sha };
+  } catch (_) { return { data: null, sha: null }; }
 }
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
 }
-function corsHeaders() {
-  return new Response(null, { status: 204, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, X-Sync-Secret' } });
-}
-function checkSecret(request, env) {
-  if (!env.SYNC_SECRET) return true;
-  const h = request.headers.get('X-Sync-Secret') || new URL(request.url).searchParams.get('secret');
-  return h === env.SYNC_SECRET;
-}
 
+// Deep-set a dot-notation path on an object
 function deepSet(obj, path, value) {
   const parts = path.split('.');
   let cur = obj;
   for (let i = 0; i < parts.length - 1; i++) {
-    if (cur[parts[i]] === undefined || cur[parts[i]] === null || typeof cur[parts[i]] !== 'object') {
-      cur[parts[i]] = {};
-    }
+    if (typeof cur[parts[i]] !== 'object' || cur[parts[i]] === null) cur[parts[i]] = {};
     cur = cur[parts[i]];
   }
   cur[parts[parts.length - 1]] = value;
-  return obj;
 }
-
-const BRAIN_PATH = 'data/brain.json';
-
-const DEFAULT_BRAIN = {
-  meta: {
-    version: '1.0.0',
-    lastUpdated: null,
-    lastOrchestrationAt: null,
-    totalRunCount: 0,
-    notes: []
-  },
-  constraints: {
-    minConfidenceToAutoApply: 0.75,
-    maxPriceChangePercent: 15,
-    requireHumanApprovalAbove: {
-      priceChangeAUD: 500
-    },
-    frozenProducts: [],
-    blacklistedActions: []
-  },
-  skills: {
-    pricing: {
-      learnedMarkups: {}
-    },
-    forecasting: {},
-    anomalyDetection: {}
-  },
-  decisionLog: []
-};
 
 export async function onRequest(context) {
   const { request, env } = context;
 
-  if (request.method === 'OPTIONS') return corsHeaders();
-
-  if (!checkSecret(request, env)) {
-    return jsonResponse({ error: 'Unauthorized' }, 401);
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } });
   }
 
   const token = env.GITHUB_PAT;
   if (!token) return jsonResponse({ error: 'GITHUB_PAT not configured' }, 500);
 
   if (request.method === 'GET') {
-    const { data, sha } = await loadJSON(BRAIN_PATH, token, DEFAULT_BRAIN);
-    return jsonResponse({ brain: data, sha });
+    const { data, sha } = await loadBrain(token);
+    if (!data) return jsonResponse({ error: 'brain.json not found' }, 404);
+    return jsonResponse(data);
   }
 
-  if (request.method === 'POST') {
-    let body;
-    try {
-      body = await request.json();
-    } catch (_) {
-      return jsonResponse({ error: 'Invalid JSON body' }, 400);
-    }
+  if (request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405);
 
-    const { action } = body;
-    const { data: brain, sha } = await loadJSON(BRAIN_PATH, token, structuredClone(DEFAULT_BRAIN));
+  const body = await request.json().catch(() => ({}));
+  const { action } = body;
 
-    if (!brain) return jsonResponse({ error: 'Failed to load brain.json' }, 500);
+  const { data: brain, sha } = await loadBrain(token);
+  if (!brain) return jsonResponse({ error: 'brain.json not found' }, 404);
 
-    if (action === 'update') {
-      const { path, value } = body;
-      if (!path) return jsonResponse({ error: 'path is required' }, 400);
-      deepSet(brain, path, value);
-      brain.meta.lastUpdated = new Date().toISOString();
-      await ghPut(BRAIN_PATH, JSON.stringify(brain, null, 2), sha, `brain: update ${path}`, token);
-      return jsonResponse({ success: true, path, value });
-    }
-
-    if (action === 'log-decision') {
-      const { decision } = body;
-      if (!decision) return jsonResponse({ error: 'decision is required' }, 400);
-      if (!Array.isArray(brain.decisionLog)) brain.decisionLog = [];
-      brain.decisionLog.push(decision);
-      if (brain.decisionLog.length > 200) {
-        brain.decisionLog = brain.decisionLog.slice(-200);
-      }
-      brain.meta.lastUpdated = new Date().toISOString();
-      await ghPut(BRAIN_PATH, JSON.stringify(brain, null, 2), sha, `brain: log decision ${decision.id || decision.type || 'unknown'}`, token);
-      return jsonResponse({ success: true, logLength: brain.decisionLog.length });
-    }
-
-    if (action === 'update-constraints') {
-      const { constraints } = body;
-      if (!constraints) return jsonResponse({ error: 'constraints is required' }, 400);
-      brain.constraints = Object.assign({}, brain.constraints, constraints);
-      brain.meta.lastUpdated = new Date().toISOString();
-      await ghPut(BRAIN_PATH, JSON.stringify(brain, null, 2), sha, 'brain: update constraints', token);
-      return jsonResponse({ success: true, constraints: brain.constraints });
-    }
-
-    if (action === 'add-note') {
-      const { note } = body;
-      if (typeof note !== 'string') return jsonResponse({ error: 'note must be a string' }, 400);
-      if (!Array.isArray(brain.meta.notes)) brain.meta.notes = [];
-      brain.meta.notes.push(note);
-      if (brain.meta.notes.length > 50) {
-        brain.meta.notes = brain.meta.notes.slice(-50);
-      }
-      brain.meta.lastUpdated = new Date().toISOString();
-      await ghPut(BRAIN_PATH, JSON.stringify(brain, null, 2), sha, 'brain: add note', token);
-      return jsonResponse({ success: true, notesCount: brain.meta.notes.length });
-    }
-
-    return jsonResponse({ error: 'Unknown action: ' + action }, 400);
+  // ── action: update — deep-set a dot-notation path ─────────────────────────
+  if (action === 'update') {
+    if (!body.path || body.value === undefined) return jsonResponse({ error: 'path and value required' }, 400);
+    deepSet(brain, body.path, body.value);
+    brain.lastUpdated = new Date().toISOString();
+    brain.meta = brain.meta || {};
+    brain.meta.totalRunCount = (brain.meta.totalRunCount || 0) + 1;
+    await ghPut('data/brain.json', JSON.stringify(brain, null, 2), sha, `Brain update: ${body.path}`, token);
+    return jsonResponse({ success: true, path: body.path });
   }
 
-  return jsonResponse({ error: 'Method not allowed' }, 405);
+  // ── action: log-decision ──────────────────────────────────────────────────
+  if (action === 'log-decision') {
+    if (!body.decision) return jsonResponse({ error: 'decision object required' }, 400);
+    brain.decisionLog = brain.decisionLog || [];
+    brain.decisionLog.unshift({ ...body.decision, timestamp: new Date().toISOString() });
+    if (brain.decisionLog.length > 200) brain.decisionLog = brain.decisionLog.slice(0, 200);
+    await ghPut('data/brain.json', JSON.stringify(brain, null, 2), sha, 'Brain: log decision', token);
+    return jsonResponse({ success: true });
+  }
+
+  // ── action: update-constraints ────────────────────────────────────────────
+  if (action === 'update-constraints') {
+    if (!body.constraints || typeof body.constraints !== 'object') return jsonResponse({ error: 'constraints object required' }, 400);
+    brain.constraints = { ...brain.constraints, ...body.constraints };
+    brain.lastUpdated = new Date().toISOString();
+    await ghPut('data/brain.json', JSON.stringify(brain, null, 2), sha, 'Brain: update constraints', token);
+    return jsonResponse({ success: true, constraints: brain.constraints });
+  }
+
+  // ── action: add-note ──────────────────────────────────────────────────────
+  if (action === 'add-note') {
+    if (!body.note) return jsonResponse({ error: 'note text required' }, 400);
+    brain.meta = brain.meta || {};
+    brain.meta.notes = brain.meta.notes || [];
+    brain.meta.notes.unshift({ text: body.note, createdAt: new Date().toISOString() });
+    if (brain.meta.notes.length > 50) brain.meta.notes = brain.meta.notes.slice(0, 50);
+    await ghPut('data/brain.json', JSON.stringify(brain, null, 2), sha, 'Brain: add note', token);
+    return jsonResponse({ success: true });
+  }
+
+  return jsonResponse({ error: 'Unknown action. Use: update | log-decision | update-constraints | add-note' }, 400);
 }

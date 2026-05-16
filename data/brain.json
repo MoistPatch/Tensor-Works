@@ -2,33 +2,13 @@
   "version": 1,
   "createdAt": null,
   "lastUpdated": null,
-
   "skills": {
-    "pricing": {
-      "learnedMarkups": {},
-      "competitorDifferentials": {},
-      "elasticityNotes": {},
-      "seasonalPatterns": {},
-      "successfulStrategies": []
-    },
-    "products": {
-      "topPerformers": [],
-      "slowMovers": [],
-      "bundleSuccessRates": {},
-      "categoryTrends": {}
-    },
-    "competitors": {
-      "pricingBehaviours": {},
-      "restockPatterns": {},
-      "promotionCycles": {}
-    },
-    "campaigns": {
-      "successfulFormats": [],
-      "highCTRTriggers": [],
-      "seasonalOpportunities": []
-    }
+    "pricing": {},
+    "products": {},
+    "competitors": {},
+    "campaigns": {},
+    "masterDirective": null
   },
-
   "history": {
     "priceChanges": [],
     "rankingChanges": [],
@@ -37,14 +17,12 @@
     "intelligenceRuns": [],
     "anomaliesDetected": []
   },
-
   "patterns": {
     "weeklyTrafficShape": {},
     "productViewCorrelations": {},
     "priceElasticityByCategory": {},
     "competitorResponseLag": {}
   },
-
   "constraints": {
     "maxPriceChangePercent": 15,
     "minConfidenceToAutoApply": 0.75,
@@ -57,11 +35,8 @@
     "blacklistedActions": [],
     "frozenProducts": []
   },
-
   "simulations": [],
-
   "decisionLog": [],
-
   "meta": {
     "totalRunCount": 0,
     "lastOrchestrationAt": null,

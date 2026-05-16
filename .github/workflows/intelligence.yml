@@ -1,19 +1,14 @@
-name: Daily Intelligence Run
+name: Daily Intelligence
 on:
   schedule:
-    - cron: '0 2 * * *'  # 2am UTC daily
+    - cron: '0 2 * * *'
   workflow_dispatch:
 jobs:
-  intelligence:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - name: Crawl competitor sites
+      - name: Trigger intelligence pipeline
         run: |
-          curl -sf -X POST "${{ vars.SITE_URL }}/api/competitor-crawl" \
-            -H "X-Sync-Secret: ${{ secrets.SYNC_SECRET }}" \
-            -H "Content-Type: application/json" || echo "Crawl failed"
-      - name: Run intelligence analysis
-        run: |
-          curl -sf -X POST "${{ vars.SITE_URL }}/api/intelligence" \
-            -H "X-Sync-Secret: ${{ secrets.SYNC_SECRET }}" \
-            -H "Content-Type: application/json" || echo "Intelligence failed"
+          curl -s -X POST https://tensorworks.online/api/competitor-crawl -H 'Content-Type: application/json' -d '{}'
+          sleep 10
+          curl -s -X POST https://tensorworks.online/api/intelligence -H 'Content-Type: application/json' -d '{}'
