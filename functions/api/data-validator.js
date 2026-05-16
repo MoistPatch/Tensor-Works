@@ -280,7 +280,8 @@ export async function onRequest(context) {
   if (request.method === 'GET') {
     const health = await loadJSON('data/data-health.json', token, { lastChecked: null, sources: {} });
     const quarantine = await loadJSON('data/quarantine.json', token, { items: [] });
-    return jsonResponse({ health: health.data, quarantineCount: (quarantine.data?.items || []).length });
+    const items = quarantine.data?.items || [];
+    return jsonResponse({ health: health.data, quarantineCount: items.length, quarantineItems: items });
   }
 
   if (request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405);
