@@ -1,7 +1,7 @@
 window.TW = {
   shopify: {
     domain: 'ituspq-hc.myshopify.com',
-    configured: false, // set to true once variant IDs are filled in below
+    configured: true,
   },
   dickerData: {
     stockProxy: '/api/stock',
@@ -15,7 +15,7 @@ window.TW = {
       category: 'GPU Accelerators',
       sku: 'NV-H100-SXM5-80',
       priceDisplay: 'POA',
-      shopifyVariantId: null,
+      shopifyVariantId: '43751354466382',
       image: null,
       iconClass: 'teal',
       icon: 'fa-microchip',
