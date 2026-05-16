@@ -313,8 +313,8 @@
       var stockIcon = p.inStock ? 'fa-circle' : 'fa-clock';
       var stockText = p.inStock ? 'In Stock' : 'On Order';
       var addBtn = configured
-        ? '<button class="btn btn-primary btn-sm" onclick="addToCart(\'' + p.handle + '\')"><i class="fas fa-cart-plus"></i> Add to Cart</button>'
-        : '<button class="btn btn-primary btn-sm" onclick="addToCart(\'' + p.handle + '\')"><i class="fas fa-cart-plus"></i> Add to Enquiry</button>';
+        ? '<button class="btn btn-primary btn-sm" onclick="addToCart(\'' + p.handle + '\')"><i class="fas fa-cart-plus"></i> Add to Basket</button>'
+        : '<button class="btn btn-primary btn-sm" onclick="addToCart(\'' + p.handle + '\')"><i class="fas fa-cart-plus"></i> Add to Basket</button>';
       return '<div class="product-card" id="card-' + p.handle + '" data-handle="' + p.handle + '">' +
         '<div class="product-head">' +
           '<div class="product-icon ' + p.iconClass + '"><i class="fas ' + p.icon + '"></i></div>' +
