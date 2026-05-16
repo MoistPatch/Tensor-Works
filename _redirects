@@ -1,5 +1,1 @@
-/products   /products.html  301
-/cart       /cart.html      301
-/account    /account.html   301
-/privacy    /privacy.html   301
-/terms      /terms.html     301
+# No redirects needed - all internal links use .html extensions directly
