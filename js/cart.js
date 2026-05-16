@@ -190,7 +190,7 @@
       if (checkoutUrl) {
         checkoutHTML = '<a href="' + checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center">Checkout <i class="fas fa-arrow-right"></i></a>';
       } else if (items.length > 0) {
-        checkoutHTML = '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fas fa-envelope"></i> Enquire to Order</a>';
+        checkoutHTML = '<a href="/cart.html" class="btn btn-primary" style="width:100%;justify-content:center" onclick="Cart.closeDrawer()">View Basket <i class="fas fa-arrow-right"></i></a>';
       }
 
       drawer.innerHTML =
@@ -248,7 +248,7 @@
       var checkoutUrl = buildCheckoutUrl(items);
       var checkoutBtn = checkoutUrl
         ? '<a href="' + checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px">Proceed to Checkout <i class="fas fa-arrow-right"></i></a>'
-        : '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px"><i class="fas fa-envelope"></i> Enquire to Order</a>';
+        : '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px"><i class="fas fa-envelope"></i> Request a Quote</a>';
 
       el.innerHTML = '<div class="cart-layout">' +
         '<div class="cart-main">' +

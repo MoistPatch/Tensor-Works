@@ -364,15 +364,19 @@
 
   // Init
   (async function() {
-    var products = await ShopifyAPI.fetchProducts();
-    allProducts = products;
-    buildCategoryFilters(products);
-    applyFilters();
-
-    // Notify availability radio for changes
-    document.querySelectorAll('input[name="avail"]').forEach(function(el){
-      el.addEventListener('change', applyFilters);
-    });
+    try {
+      var products = (window.ShopifyAPI ? await ShopifyAPI.fetchProducts() : null) || window.TW.products;
+      allProducts = products;
+      buildCategoryFilters(products);
+      applyFilters();
+      document.querySelectorAll('input[name="avail"]').forEach(function(el){
+        el.addEventListener('change', applyFilters);
+      });
+    } catch(e) {
+      allProducts = window.TW.products;
+      buildCategoryFilters(allProducts);
+      applyFilters();
+    }
   })();
 
   Cart.renderCartBadge();
