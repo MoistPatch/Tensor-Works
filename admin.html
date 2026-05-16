@@ -98,6 +98,22 @@
     .btn-add-spec { background: none; border: 1px dashed var(--bdr2); border-radius: var(--rsm); color: var(--txt3); padding: 8px 14px; font-size: 13px; cursor: pointer; transition: var(--tr); font-family: inherit; width: 100%; margin-top: 4px; }
     .btn-add-spec:hover { border-color: var(--teal); color: var(--teal-lt); }
 
+    /* Research panel */
+    .research-panel { background: var(--bg3); border: 1px solid var(--teal-dk); border-radius: var(--r); padding: 20px; margin-bottom: 24px; }
+    .research-panel-title { font-size: 13px; font-weight: 700; color: var(--teal-lt); display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .research-loading { display: flex; align-items: center; gap: 12px; color: var(--txt2); font-size: 14px; padding: 8px 0; }
+    .research-section { margin-bottom: 16px; }
+    .research-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .research-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); }
+    .research-section-body { font-size: 13px; color: var(--txt2); line-height: 1.6; background: var(--bg4); border-radius: var(--rsm); padding: 12px; max-height: 140px; overflow-y: auto; }
+    .research-image-preview { display: flex; align-items: center; gap: 12px; }
+    .research-image-thumb { width: 64px; height: 64px; object-fit: contain; background: var(--bg4); border-radius: var(--rsm); border: 1px solid var(--bdr2); }
+    .research-image-url { font-size: 12px; color: var(--txt3); word-break: break-all; flex: 1; }
+    .btn-apply { background: rgba(13,115,119,.15); border: 1px solid var(--teal-dk); color: var(--teal-lt); border-radius: var(--rsm); padding: 4px 12px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--tr); }
+    .btn-apply:hover { background: rgba(13,115,119,.3); }
+    .btn-apply.applied { background: rgba(61,220,132,.1); border-color: rgba(61,220,132,.3); color: var(--green); }
+    .research-error { color: var(--red); font-size: 13px; padding: 8px 0; }
+
     /* Pricing card */
     .pricing-card { background: var(--bg3); border: 1px solid var(--bdr2); border-radius: var(--r); padding: 18px; margin-bottom: 20px; }
     .pricing-card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
@@ -278,7 +294,10 @@
     form.innerHTML =
       '<div class="form-header">' +
         '<div class="form-title">' + escHtml(p.title || 'New Product') + '</div>' +
+        '<button class="btn btn-outline btn-sm" onclick="openResearch()" title="Research product with AI"><i class="fas fa-robot"></i> Research with AI</button>' +
       '</div>' +
+
+      '<div id="research-panel" style="display:none"></div>' +
 
       '<div class="form-grid">' +
         '<div class="form-group">' +
@@ -312,6 +331,10 @@
         '<div class="form-group">' +
           '<label>Icon (FontAwesome)</label>' +
           '<input type="text" value="' + escAttr(p.icon || 'fa-microchip') + '" oninput="updateField(\'icon\',this.value)" placeholder="fa-microchip">' +
+        '</div>' +
+        '<div class="form-group full">' +
+          '<label>Product Image URL <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--txt3)">(optional — replaces icon on site)</span></label>' +
+          '<input type="text" id="image-url-input" value="' + escAttr(p.image || '') + '" oninput="updateField(\'image\',this.value||null)" placeholder="https://...">' +
         '</div>' +
         '<div class="form-group full">' +
           '<label>Description</label>' +
@@ -394,6 +417,141 @@
 
   window.selectProduct = selectProduct;
   window.renderList = renderList;
+
+  window.openResearch = function() {
+    if (state.selectedIdx === null) return;
+    var panel = document.getElementById('research-panel');
+    if (!panel) return;
+    var p = state.products[state.selectedIdx];
+    panel.style.display = 'block';
+    panel.innerHTML =
+      '<div class="research-panel">' +
+        '<div class="research-panel-title"><i class="fas fa-robot"></i> AI Product Research</div>' +
+        '<div class="research-loading"><div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Researching ' + escHtml(p.title || p.sku || 'product') + '...</div>' +
+      '</div>';
+
+    fetch('/api/product-research', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: p.title, sku: p.sku, category: p.category, handle: p.handle }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error) {
+        panel.innerHTML = '<div class="research-panel"><div class="research-panel-title"><i class="fas fa-robot"></i> AI Product Research</div><div class="research-error"><i class="fas fa-exclamation-circle"></i> ' + escHtml(data.error) + '</div></div>';
+        return;
+      }
+      renderResearchPanel(panel, data);
+    })
+    .catch(function(e) {
+      panel.innerHTML = '<div class="research-panel"><div class="research-panel-title"><i class="fas fa-robot"></i> AI Product Research</div><div class="research-error">Request failed: ' + escHtml(e.message) + '</div></div>';
+    });
+  };
+
+  function renderResearchPanel(panel, data) {
+    var specsList = (data.specs || []).map(function(s) { return s.key + ': ' + s.value; }).join('\n');
+
+    var imageSection = '';
+    if (data.imageUrl) {
+      imageSection =
+        '<div class="research-section">' +
+          '<div class="research-section-header">' +
+            '<span class="research-section-label">Product Image</span>' +
+            '<button class="btn-apply" id="apply-image-btn" onclick="applyResearch(\'image\',' + JSON.stringify(data.imageUrl) + ')">Apply</button>' +
+          '</div>' +
+          '<div class="research-image-preview">' +
+            '<img class="research-image-thumb" src="' + escAttr(data.imageUrl) + '" alt="preview" onerror="this.src=\'\';this.style.display=\'none\'">' +
+            '<span class="research-image-url">' + escHtml(data.imageUrl) + '</span>' +
+          '</div>' +
+        '</div>';
+    }
+
+    var refLink = data.productPageUrl
+      ? '<a href="' + escAttr(data.productPageUrl) + '" target="_blank" rel="noopener" style="font-size:12px;color:var(--teal-lt);margin-left:auto"><i class="fas fa-external-link-alt"></i> Official page</a>'
+      : '';
+
+    panel.innerHTML =
+      '<div class="research-panel">' +
+        '<div class="research-panel-title"><i class="fas fa-robot"></i> AI Product Research' + refLink + '</div>' +
+
+        '<div class="research-section">' +
+          '<div class="research-section-header">' +
+            '<span class="research-section-label">Description</span>' +
+            '<button class="btn-apply" id="apply-desc-btn" onclick="applyResearch(\'description\',' + JSON.stringify(data.description || '') + ')">Apply</button>' +
+          '</div>' +
+          '<div class="research-section-body">' + escHtml(data.description || '') + '</div>' +
+        '</div>' +
+
+        '<div class="research-section">' +
+          '<div class="research-section-header">' +
+            '<span class="research-section-label">Specs (' + (data.specs || []).length + ')</span>' +
+            '<button class="btn-apply" id="apply-specs-btn" onclick="applyResearchSpecs(' + escAttr(JSON.stringify(data.specs || [])) + ')">Apply</button>' +
+          '</div>' +
+          '<div class="research-section-body" style="white-space:pre;font-family:monospace;font-size:12px">' + escHtml(specsList) + '</div>' +
+        '</div>' +
+
+        (data.tags && data.tags.length
+          ? '<div class="research-section">' +
+              '<div class="research-section-header">' +
+                '<span class="research-section-label">Tags</span>' +
+                '<button class="btn-apply" id="apply-tags-btn" onclick="applyResearch(\'tags\',' + JSON.stringify(data.tags) + ')">Apply</button>' +
+              '</div>' +
+              '<div class="research-section-body">' + escHtml((data.tags || []).join(', ')) + '</div>' +
+            '</div>'
+          : '') +
+
+        imageSection +
+
+        '<button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;margin-top:4px" onclick="applyResearchAll(' +
+          escAttr(JSON.stringify(data)) + ')"><i class="fas fa-check-double"></i> Apply All</button>' +
+      '</div>';
+  }
+
+  window.applyResearch = function(field, value) {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx][field] = value;
+    state.dirty = true;
+    // Update the corresponding form input live
+    if (field === 'description') {
+      var ta = document.querySelector('.product-form textarea');
+      if (ta) ta.value = value;
+    } else if (field === 'image') {
+      var img = document.getElementById('image-url-input');
+      if (img) img.value = value;
+    } else if (field === 'tags') {
+      var tagInput = document.querySelector('.product-form input[type="text"][value*=","]') ||
+        Array.from(document.querySelectorAll('.product-form input[type="text"]')).find(function(i){ return i.placeholder && i.placeholder.indexOf('comma') > -1; });
+      if (!tagInput) {
+        // Find by oninput containing 'tags'
+        tagInput = Array.from(document.querySelectorAll('.product-form input')).find(function(i){ return (i.getAttribute('oninput') || '').indexOf('tags') > -1; });
+      }
+      if (tagInput) tagInput.value = (Array.isArray(value) ? value : [value]).join(', ');
+    }
+    var btnId = 'apply-' + (field === 'image' ? 'image' : field === 'description' ? 'desc' : field) + '-btn';
+    var btn = document.getElementById(btnId);
+    if (btn) { btn.textContent = 'Applied'; btn.classList.add('applied'); }
+    renderList();
+  };
+
+  window.applyResearchSpecs = function(specs) {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx].specs = specs;
+    state.dirty = true;
+    renderForm();
+    var btn = document.getElementById('apply-specs-btn');
+    if (btn) { btn.textContent = 'Applied'; btn.classList.add('applied'); }
+  };
+
+  window.applyResearchAll = function(data) {
+    if (state.selectedIdx === null) return;
+    if (data.description) { state.products[state.selectedIdx].description = data.description; }
+    if (data.specs && data.specs.length) { state.products[state.selectedIdx].specs = data.specs; }
+    if (data.tags && data.tags.length) { state.products[state.selectedIdx].tags = data.tags; }
+    if (data.imageUrl) { state.products[state.selectedIdx].image = data.imageUrl; }
+    state.dirty = true;
+    renderForm();
+    renderList();
+  };
 
   var pricingTimer = null;
   window.runPricingAgent = function(immediate) {
