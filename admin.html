@@ -98,6 +98,25 @@
     .btn-add-spec { background: none; border: 1px dashed var(--bdr2); border-radius: var(--rsm); color: var(--txt3); padding: 8px 14px; font-size: 13px; cursor: pointer; transition: var(--tr); font-family: inherit; width: 100%; margin-top: 4px; }
     .btn-add-spec:hover { border-color: var(--teal); color: var(--teal-lt); }
 
+    /* Pricing card */
+    .pricing-card { background: var(--bg3); border: 1px solid var(--bdr2); border-radius: var(--r); padding: 18px; margin-bottom: 20px; }
+    .pricing-card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .pricing-card-title i { color: var(--teal-lt); }
+    .pricing-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .pricing-breakdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+    .pricing-stat { background: var(--bg4); border-radius: var(--rsm); padding: 10px 12px; }
+    .pricing-stat-label { font-size: 11px; color: var(--txt3); margin-bottom: 4px; }
+    .pricing-stat-value { font-size: 15px; font-weight: 700; color: var(--white); }
+    .pricing-stat-value.highlight { color: var(--teal-lt); }
+    .pricing-stat-value.muted { color: var(--txt2); font-size: 13px; }
+    .pricing-calculating { font-size: 12px; color: var(--txt3); font-style: italic; margin-top: 6px; min-height: 18px; }
+    input[type="number"] {
+      background: var(--bg3); border: 1px solid var(--bdr2); border-radius: var(--rsm);
+      color: var(--txt); font-family: inherit; font-size: 14px; padding: 10px 12px;
+      transition: border-color var(--tr); outline: none; width: 100%;
+    }
+    input[type="number"]:focus { border-color: var(--teal); }
+
     /* Danger zone */
     .danger-zone { margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(248,81,73,.2); }
     .danger-zone h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--red); margin-bottom: 12px; }
@@ -272,7 +291,7 @@
         '</div>' +
         '<div class="form-group">' +
           '<label>Category</label>' +
-          '<select onchange="updateField(\'category\',this.value)">' + categoryOptions + '<option value="">Other</option></select>' +
+          '<select onchange="updateField(\'category\',this.value);runPricingAgent()">' + categoryOptions + '<option value="">Other</option></select>' +
         '</div>' +
         '<div class="form-group">' +
           '<label>SKU</label>' +
@@ -280,7 +299,7 @@
         '</div>' +
         '<div class="form-group">' +
           '<label>Price Display</label>' +
-          '<input type="text" value="' + escAttr(p.priceDisplay || 'POA') + '" oninput="updateField(\'priceDisplay\',this.value)" placeholder="POA">' +
+          '<input type="text" id="price-display-input" value="' + escAttr(p.priceDisplay || 'POA') + '" oninput="updateField(\'priceDisplay\',this.value)" placeholder="POA or A$12,100.00">' +
         '</div>' +
         '<div class="form-group">' +
           '<label>Shopify Variant ID</label>' +
@@ -301,6 +320,27 @@
         '<div class="form-group full">' +
           '<label>Tags (comma-separated)</label>' +
           '<input type="text" value="' + escAttr((p.tags || []).join(', ')) + '" oninput="updateField(\'tags\',this.value.split(\',\').map(function(t){return t.trim();}).filter(Boolean))">' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="pricing-card">' +
+        '<div class="pricing-card-title"><i class="fas fa-calculator"></i> Pricing Agent</div>' +
+        '<div class="pricing-row">' +
+          '<div class="form-group">' +
+            '<label>Cost Price (ex GST, AUD)</label>' +
+            '<input type="number" id="cost-input" min="0" step="0.01" value="' + escAttr(p.costExGst || '') + '" placeholder="e.g. 35000" oninput="updateField(\'costExGst\',parseFloat(this.value)||null);runPricingAgent()">' +
+          '</div>' +
+          '<div class="form-group" style="justify-content:flex-end">' +
+            '<label>&nbsp;</label>' +
+            '<button class="btn btn-outline btn-sm" onclick="runPricingAgent(true)" style="align-self:flex-start"><i class="fas fa-sync-alt"></i> Calculate</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="pricing-calculating" id="pricing-status"></div>' +
+        '<div class="pricing-breakdown" id="pricing-breakdown" style="display:none">' +
+          '<div class="pricing-stat"><div class="pricing-stat-label">Ex GST</div><div class="pricing-stat-value muted" id="p-ex-gst">-</div></div>' +
+          '<div class="pricing-stat"><div class="pricing-stat-label">GST (10%)</div><div class="pricing-stat-value muted" id="p-gst">-</div></div>' +
+          '<div class="pricing-stat"><div class="pricing-stat-label">Inc GST</div><div class="pricing-stat-value highlight" id="p-inc-gst">-</div></div>' +
+          '<div class="pricing-stat"><div class="pricing-stat-label">Margin</div><div class="pricing-stat-value" id="p-margin">-</div></div>' +
         '</div>' +
       '</div>' +
 
@@ -355,12 +395,53 @@
   window.selectProduct = selectProduct;
   window.renderList = renderList;
 
+  var pricingTimer = null;
+  window.runPricingAgent = function(immediate) {
+    if (state.selectedIdx === null) return;
+    var p = state.products[state.selectedIdx];
+    var cost = parseFloat(p.costExGst);
+    var category = p.category;
+    if (!cost || cost <= 0 || !category) {
+      document.getElementById('pricing-status').textContent = cost ? 'Select a category to calculate.' : '';
+      document.getElementById('pricing-breakdown').style.display = 'none';
+      return;
+    }
+    clearTimeout(pricingTimer);
+    var delay = immediate ? 0 : 800;
+    pricingTimer = setTimeout(function() {
+      document.getElementById('pricing-status').textContent = 'Calculating...';
+      fetch('/api/pricing-agent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ costExGst: cost, category: category }),
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.error) { document.getElementById('pricing-status').textContent = 'Error: ' + data.error; return; }
+        document.getElementById('pricing-status').textContent = '';
+        document.getElementById('pricing-breakdown').style.display = 'grid';
+        document.getElementById('p-ex-gst').textContent = 'A$' + data.retailExGst.toLocaleString('en-AU', {minimumFractionDigits:2,maximumFractionDigits:2});
+        document.getElementById('p-gst').textContent = 'A$' + data.gst.toLocaleString('en-AU', {minimumFractionDigits:2,maximumFractionDigits:2});
+        document.getElementById('p-inc-gst').textContent = data.displayPrice;
+        document.getElementById('p-margin').textContent = data.marginPct + '% / A$' + data.margin.toLocaleString('en-AU', {minimumFractionDigits:0,maximumFractionDigits:0});
+        // Auto-fill Price Display if it's still POA or blank
+        var pd = document.getElementById('price-display-input');
+        if (pd && (pd.value === 'POA' || pd.value === '')) {
+          pd.value = data.displayPrice;
+          updateField('priceDisplay', data.displayPrice);
+        }
+      })
+      .catch(function() { document.getElementById('pricing-status').textContent = 'Could not reach pricing agent.'; });
+    }, delay);
+  };
+
   window.addProduct = function() {
     var p = {
       handle: 'new-product-' + Date.now(),
       title: 'New Product',
       category: 'GPU Accelerators',
       sku: '',
+      costExGst: null,
       priceDisplay: 'POA',
       shopifyVariantId: null,
       image: null,
