@@ -79,36 +79,49 @@ function parseJsonSafe(text) {
   }
 }
 
-async function crawlSite(site, products, apiKey) {
+async function fetchHTML(url, apiKey) {
+  if (apiKey) {
+    try {
+      const sbUrl = 'https://app.scrapingbee.com/api/v1/?api_key=' + encodeURIComponent(apiKey) + '&url=' + encodeURIComponent(url) + '&render_js=true&premium_proxy=false';
+      const r = await fetch(sbUrl, { headers: { 'User-Agent': 'TensorWorks-Bot/1.0' } });
+      if (r.ok) {
+        const html = await r.text();
+        if (html.length > 500) return { html, method: 'scrapingbee' };
+      }
+    } catch (_) {}
+  }
+  // Fallback: plain fetch
+  try {
+    const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' } });
+    if (r.ok) {
+      const html = await r.text();
+      if (html.length > 500) return { html, method: 'direct' };
+    }
+  } catch (_) {}
+  return null;
+}
+
+async function crawlSite(site, products, apiKey, scrapingBeeKey) {
   const result = {
     id: site.id,
     name: site.name,
     status: 'ok',
+    fetchMethod: null,
     productCount: 0,
     matched: 0,
     error: null,
   };
 
   let html = '';
-  try {
-    const pageRes = await fetch(site.catalogueUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'en-AU,en;q=0.9',
-      },
-    });
-    if (!pageRes.ok) {
-      result.status = 'blocked';
-      result.error = 'HTTP ' + pageRes.status;
-      return result;
-    }
-    html = await pageRes.text();
-  } catch (e) {
+  const fetched = await fetchHTML(site.catalogueUrl, scrapingBeeKey);
+  if (!fetched) {
     result.status = 'blocked';
-    result.error = e.message;
+    result.fetchMethod = 'blocked';
+    result.error = 'All fetch methods failed or returned insufficient HTML';
     return result;
   }
+  html = fetched.html;
+  result.fetchMethod = fetched.method;
 
   const truncatedHtml = html.slice(0, 15000);
 
@@ -221,13 +234,14 @@ export async function onRequest(context) {
 
       const summary = [];
       for (const site of targetSites) {
-        const crawlResult = await crawlSite(site, products, apiKey);
-        summary.push({ id: crawlResult.id, name: crawlResult.name, status: crawlResult.status, productCount: crawlResult.productCount, matched: crawlResult.matched });
+        const crawlResult = await crawlSite(site, products, apiKey, env.SCRAPINGBEE_API_KEY);
+        summary.push({ id: crawlResult.id, name: crawlResult.name, status: crawlResult.status, fetchMethod: crawlResult.fetchMethod, productCount: crawlResult.productCount, matched: crawlResult.matched });
 
         const siteIdx = sites.findIndex(function(s) { return s.id === site.id; });
         if (siteIdx !== -1) {
           sites[siteIdx].lastCrawled = new Date().toISOString();
           sites[siteIdx].lastStatus = crawlResult.status;
+          sites[siteIdx].lastFetchMethod = crawlResult.fetchMethod;
           sites[siteIdx].productCount = crawlResult.productCount;
         }
 
