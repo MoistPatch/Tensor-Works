@@ -28,7 +28,7 @@
         "value": "SXM5 / PCIe"
       }
     ],
-    "inStock": true,
+    "inStock": false,
     "tags": [
       "GPU",
       "NVIDIA",
@@ -142,7 +142,7 @@
         "value": "300W"
       }
     ],
-    "inStock": true,
+    "inStock": false,
     "tags": [
       "GPU",
       "NVIDIA",
@@ -180,7 +180,7 @@
         "value": "Gen 5"
       }
     ],
-    "inStock": true,
+    "inStock": false,
     "tags": [
       "DPU",
       "NVIDIA",
@@ -218,7 +218,7 @@
         "value": "24/7 Enterprise"
       }
     ],
-    "inStock": true,
+    "inStock": false,
     "tags": [
       "Software",
       "NVIDIA",
@@ -255,7 +255,7 @@
         "value": "IB / Ethernet"
       }
     ],
-    "inStock": true,
+    "inStock": false,
     "tags": [
       "Server",
       "Dell",
@@ -293,7 +293,7 @@
         "value": "Managed"
       }
     ],
-    "inStock": true,
+    "inStock": false,
     "tags": [
       "Networking",
       "InfiniBand",
