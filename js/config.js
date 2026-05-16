@@ -75,7 +75,7 @@ window.TW = {
       category: 'Workstation GPU',
       sku: 'NV-RTX6000-ADA',
       priceDisplay: 'POA',
-      shopifyVariantId: null,
+      shopifyVariantId: '43751354662990',
       image: null,
       iconClass: 'blue',
       icon: 'fa-desktop',
