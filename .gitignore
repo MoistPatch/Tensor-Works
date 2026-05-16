@@ -2,6 +2,7 @@
 Thumbs.db
 tensorworkssite.zip
 tensor-works-site/
+.claude/
 
 # wrangler files
 .wrangler
