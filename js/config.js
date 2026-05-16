@@ -115,7 +115,7 @@ window.TW = {
       category: 'Software Suite',
       sku: 'NV-AIE-SUITE',
       priceDisplay: 'POA',
-      shopifyVariantId: null,
+      shopifyVariantId: '43751354761294',
       image: null,
       iconClass: 'teal',
       icon: 'fa-brain',
