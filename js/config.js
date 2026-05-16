@@ -135,7 +135,7 @@ window.TW = {
       category: 'Server Platform',
       sku: 'DELL-PE-XE9680',
       priceDisplay: 'POA',
-      shopifyVariantId: null,
+      shopifyVariantId: '43751354826830',
       image: null,
       iconClass: 'orange',
       icon: 'fa-hdd',
