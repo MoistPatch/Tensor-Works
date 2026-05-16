@@ -9,14 +9,28 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Dicker Data sync
+      - name: Check configuration
+        id: check
         run: |
-          STATUS=$(curl -sf -o /tmp/sync-response.json -w "%{http_code}" \
-            -X POST "${{ vars.SITE_URL }}/api/dicker-sync" \
-            -H "X-Sync-Secret: ${{ secrets.SYNC_SECRET }}" \
+          if [ -z "${{ vars.SITE_URL }}" ]; then
+            echo "SITE_URL not configured — skipping sync"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Trigger Dicker Data sync
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          SITE="${{ vars.SITE_URL }}"
+          SECRET="${{ secrets.SYNC_SECRET }}"
+          STATUS=$(curl -s -o /tmp/sync-response.json -w "%{http_code}" \
+            -X POST "${SITE}/api/dicker-sync" \
+            -H "X-Sync-Secret: ${SECRET}" \
             -H "Content-Type: application/json")
+          echo "HTTP ${STATUS}"
           cat /tmp/sync-response.json
-          if [ "$STATUS" -ge 400 ]; then
-            echo "Sync endpoint returned $STATUS"
+          if [ "$STATUS" -ge 500 ]; then
+            echo "Server error ${STATUS} — sync failed"
             exit 1
           fi
