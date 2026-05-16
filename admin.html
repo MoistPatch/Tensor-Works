@@ -572,6 +572,21 @@
       <button class="btn btn-outline btn-sm" onclick="addBrainNote()"><i class="fas fa-plus"></i> Add</button>
     </div>
   </div>
+
+  <div class="tab-section" style="border-top:2px solid var(--teal-dk);padding-top:28px;margin-top:8px">
+    <div class="intel-header" style="margin-bottom:16px">
+      <div>
+        <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-sync-alt"></i> Monthly System Update</div>
+        <div class="intel-timestamp" id="sysupdate-timestamp">Synthesises all month's data into a master directive, validates it, bug-checks it, then injects into brain</div>
+      </div>
+      <button class="btn btn-primary" onclick="runSystemUpdate()" id="sysupdate-btn"><i class="fas fa-rocket"></i> Run System Update</button>
+    </div>
+    <div id="sysupdate-result" style="display:none"></div>
+    <div class="tab-section" style="margin-top:20px">
+      <div class="tab-section-title" style="margin-bottom:12px"><i class="fas fa-history"></i> Update History</div>
+      <div id="sysupdate-history"><div class="empty-panel"><p>No system updates run yet.</p></div></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1231,6 +1246,92 @@
     fetch('/api/brain', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'update-constraints', constraints: { maxPriceChangePercent: parseFloat(newMax) } })
     }).then(function() { loadBrain(); }).catch(function(e) { alert('Error: ' + e.message); });
+  };
+
+  // ── System Update ─────────────────────────────────────────────────────────
+  window.runSystemUpdate = async function() {
+    var btn = document.getElementById('sysupdate-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running...';
+    document.getElementById('sysupdate-timestamp').textContent = 'Phase 1: Synthesising month data... (this takes 2-3 minutes)';
+    document.getElementById('sysupdate-result').style.display = 'none';
+
+    try {
+      var r = await fetch('/api/system-update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fromAdmin: true }),
+      });
+      var data = await r.json();
+
+      document.getElementById('sysupdate-result').style.display = 'block';
+
+      if (data.requiresHumanReview) {
+        document.getElementById('sysupdate-result').innerHTML =
+          '<div class="alert-card" style="margin-bottom:0"><i class="fas fa-exclamation-triangle"></i>' +
+          '<div><strong>Human review required before implementation.</strong><br>' +
+          '<span style="font-size:12px">' + escHtml((data.validation || {}).validatorNotes || '') + '</span><br>' +
+          '<ul style="margin-top:8px;padding-left:16px;font-size:12px">' +
+          ((data.validation || {}).issues || []).filter(function(i){return i.severity==='critical';}).map(function(i) {
+            return '<li><strong>' + escHtml(i.field) + ':</strong> ' + escHtml(i.issue) + '</li>';
+          }).join('') + '</ul></div></div>';
+        document.getElementById('sysupdate-timestamp').textContent = 'Requires review — check issues above before proceeding';
+      } else if (data.error) {
+        document.getElementById('sysupdate-result').innerHTML =
+          '<div class="alert-card"><i class="fas fa-times-circle"></i> Error: ' + escHtml(data.error) + '</div>';
+        document.getElementById('sysupdate-timestamp').textContent = 'Update failed';
+      } else {
+        var scoreColor = data.confidenceScore >= 0.7 ? 'var(--green)' : data.confidenceScore >= 0.5 ? 'var(--orange)' : 'var(--red)';
+        document.getElementById('sysupdate-result').innerHTML =
+          '<div class="sim-result-card" style="border-color:var(--teal-dk)">' +
+            '<div class="sim-result-title">v' + data.version + ' implemented <span class="sim-confidence" style="background:none;border:none;color:' + scoreColor + '">' + Math.round((data.confidenceScore||0)*100) + '% confidence</span></div>' +
+            '<div class="sim-result-body">' + escHtml(data.executiveSummary || '') + '</div>' +
+            '<div class="sim-result-rec"><i class="fas fa-crosshairs" style="color:var(--teal-lt);margin-right:8px"></i><strong>Strategic focus:</strong> ' + escHtml(data.strategicFocus || '') + '</div>' +
+            '<div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--txt3)">' +
+              '<span>Validation: ' + Math.round((data.validationScore||0)*100) + '%</span>' +
+              '<span>Issues found: ' + (data.issuesFound||0) + '</span>' +
+              '<span>Bugs found: ' + (data.bugsFound||0) + '</span>' +
+              '<span>Constraints updated: ' + (data.constraintsUpdated||0) + '</span>' +
+            '</div>' +
+          '</div>';
+        document.getElementById('sysupdate-timestamp').textContent = 'Completed successfully — ' + new Date().toLocaleString('en-AU');
+        await loadBrain();
+      }
+      await loadSystemUpdateHistory();
+    } catch(e) {
+      document.getElementById('sysupdate-result').style.display = 'block';
+      document.getElementById('sysupdate-result').innerHTML = '<div class="alert-card"><i class="fas fa-times-circle"></i> ' + escHtml(e.message) + '</div>';
+      document.getElementById('sysupdate-timestamp').textContent = 'Failed: ' + e.message;
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-rocket"></i> Run System Update';
+  };
+
+  async function loadSystemUpdateHistory() {
+    try {
+      var r = await fetch('/api/system-update');
+      var data = await r.json();
+      var history = [];
+      if (data.current) history.push(data.current);
+      history = history.concat(data.history || []);
+      document.getElementById('sysupdate-history').innerHTML = history.length
+        ? history.map(function(h) {
+            var statusColor = h.status === 'implemented' ? 'var(--green)' : h.status === 'requires-review' ? 'var(--orange)' : 'var(--red)';
+            return '<div class="sim-history-item">' +
+              '<span class="sim-history-scenario">v' + (h.version||'?') + ' — ' + escHtml(h.strategicFocus || h.executiveSummary || 'System update') + '</span>' +
+              '<span class="sim-confidence" style="color:' + statusColor + ';background:none;border:none">' + escHtml(h.status||'') + '</span>' +
+              '<span class="sim-history-date">' + (h.implementedAt ? new Date(h.implementedAt).toLocaleDateString('en-AU') : '') + '</span>' +
+            '</div>';
+          }).join('')
+        : '<div class="empty-panel"><p>No system updates yet.</p></div>';
+    } catch(_) {}
+  }
+
+  // Load system update history when brain tab opens
+  var _origLoadBrain = window.loadBrain;
+  window.loadBrain = async function() {
+    await _origLoadBrain();
+    await loadSystemUpdateHistory();
   };
 
   // ── Competitors tab ───────────────────────────────────────────────────────
