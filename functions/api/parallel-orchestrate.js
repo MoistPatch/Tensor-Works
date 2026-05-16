@@ -35,7 +35,10 @@ const TASK_DAG = {
   'multi-agent-intel':{ deps: ['competitor-crawl', 'trend-analyst', 'anomaly-detector'], timeout: 28000 },
   'memory-manager':   { deps: ['multi-agent-intel'],                             timeout: 20000 },
   'reporting':        { deps: ['multi-agent-intel'],                             timeout: 20000 },
-  'brain-update':     { deps: ['memory-manager', 'reporting'],                  timeout: 10000 },
+  'synthesis-engine': { deps: ['multi-agent-intel'],                             timeout: 28000 },
+  'strategy-evolver': { deps: ['synthesis-engine'],                              timeout: 20000 },
+  'temporal-simulator':{ deps: ['strategy-evolver'],                             timeout: 25000 },
+  'brain-update':     { deps: ['memory-manager', 'reporting', 'synthesis-engine'], timeout: 10000 },
   'monitor':          { deps: ['brain-update'],                                  timeout: 15000 },
 };
 
@@ -148,6 +151,14 @@ async function runDAG(tasks, siteUrl, token, anthropicKey, agentRunId) {
         } else if (name === 'brain-update') {
           url = `${siteUrl}/api/brain`;
           body = { action: 'update', path: 'meta.lastOrchestrationAt', value: new Date().toISOString() };
+        } else if (name === 'strategy-evolver') {
+          body = { action: 'evolve' };
+        } else if (name === 'temporal-simulator') {
+          body = { action: 'compare-elite' };
+        } else if (name === 'task-queue') {
+          body = { action: 'purge' };
+        } else if (name === 'agent-manager') {
+          body = { action: 'cleanup' };
         }
         const r = await fetch(url, {
           method: 'POST',
