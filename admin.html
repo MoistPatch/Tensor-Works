@@ -155,6 +155,125 @@
     .loading-overlay.show { display: flex; }
     .spinner { width: 36px; height: 36px; border: 3px solid var(--bdr2); border-top-color: var(--teal-lt); border-radius: 50%; animation: spin .8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Tab bar */
+    .admin-tab-bar { display: flex; gap: 2px; padding: 0 24px; background: var(--bg2); border-bottom: 1px solid var(--bdr); flex-shrink: 0; }
+    .admin-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--txt3); font-family: inherit; font-size: 13px; font-weight: 600; padding: 12px 18px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: color .2s, border-color .2s; margin-bottom: -1px; }
+    .admin-tab:hover { color: var(--txt); }
+    .admin-tab.active { color: var(--teal-lt); border-bottom-color: var(--teal-lt); }
+
+    /* Tab panels */
+    .tab-panel { flex: 1; overflow-y: auto; padding: 32px; }
+    .tab-section { margin-bottom: 32px; }
+    .tab-section-title { font-size: 14px; font-weight: 700; color: var(--txt2); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .tab-section-title i { color: var(--teal-lt); }
+
+    /* Competitor tab */
+    .comp-add-form { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 20px; margin-bottom: 24px; }
+    .comp-add-form-title { font-size: 13px; font-weight: 700; color: var(--teal-lt); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .comp-add-grid { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; align-items: end; }
+    .comp-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .comp-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 16px 20px; display: flex; align-items: center; gap: 16px; }
+    .comp-card-info { flex: 1; min-width: 0; }
+    .comp-card-name { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .comp-card-url { font-size: 12px; color: var(--txt3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .comp-card-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--txt3); }
+    .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .status-active { background: rgba(61,220,132,.1); color: var(--green); border: 1px solid rgba(61,220,132,.2); }
+    .status-blocked { background: rgba(248,81,73,.1); color: var(--red); border: 1px solid rgba(248,81,73,.2); }
+    .status-never { background: var(--bg4); color: var(--txt3); border: 1px solid var(--bdr2); }
+    .comp-card-actions { display: flex; gap: 8px; align-items: center; }
+    .price-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .price-table th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); border-bottom: 1px solid var(--bdr); }
+    .price-table td { padding: 10px 12px; border-bottom: 1px solid var(--bdr); color: var(--txt2); vertical-align: middle; }
+    .price-table tr:last-child td { border-bottom: none; }
+    .price-table tr:hover td { background: var(--bg3); }
+    .price-better { color: var(--red); font-weight: 700; }
+    .price-worse { color: var(--green); font-weight: 700; }
+    .price-table-wrap { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); overflow: hidden; margin-bottom: 24px; }
+
+    /* Analytics tab */
+    .stats-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 18px 20px; }
+    .stat-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); margin-bottom: 8px; }
+    .stat-card-value { font-size: 28px; font-weight: 800; color: var(--white); }
+    .stat-card-value.teal { color: var(--teal-lt); }
+    .bar-list { display: flex; flex-direction: column; gap: 8px; }
+    .bar-item { display: flex; align-items: center; gap: 12px; }
+    .bar-row { display: flex; align-items: center; gap: 10px; }
+    .bar-label { font-size: 13px; color: var(--txt2); min-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 8px; background: var(--bg4); border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--teal-lt)); border-radius: 4px; }
+    .bar-count { font-size: 13px; font-weight: 700; color: var(--txt); min-width: 40px; text-align: right; }
+    .session-list { display: flex; flex-direction: column; gap: 8px; }
+    .session-item { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--rsm); padding: 12px 16px; display: flex; align-items: center; gap: 16px; font-size: 13px; }
+    .session-date { color: var(--txt3); font-weight: 600; min-width: 90px; }
+    .session-detail { color: var(--txt2); flex: 1; }
+    .session-products { color: var(--teal-lt); font-size: 12px; }
+    .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 900px) { .two-col-grid { grid-template-columns: 1fr; } }
+    .panel-box { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 20px; }
+
+    /* Intelligence tab */
+    .intel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .intel-timestamp { font-size: 12px; color: var(--txt3); }
+    .alert-list { display: flex; flex-direction: column; gap: 10px; }
+    .alert-card { background: rgba(248,81,73,.07); border: 1px solid rgba(248,81,73,.2); border-radius: var(--rsm); padding: 12px 16px; font-size: 13px; color: var(--txt2); display: flex; align-items: flex-start; gap: 10px; }
+    .alert-card i { color: var(--red); flex-shrink: 0; margin-top: 1px; }
+    .trend-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .trend-chip { background: rgba(13,115,119,.12); border: 1px solid var(--teal-dk); color: var(--teal-lt); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .insight-list { display: flex; flex-direction: column; gap: 10px; }
+    .insight-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--txt2); padding: 10px 14px; background: var(--bg3); border-radius: var(--rsm); border-left: 3px solid var(--teal-dk); }
+    .insight-item i { color: var(--teal-lt); flex-shrink: 0; margin-top: 2px; }
+    .rec-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .rec-table th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); border-bottom: 1px solid var(--bdr); }
+    .rec-table td { padding: 10px 12px; border-bottom: 1px solid var(--bdr); color: var(--txt2); vertical-align: top; }
+    .rec-table tr:last-child td { border-bottom: none; }
+    .rec-table tr:hover td { background: var(--bg3); }
+    .rec-table-wrap { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); overflow: hidden; }
+    .ranking-list { display: flex; flex-direction: column; gap: 6px; }
+    .ranking-item { display: flex; align-items: center; gap: 12px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--rsm); padding: 10px 14px; font-size: 13px; }
+    .ranking-num { font-size: 16px; font-weight: 800; color: var(--teal-lt); min-width: 28px; }
+    .ranking-title { font-size: 14px; color: var(--txt); }
+    .session-row { display: flex; align-items: center; gap: 16px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--rsm); padding: 10px 14px; font-size: 13px; }
+    .session-date { color: var(--txt3); min-width: 90px; }
+    .session-pages { color: var(--txt2); }
+    .session-products { color: var(--teal-lt); margin-left: auto; }
+    .status-chip { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .status-chip.green { background: rgba(61,220,132,.1); color: var(--green); border: 1px solid rgba(61,220,132,.2); }
+    .status-chip.red { background: rgba(248,81,73,.1); color: var(--red); border: 1px solid rgba(248,81,73,.2); }
+    .status-chip.muted { background: var(--bg4); color: var(--txt3); border: 1px solid var(--bdr2); }
+    .comp-item { display: flex; align-items: center; gap: 16px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 16px 18px; }
+    .comp-item-info { flex: 1; min-width: 0; }
+    .comp-item-name { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+    .comp-item-url { font-size: 12px; color: var(--txt3); margin-bottom: 3px; }
+    .comp-item-url a { color: var(--teal-lt); }
+    .comp-item-meta { font-size: 11px; color: var(--txt3); }
+    .comp-item-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .bundle-tag { display: inline-block; background: var(--bg3); border: 1px solid var(--bdr2); color: var(--txt2); font-size: 11px; padding: 3px 8px; border-radius: 4px; margin: 2px; }
+    .bundle-card-products { margin-bottom: 10px; }
+    .bundle-card-discount { font-size: 13px; font-weight: 700; color: var(--green); }
+    .tab-section { margin-bottom: 28px; }
+    .tab-section-title { font-size: 14px; font-weight: 700; color: var(--txt); display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .tab-section-title i { color: var(--teal-lt); }
+    .intel-timestamp { font-size: 12px; color: var(--txt3); }
+    .trend-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .price-table-wrap { overflow-x: auto; }
+    .empty-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: var(--txt3); gap: 10px; text-align: center; }
+    .empty-panel i { font-size: 32px; }
+    .ranking-name { color: var(--txt); flex: 1; }
+    .ranking-handle { font-size: 11px; color: var(--txt3); }
+    .bundle-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .bundle-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 18px; }
+    .bundle-card-name { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .bundle-card-desc { font-size: 13px; color: var(--txt2); margin-bottom: 12px; line-height: 1.5; }
+    .bundle-products { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .bundle-product-tag { background: var(--bg4); border: 1px solid var(--bdr2); border-radius: 4px; padding: 3px 8px; font-size: 11px; color: var(--txt3); }
+    .bundle-discount { font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 12px; }
+    .bundle-reasoning { font-size: 12px; color: var(--txt3); font-style: italic; margin-bottom: 14px; line-height: 1.5; }
+    .empty-panel { text-align: center; padding: 48px 24px; color: var(--txt3); }
+    .empty-panel i { font-size: 36px; margin-bottom: 12px; display: block; }
+    .empty-panel p { font-size: 14px; }
   </style>
 </head>
 <body>
@@ -177,6 +296,14 @@
   </div>
 </header>
 
+<div class="admin-tab-bar">
+  <button class="admin-tab active" onclick="switchAdminTab('products')" id="tab-btn-products"><i class="fas fa-microchip"></i> Products</button>
+  <button class="admin-tab" onclick="switchAdminTab('competitors')" id="tab-btn-competitors"><i class="fas fa-globe"></i> Competitors</button>
+  <button class="admin-tab" onclick="switchAdminTab('analytics')" id="tab-btn-analytics"><i class="fas fa-chart-line"></i> Analytics</button>
+  <button class="admin-tab" onclick="switchAdminTab('intelligence')" id="tab-btn-intelligence"><i class="fas fa-brain"></i> Intelligence</button>
+</div>
+
+<div id="tab-content-products" style="display:grid">
 <div class="admin-layout">
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -197,6 +324,126 @@
     </div>
     <div class="product-form" id="product-form" style="display:none"></div>
   </main>
+</div>
+</div><!-- /tab-content-products -->
+
+<!-- Competitors Tab -->
+<div id="tab-content-competitors" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div class="tab-section-title"><i class="fas fa-globe"></i> Competitor Intelligence</div>
+    <button class="btn btn-primary btn-sm" onclick="crawlAllCompetitors()"><i class="fas fa-sync-alt"></i> Crawl All</button>
+  </div>
+
+  <div class="comp-add-form">
+    <div class="comp-add-form-title"><i class="fas fa-plus-circle"></i> Add Competitor Site</div>
+    <div class="comp-add-grid">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="comp-name" placeholder="e.g. Dicker Data" />
+      </div>
+      <div class="form-group">
+        <label>Website URL</label>
+        <input type="text" id="comp-url" placeholder="https://www.example.com.au" />
+      </div>
+      <div class="form-group">
+        <label>Catalogue URL</label>
+        <input type="text" id="comp-catalogue-url" placeholder="https://www.example.com.au/products" />
+      </div>
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button class="btn btn-primary" onclick="addCompetitor()"><i class="fas fa-plus"></i> Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-list"></i> Monitored Sites</div>
+    <div class="comp-list" id="comp-list">
+      <div class="empty-panel"><i class="fas fa-globe"></i><p>Loading competitor sites...</p></div>
+    </div>
+  </div>
+
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-table"></i> Price Comparison</div>
+    <div class="price-table-wrap" id="price-table-wrap">
+      <div class="empty-panel"><i class="fas fa-chart-bar"></i><p>No price data yet. Add competitors and run a crawl.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Analytics Tab -->
+<div id="tab-content-analytics" style="display:none" class="tab-panel">
+  <div class="tab-section-title"><i class="fas fa-chart-line"></i> Site Analytics</div>
+  <div class="stats-cards" id="analytics-stats">
+    <div class="stat-card"><div class="stat-card-label">Sessions (7d)</div><div class="stat-card-value teal" id="stat-7d">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Sessions (30d)</div><div class="stat-card-value" id="stat-30d">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Total Sessions</div><div class="stat-card-value" id="stat-total">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Unique Products Viewed</div><div class="stat-card-value teal" id="stat-products">—</div></div>
+  </div>
+  <div class="two-col-grid">
+    <div class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-fire"></i> Top Products</div>
+      <div class="bar-list" id="top-products-list"><div class="empty-panel" style="padding:16px"><p>No product view data yet.</p></div></div>
+    </div>
+    <div class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-file-alt"></i> Top Pages</div>
+      <div class="bar-list" id="top-pages-list"><div class="empty-panel" style="padding:16px"><p>No page view data yet.</p></div></div>
+    </div>
+  </div>
+  <div class="tab-section" style="margin-top:24px">
+    <div class="tab-section-title"><i class="fas fa-history"></i> Recent Sessions</div>
+    <div class="session-list" id="session-list"><div class="empty-panel"><p>No sessions recorded yet.</p></div></div>
+  </div>
+</div>
+
+<!-- Intelligence Tab -->
+<div id="tab-content-intelligence" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div>
+      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-brain"></i> Business Intelligence</div>
+      <div class="intel-timestamp" id="intel-timestamp">No report generated yet</div>
+    </div>
+    <button class="btn btn-primary" onclick="runIntelligence()" id="intel-run-btn"><i class="fas fa-play"></i> Run Analysis</button>
+  </div>
+
+  <div id="intel-alerts-section" style="display:none" class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-exclamation-triangle"></i> Alerts</div>
+    <div class="alert-list" id="intel-alerts"></div>
+  </div>
+
+  <div class="two-col-grid" style="margin-bottom:24px">
+    <div id="intel-trends-section" style="display:none" class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-chart-line"></i> Trends</div>
+      <div class="trend-chips" id="intel-trends"></div>
+    </div>
+    <div id="intel-insights-section" style="display:none" class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-lightbulb"></i> Insights</div>
+      <div class="insight-list" id="intel-insights"></div>
+    </div>
+  </div>
+
+  <div id="intel-recs-section" style="display:none" class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-dollar-sign"></i> Price Recommendations</div>
+    <div class="rec-table-wrap">
+      <table class="rec-table">
+        <thead><tr><th>Product</th><th>Current Price</th><th>Recommended</th><th>Reasoning</th><th></th></tr></thead>
+        <tbody id="intel-recs"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="intel-ranking-section" style="display:none" class="tab-section">
+    <div class="tab-section-title" style="justify-content:space-between">
+      <span><i class="fas fa-sort-amount-down"></i> Product Ranking</span>
+      <button class="btn btn-outline btn-sm" onclick="applyProductRanking()" id="apply-ranking-btn"><i class="fas fa-check"></i> Apply Ranking</button>
+    </div>
+    <div class="ranking-list" id="intel-ranking"></div>
+  </div>
+
+  <div id="intel-bundles-section" style="display:none" class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-boxes"></i> Bundle Suggestions</div>
+    <div class="bundle-cards" id="intel-bundles"></div>
+  </div>
 </div>
 
 <script>
@@ -665,6 +912,315 @@
   window.addEventListener('beforeunload', function(e) {
     if (state.dirty) { e.preventDefault(); e.returnValue = ''; }
   });
+
+  // ── Tab navigation ────────────────────────────────────────────────────────
+  window.switchAdminTab = function(tab) {
+    ['products','competitors','analytics','intelligence'].forEach(function(t) {
+      var content = document.getElementById('tab-content-' + t);
+      var btn = document.getElementById('tab-btn-' + t);
+      if (content) content.style.display = t === tab ? (t === 'products' ? 'grid' : 'block') : 'none';
+      if (btn) btn.classList.toggle('active', t === tab);
+    });
+    if (tab === 'competitors') loadCompetitors();
+    if (tab === 'analytics') loadAnalytics();
+    if (tab === 'intelligence') loadIntelligence();
+  };
+
+  // ── Competitors tab ───────────────────────────────────────────────────────
+  var compState = { sites: [], prices: {} };
+
+  async function loadCompetitors() {
+    document.getElementById('comp-list').innerHTML = '<div class="empty-panel"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
+    try {
+      var r = await fetch('/api/competitors');
+      var data = await r.json();
+      compState.sites = data.sites || [];
+      compState.prices = data.prices || {};
+      renderCompList();
+      renderPriceTable();
+    } catch(e) {
+      document.getElementById('comp-list').innerHTML = '<div class="empty-panel"><i class="fas fa-exclamation-circle"></i><p>Error: ' + escHtml(e.message) + '</p></div>';
+    }
+  }
+
+  function renderCompList() {
+    var el = document.getElementById('comp-list');
+    if (!compState.sites.length) {
+      el.innerHTML = '<div class="empty-panel"><i class="fas fa-globe"></i><p>No competitor sites added yet.</p></div>';
+      return;
+    }
+    el.innerHTML = compState.sites.map(function(s) {
+      var statusClass = s.lastStatus === 'ok' ? 'green' : s.lastStatus === 'blocked' ? 'red' : 'muted';
+      var statusText = s.lastStatus === 'ok' ? 'Active' : s.lastStatus === 'blocked' ? 'Blocked' : 'Never crawled';
+      var crawledAt = s.lastCrawled ? new Date(s.lastCrawled).toLocaleString('en-AU') : 'Never';
+      return '<div class="comp-item">' +
+        '<div class="comp-item-info">' +
+          '<div class="comp-item-name">' + escHtml(s.name) + '</div>' +
+          '<div class="comp-item-url"><a href="' + escAttr(s.url) + '" target="_blank">' + escHtml(s.url) + '</a></div>' +
+          '<div class="comp-item-meta">Last crawled: ' + crawledAt + ' &nbsp;·&nbsp; Products matched: ' + (s.productCount || 0) + '</div>' +
+        '</div>' +
+        '<div class="comp-item-actions">' +
+          '<span class="status-chip ' + statusClass + '">' + statusText + '</span>' +
+          '<button class="btn btn-outline btn-sm" onclick="crawlCompetitor(\'' + escAttr(s.id) + '\')"><i class="fas fa-sync-alt"></i> Crawl</button>' +
+          '<button class="btn-icon" onclick="removeCompetitor(\'' + escAttr(s.id) + '\')" title="Remove"><i class="fas fa-trash-alt"></i></button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderPriceTable() {
+    var el = document.getElementById('price-table-wrap');
+    var hasData = Object.keys(compState.prices).some(function(id) { return compState.prices[id] && compState.prices[id].length; });
+    if (!hasData) {
+      el.innerHTML = '<div class="empty-panel"><i class="fas fa-chart-bar"></i><p>No price data yet. Add competitors and run a crawl.</p></div>';
+      return;
+    }
+    // Build product → competitors map
+    var byHandle = {};
+    Object.keys(compState.prices).forEach(function(compId) {
+      var comp = compState.sites.find(function(s) { return s.id === compId; });
+      var compName = comp ? comp.name : compId;
+      (compState.prices[compId] || []).forEach(function(row) {
+        if (!byHandle[row.matchedHandle]) byHandle[row.matchedHandle] = [];
+        byHandle[row.matchedHandle].push({ name: compName, price: row.competitorPrice, url: row.competitorUrl });
+      });
+    });
+    var headers = '<th>Our Product</th><th>Our Price</th>' + compState.sites.map(function(s) { return '<th>' + escHtml(s.name) + '</th>'; }).join('');
+    var rows = Object.keys(byHandle).map(function(handle) {
+      var prod = state.products.find(function(p) { return p.handle === handle; });
+      var title = prod ? prod.title : handle;
+      var ourPrice = prod ? (prod.priceDisplay || 'POA') : '—';
+      var cells = compState.sites.map(function(s) {
+        var match = (compState.prices[s.id] || []).find(function(r) { return r.matchedHandle === handle; });
+        if (!match) return '<td>—</td>';
+        var price = match.competitorPrice ? 'A$' + Number(match.competitorPrice).toLocaleString('en-AU', {minimumFractionDigits:0}) : '—';
+        return '<td><a href="' + escAttr(match.competitorUrl || '#') + '" target="_blank">' + price + '</a></td>';
+      }).join('');
+      return '<tr><td><strong>' + escHtml(title) + '</strong></td><td>' + escHtml(ourPrice) + '</td>' + cells + '</tr>';
+    }).join('');
+    el.innerHTML = '<table class="rec-table"><thead><tr>' + headers + '</tr></thead><tbody>' + rows + '</tbody></table>';
+  }
+
+  window.addCompetitor = async function() {
+    var name = document.getElementById('comp-name').value.trim();
+    var url = document.getElementById('comp-url').value.trim();
+    var catalogueUrl = document.getElementById('comp-catalogue-url').value.trim();
+    if (!name || !url || !catalogueUrl) { alert('Please fill in all three fields.'); return; }
+    try {
+      var r = await fetch('/api/competitors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add', site: { name: name, url: url, catalogueUrl: catalogueUrl } }),
+      });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      document.getElementById('comp-name').value = '';
+      document.getElementById('comp-url').value = '';
+      document.getElementById('comp-catalogue-url').value = '';
+      await loadCompetitors();
+    } catch(e) { alert('Error: ' + e.message); }
+  };
+
+  window.removeCompetitor = async function(id) {
+    if (!confirm('Remove this competitor site?')) return;
+    try {
+      await fetch('/api/competitors', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'remove', id: id }) });
+      await loadCompetitors();
+    } catch(e) { alert('Error: ' + e.message); }
+  };
+
+  window.crawlCompetitor = async function(id) {
+    var btn = event.target.closest('button');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Crawling...'; }
+    try {
+      var r = await fetch('/api/competitor-crawl', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id }) });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      await loadCompetitors();
+    } catch(e) { alert('Crawl error: ' + e.message); if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sync-alt"></i> Crawl'; } }
+  };
+
+  window.crawlAllCompetitors = async function() {
+    var btn = document.querySelector('[onclick="crawlAllCompetitors()"]');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Crawling...'; }
+    try {
+      var r = await fetch('/api/competitor-crawl', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      await loadCompetitors();
+    } catch(e) { alert('Crawl error: ' + e.message); }
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sync-alt"></i> Crawl All'; }
+  };
+
+  // ── Analytics tab ─────────────────────────────────────────────────────────
+  async function loadAnalytics() {
+    try {
+      var r = await fetch('/api/analytics');
+      var data = await r.json();
+      document.getElementById('stat-7d').textContent = data.sessions7d || 0;
+      document.getElementById('stat-30d').textContent = data.sessions30d || 0;
+      document.getElementById('stat-total').textContent = data.totalSessions || 0;
+      document.getElementById('stat-products').textContent = Object.keys(data.productViews || {}).length;
+
+      var topProds = Object.entries(data.productViews || {}).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
+      var maxProd = topProds.length ? topProds[0][1] : 1;
+      document.getElementById('top-products-list').innerHTML = topProds.length
+        ? topProds.map(function(p) {
+            var prod = state.products.find(function(x){return x.handle===p[0];});
+            var label = prod ? prod.title : p[0];
+            var pct = Math.round((p[1]/maxProd)*100);
+            return '<div class="bar-row"><div class="bar-label">' + escHtml(label) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div><div class="bar-count">' + p[1] + '</div></div>';
+          }).join('')
+        : '<div class="empty-panel" style="padding:16px"><p>No product view data yet.</p></div>';
+
+      var topPages = Object.entries(data.pageViews || {}).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
+      var maxPage = topPages.length ? topPages[0][1] : 1;
+      document.getElementById('top-pages-list').innerHTML = topPages.length
+        ? topPages.map(function(p) {
+            var pct = Math.round((p[1]/maxPage)*100);
+            return '<div class="bar-row"><div class="bar-label">' + escHtml(p[0]) + '</div><div class="bar-track"><div class="bar-fill teal" style="width:' + pct + '%"></div></div><div class="bar-count">' + p[1] + '</div></div>';
+          }).join('')
+        : '<div class="empty-panel" style="padding:16px"><p>No page view data yet.</p></div>';
+
+      var sessions = (data.recentSessions || []).slice(0, 20);
+      document.getElementById('session-list').innerHTML = sessions.length
+        ? sessions.map(function(s) {
+            return '<div class="session-row"><span class="session-date">' + escHtml(s.date) + '</span><span class="session-pages">' + (s.pages||[]).length + ' pages</span><span class="session-products">' + (s.products||[]).length + ' products viewed</span></div>';
+          }).join('')
+        : '<div class="empty-panel"><p>No sessions recorded yet.</p></div>';
+    } catch(e) {
+      document.getElementById('stat-7d').textContent = 'Err';
+    }
+  }
+
+  // ── Intelligence tab ──────────────────────────────────────────────────────
+  async function loadIntelligence() {
+    try {
+      var r = await fetch('/api/intelligence');
+      var data = await r.json();
+      if (data && data.generatedAt) renderIntelligenceReport(data);
+    } catch(e) {}
+  }
+
+  window.runIntelligence = async function() {
+    var btn = document.getElementById('intel-run-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analysing...';
+    document.getElementById('intel-timestamp').textContent = 'Running analysis — this may take 30–60 seconds...';
+    try {
+      var r = await fetch('/api/intelligence', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      renderIntelligenceReport(data);
+    } catch(e) {
+      document.getElementById('intel-timestamp').textContent = 'Error: ' + e.message;
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-play"></i> Run Analysis';
+  };
+
+  function renderIntelligenceReport(data) {
+    document.getElementById('intel-timestamp').textContent = data.generatedAt ? 'Last run: ' + new Date(data.generatedAt).toLocaleString('en-AU') : '';
+
+    var alerts = data.alerts || [];
+    var alertsEl = document.getElementById('intel-alerts-section');
+    alertsEl.style.display = alerts.length ? 'block' : 'none';
+    document.getElementById('intel-alerts').innerHTML = alerts.map(function(a) { return '<div class="alert-card"><i class="fas fa-exclamation-triangle"></i> ' + escHtml(a) + '</div>'; }).join('');
+
+    var trends = data.trends || [];
+    var trendsEl = document.getElementById('intel-trends-section');
+    trendsEl.style.display = trends.length ? 'block' : 'none';
+    document.getElementById('intel-trends').innerHTML = trends.map(function(t) { return '<span class="trend-chip">' + escHtml(t) + '</span>'; }).join('');
+
+    var insights = data.insights || [];
+    var insightsEl = document.getElementById('intel-insights-section');
+    insightsEl.style.display = insights.length ? 'block' : 'none';
+    document.getElementById('intel-insights').innerHTML = insights.map(function(i) { return '<div class="insight-item"><i class="fas fa-check-circle"></i> ' + escHtml(i) + '</div>'; }).join('');
+
+    var recs = data.priceRecommendations || [];
+    var recsEl = document.getElementById('intel-recs-section');
+    recsEl.style.display = recs.length ? 'block' : 'none';
+    document.getElementById('intel-recs').innerHTML = recs.map(function(rec, i) {
+      return '<tr>' +
+        '<td><strong>' + escHtml(rec.handle) + '</strong></td>' +
+        '<td>' + escHtml(rec.currentPrice || '—') + '</td>' +
+        '<td><strong style="color:var(--teal-lt)">' + escHtml(rec.recommendedPrice || '—') + '</strong></td>' +
+        '<td style="max-width:300px;font-size:12px;color:var(--txt3)">' + escHtml(rec.reasoning || '') + '</td>' +
+        '<td><button class="btn-apply" onclick="applyPriceRec(' + i + ',' + JSON.stringify(rec) + ')">Apply</button></td>' +
+      '</tr>';
+    }).join('');
+
+    var ranking = data.productRanking || [];
+    var rankEl = document.getElementById('intel-ranking-section');
+    rankEl.style.display = ranking.length ? 'block' : 'none';
+    window._intelligenceRanking = ranking;
+    document.getElementById('intel-ranking').innerHTML = ranking.map(function(handle, i) {
+      var prod = state.products.find(function(p) { return p.handle === handle; });
+      var title = prod ? prod.title : handle;
+      return '<div class="ranking-item"><span class="ranking-num">' + (i+1) + '</span><span class="ranking-title">' + escHtml(title) + '</span></div>';
+    }).join('');
+
+    var bundles = data.bundles || [];
+    var bundlesEl = document.getElementById('intel-bundles-section');
+    bundlesEl.style.display = bundles.length ? 'block' : 'none';
+    document.getElementById('intel-bundles').innerHTML = bundles.map(function(b, i) {
+      var productTitles = (b.products || []).map(function(h) {
+        var p = state.products.find(function(x){return x.handle===h;});
+        return p ? p.title : h;
+      });
+      return '<div class="bundle-card">' +
+        '<div class="bundle-card-name">' + escHtml(b.name) + '</div>' +
+        '<div class="bundle-card-desc">' + escHtml(b.description || '') + '</div>' +
+        '<div class="bundle-card-products">' + productTitles.map(function(t){return '<span class="bundle-tag">' + escHtml(t) + '</span>';}).join('') + '</div>' +
+        (b.discountPct ? '<div class="bundle-card-discount">' + b.discountPct + '% bundle discount</div>' : '') +
+        '<button class="btn btn-outline btn-sm" style="margin-top:12px;width:100%;justify-content:center" onclick="saveBundleToSite(' + i + ')"><i class="fas fa-plus"></i> Add to Site</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  window.applyPriceRec = function(idx, rec) {
+    var prod = state.products.find(function(p) { return p.handle === rec.handle; });
+    if (!prod) { alert('Product not found: ' + rec.handle); return; }
+    prod.priceDisplay = rec.recommendedPrice;
+    state.dirty = true;
+    var btns = document.querySelectorAll('#intel-recs .btn-apply');
+    if (btns[idx]) { btns[idx].textContent = 'Applied'; btns[idx].classList.add('applied'); }
+    renderList();
+  };
+
+  window.applyProductRanking = function() {
+    var ranking = window._intelligenceRanking || [];
+    if (!ranking.length) return;
+    var reordered = [];
+    ranking.forEach(function(handle) {
+      var p = state.products.find(function(x){return x.handle===handle;});
+      if (p) reordered.push(p);
+    });
+    state.products.forEach(function(p) {
+      if (!ranking.includes(p.handle)) reordered.push(p);
+    });
+    state.products = reordered;
+    state.dirty = true;
+    renderList();
+    var btn = document.getElementById('apply-ranking-btn');
+    if (btn) { btn.textContent = 'Applied'; btn.classList.add('applied'); }
+  };
+
+  window.saveBundleToSite = async function(idx) {
+    var report = await fetch('/api/intelligence').then(function(r){return r.json();}).catch(function(){return {};});
+    var bundle = (report.bundles || [])[idx];
+    if (!bundle) { alert('Bundle not found'); return; }
+    bundle.id = 'bundle-' + Date.now();
+    bundle.generatedAt = new Date().toISOString();
+    try {
+      var r = await fetch('/api/intelligence', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'save-bundle', bundle: bundle }) });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      var btn = event.target;
+      btn.textContent = 'Added to Site';
+      btn.disabled = true;
+    } catch(e) { alert('Error: ' + e.message); }
+  };
 
   loadProducts();
 })();

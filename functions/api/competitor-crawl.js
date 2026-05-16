@@ -1,7 +1,7 @@
 const OWNER = 'MoistPatch';
 const REPO = 'Tensor-Works';
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
-const CLAUDE_MODEL = 'claude-opus-4-5';
+const CLAUDE_MODEL = 'claude-opus-4-7';
 
 async function ghGet(path, token) {
   const r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path, {

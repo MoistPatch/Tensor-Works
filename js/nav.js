@@ -82,3 +82,43 @@
   window.injectNav = injectNav;
   window.injectFooter = injectFooter;
 })();
+
+// Analytics beacon - tracks page views and product interactions
+(function() {
+  var session = { date: new Date().toISOString().slice(0,10), pages: [], products: [], events: [] };
+  var startTime = Date.now();
+  var currentPath = window.location.pathname;
+
+  function recordPage() {
+    session.pages.push({ path: currentPath, duration: 0 });
+  }
+
+  function updateDuration() {
+    if (session.pages.length) {
+      session.pages[session.pages.length - 1].duration = Math.round((Date.now() - startTime) / 1000);
+    }
+  }
+
+  function recordProductView(handle) {
+    if (handle && session.products.indexOf(handle) === -1) session.products.push(handle);
+    session.events.push({ type: 'product_view', handle: handle, at: Date.now() });
+  }
+
+  function sendSession() {
+    updateDuration();
+    if (session.pages.length === 0 && session.products.length === 0) return;
+    var data = JSON.stringify({ session: session });
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/api/analytics', new Blob([data], { type: 'application/json' }));
+    } else {
+      fetch('/api/analytics', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: data, keepalive: true }).catch(function(){});
+    }
+  }
+
+  recordPage();
+  window.addEventListener('beforeunload', sendSession);
+
+  // Expose for product pages to call
+  window.TW = window.TW || {};
+  window.TW.analytics = { recordProductView: recordProductView };
+})();

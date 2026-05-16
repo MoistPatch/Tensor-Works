@@ -1,0 +1,19 @@
+name: Daily Intelligence Run
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 2am UTC daily
+  workflow_dispatch:
+jobs:
+  intelligence:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Crawl competitor sites
+        run: |
+          curl -sf -X POST "${{ vars.SITE_URL }}/api/competitor-crawl" \
+            -H "X-Sync-Secret: ${{ secrets.SYNC_SECRET }}" \
+            -H "Content-Type: application/json" || echo "Crawl failed"
+      - name: Run intelligence analysis
+        run: |
+          curl -sf -X POST "${{ vars.SITE_URL }}/api/intelligence" \
+            -H "X-Sync-Secret: ${{ secrets.SYNC_SECRET }}" \
+            -H "Content-Type: application/json" || echo "Intelligence failed"
