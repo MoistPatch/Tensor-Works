@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products — Tensor Works | Enterprise AI Hardware</title>
+  <meta name="description" content="Browse Tensor Works' full catalogue of enterprise AI hardware — NVIDIA H100, H200, DGX systems, InfiniBand networking and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /></noscript>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal:        #0D7377;
+      --teal-lt:     #14a8ae;
+      --teal-dk:     #095457;
+      --teal-pale:   rgba(13,115,119,.10);
+      --orange:      #E07B39;
+      --orange-lt:   #f09050;
+      --bg:          #090e10;
+      --bg2:         #0f1518;
+      --bg3:         #151d21;
+      --bg4:         #1c262c;
+      --bdr:         #223039;
+      --bdr2:        #2d3f4a;
+      --txt:         #e2eaed;
+      --txt2:        #8fa8b2;
+      --txt3:        #6e8898;
+      --white:       #ffffff;
+      --r:           10px;
+      --rsm:         6px;
+      --sh:          0 4px 24px rgba(0,0,0,.5);
+      --shmd:        0 8px 48px rgba(0,0,0,.6);
+      --tr:          .2s ease;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); line-height: 1.65; overflow-x: hidden; }
+    a { color: var(--teal-lt); text-decoration: none; }
+    ::selection { background: var(--teal); color: #fff; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--teal-dk); border-radius: 3px; }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: var(--r); font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: var(--tr); text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--teal), var(--teal-dk)); color: #fff; box-shadow: 0 4px 20px rgba(13,115,119,.45); }
+    .btn-primary:hover { background: linear-gradient(135deg, var(--teal-lt), var(--teal)); box-shadow: 0 6px 30px rgba(13,115,119,.6); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--txt); border: 1px solid var(--bdr2); }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal-lt); transform: translateY(-1px); }
+    .btn-sm { padding: 9px 18px; font-size: 13px; }
+    .btn-orange { background: linear-gradient(135deg, var(--orange), #c46025); color: #fff; box-shadow: 0 4px 20px rgba(224,123,57,.35); }
+    .btn-orange:hover { transform: translateY(-1px); box-shadow: 0 6px 30px rgba(224,123,57,.5); }
+
+    /* Header */
+    header { position: sticky; top: 0; z-index: 200; background: rgba(9,14,16,.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--bdr); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; color: var(--white); letter-spacing: -.3px; }
+    .logo-mark { width: 34px; height: 34px; background: linear-gradient(135deg, var(--teal), var(--teal-dk)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-weight: 900; }
+    .logo span { color: var(--teal-lt); }
+    nav { display: flex; align-items: center; gap: 6px; }
+    nav a { color: var(--txt2); font-size: 14px; font-weight: 500; padding: 6px 14px; border-radius: var(--rsm); transition: var(--tr); white-space: nowrap; }
+    nav a:hover { color: var(--white); background: var(--bg3); }
+    .header-cta { display: flex; align-items: center; gap: 10px; }
+    .hamburger { display: none; background: none; border: none; color: var(--txt); font-size: 20px; cursor: pointer; padding: 6px; }
+    @media (max-width: 768px) {
+      nav { display: none; }
+      nav.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--bg2); border-bottom: 1px solid var(--bdr); padding: 16px; gap: 4px; }
+      nav.open a { width: 100%; padding: 10px 16px; }
+      .hamburger { display: block; }
+      .header-cta .btn:not(.cart-btn) { display: none; }
+    }
+
+    /* Footer */
+    footer { background: var(--bg2); border-top: 1px solid var(--bdr); padding: 48px 0 32px; }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--bdr); }
+    @media (max-width: 700px) { .footer-inner { grid-template-columns: 1fr; } }
+    .footer-brand p { font-size: 13px; color: var(--txt3); line-height: 1.7; max-width: 300px; margin-top: 14px; }
+    .footer-col h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--txt2); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 13px; color: var(--txt3); margin-bottom: 9px; transition: color var(--tr); }
+    .footer-col a:hover { color: var(--teal-lt); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 28px; }
+    .footer-bottom p { font-size: 12px; color: var(--txt3); }
+    .footer-bottom a { font-size: 12px; color: var(--txt3); }
+    .footer-bottom a:hover { color: var(--teal-lt); }
+
+    /* Page layout */
+    .page-hero { background: var(--bg2); border-bottom: 1px solid var(--bdr); padding: 48px 0 40px; }
+    .page-hero h1 { font-size: clamp(28px,4vw,42px); font-weight: 900; color: var(--white); margin-bottom: 10px; }
+    .page-hero p { font-size: 16px; color: var(--txt2); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--txt3); margin-bottom: 20px; }
+    .breadcrumb a { color: var(--txt3); }
+    .breadcrumb a:hover { color: var(--teal-lt); }
+    .breadcrumb i { font-size: 10px; }
+
+    /* Products layout */
+    .products-layout { display: grid; grid-template-columns: 240px 1fr; gap: 32px; padding: 40px 0 80px; align-items: start; }
+    @media (max-width: 860px) { .products-layout { grid-template-columns: 1fr; } }
+
+    /* Sidebar */
+    .sidebar { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 24px; position: sticky; top: 80px; }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--txt3); margin-bottom: 14px; }
+    .filter-option { display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; }
+    .filter-option input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--teal); cursor: pointer; }
+    .filter-option label { font-size: 13px; color: var(--txt2); cursor: pointer; flex: 1; }
+    .filter-option:hover label { color: var(--white); }
+    .filter-radio { display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; }
+    .filter-radio input[type="radio"] { width: 15px; height: 15px; accent-color: var(--teal); cursor: pointer; }
+    .filter-radio label { font-size: 13px; color: var(--txt2); cursor: pointer; }
+    .filter-radio:hover label { color: var(--white); }
+    .sidebar-reset { width: 100%; padding: 8px; background: none; border: 1px solid var(--bdr); border-radius: var(--rsm); color: var(--txt3); font-size: 12px; cursor: pointer; transition: var(--tr); margin-top: 8px; }
+    .sidebar-reset:hover { border-color: var(--teal); color: var(--teal-lt); }
+
+    /* Main area */
+    .products-main {}
+    .products-topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+    .search-box { flex: 1; min-width: 200px; position: relative; }
+    .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--txt3); font-size: 14px; }
+    .search-box input { width: 100%; padding: 10px 14px 10px 36px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--rsm); color: var(--txt); font-size: 14px; font-family: inherit; outline: none; transition: border-color var(--tr); }
+    .search-box input:focus { border-color: var(--teal); }
+    .search-box input::placeholder { color: var(--txt3); }
+    .sort-select { padding: 10px 14px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--rsm); color: var(--txt2); font-size: 13px; font-family: inherit; outline: none; cursor: pointer; }
+    .sort-select:focus { border-color: var(--teal); }
+    .result-count { font-size: 13px; color: var(--txt3); white-space: nowrap; }
+
+    /* Product grid */
+    .product-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    @media (max-width: 1100px) { .product-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 580px) { .product-grid { grid-template-columns: 1fr; } }
+    .product-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column; transition: transform var(--tr), border-color var(--tr), box-shadow var(--tr); }
+    .product-card:hover { transform: translateY(-4px); border-color: var(--teal-dk); box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+    .product-head { padding: 24px 24px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .product-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .product-icon.teal   { background: rgba(13,115,119,.2); color: var(--teal-lt); }
+    .product-icon.orange { background: rgba(224,123,57,.15); color: var(--orange-lt); }
+    .product-icon.blue   { background: rgba(88,166,255,.1); color: #58a6ff; }
+    .product-icon.purple { background: rgba(160,100,255,.1); color: #b084ff; }
+    .product-icon.green  { background: rgba(0,200,100,.1); color: #3ddc84; }
+    .product-cat { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--txt3); background: var(--bg3); border: 1px solid var(--bdr); padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+    .product-body { padding: 16px 24px; flex: 1; }
+    .product-name { font-size: 17px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+    .product-name a { color: var(--white); }
+    .product-name a:hover { color: var(--teal-lt); }
+    .product-desc { font-size: 13px; color: var(--txt2); line-height: 1.6; margin-bottom: 14px; }
+    .spec-list { display: flex; flex-direction: column; gap: 5px; }
+    .spec-row { display: flex; justify-content: space-between; font-size: 12px; padding-bottom: 5px; border-bottom: 1px solid var(--bdr); }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-row .key { color: var(--txt3); }
+    .spec-row .val { color: var(--txt); font-weight: 600; }
+    .product-foot { padding: 0 24px 24px; display: flex; flex-direction: column; gap: 8px; }
+    .product-price { font-size: 15px; font-weight: 700; color: var(--teal-lt); margin-bottom: 4px; }
+
+    /* Stock badge */
+    .stock-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; }
+    .stock-badge i { font-size: 7px; }
+    .stock-in    { background: rgba(13,115,119,.15); color: var(--teal-lt); border: 1px solid var(--teal-dk); }
+    .stock-order { background: rgba(224,123,57,.12); color: var(--orange-lt); border: 1px solid rgba(224,123,57,.3); }
+    .stock-low   { background: rgba(255,200,0,.1); color: #ffc94d; border: 1px solid rgba(255,200,0,.2); }
+
+    .product-actions { display: flex; gap: 8px; }
+    .product-actions .btn { flex: 1; justify-content: center; font-size: 13px; padding: 9px 12px; }
+
+    /* Empty state */
+    .no-results { padding: 64px 24px; text-align: center; color: var(--txt2); }
+    .no-results i { font-size: 40px; color: var(--txt3); margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+
+<header id="site-header"></header>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <span>Products</span>
+    </div>
+    <h1>Hardware Catalogue</h1>
+    <p>Enterprise AI compute infrastructure — GPUs, DGX systems, networking and software.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="products-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Category</div>
+        <div id="category-filters"></div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Availability</div>
+        <div class="filter-radio">
+          <input type="radio" name="avail" id="avail-all" value="all" checked />
+          <label for="avail-all">All Products</label>
+        </div>
+        <div class="filter-radio">
+          <input type="radio" name="avail" id="avail-in" value="in-stock" />
+          <label for="avail-in">In Stock</label>
+        </div>
+        <div class="filter-radio">
+          <input type="radio" name="avail" id="avail-order" value="on-order" />
+          <label for="avail-order">On Order</label>
+        </div>
+      </div>
+      <button class="sidebar-reset" onclick="resetFilters()">
+        <i class="fas fa-undo"></i> Reset Filters
+      </button>
+    </aside>
+
+    <!-- Main -->
+    <div class="products-main">
+      <div class="products-topbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-input" placeholder="Search products…" oninput="applyFilters()" />
+        </div>
+        <select class="sort-select" id="sort-select" onchange="applyFilters()">
+          <option value="relevance">Relevance</option>
+          <option value="name-az">Name A–Z</option>
+          <option value="category">Category</option>
+        </select>
+        <span class="result-count" id="result-count"></span>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<div id="cart-drawer"></div>
+<div id="cart-overlay"></div>
+<footer id="site-footer"></footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/shopify.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/dicker.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+  injectNav('products');
+  injectFooter();
+
+  var allProducts = [];
+  var activeCategories = [];
+
+  function iconBgColor(cls) {
+    return {teal:'rgba(13,115,119,.2)',orange:'rgba(224,123,57,.15)',blue:'rgba(88,166,255,.1)',purple:'rgba(160,100,255,.1)',green:'rgba(0,200,100,.1)'}[cls] || 'rgba(13,115,119,.2)';
+  }
+
+  function buildCategoryFilters(products) {
+    var cats = [...new Set(products.map(function(p){return p.category;}))];
+    var html = cats.map(function(cat) {
+      var id = 'cat-' + cat.replace(/\s+/g,'-').toLowerCase();
+      return '<div class="filter-option"><input type="checkbox" id="' + id + '" value="' + cat + '" onchange="onCategoryChange(this)" /><label for="' + id + '">' + cat + '</label></div>';
+    }).join('');
+    document.getElementById('category-filters').innerHTML = html;
+  }
+
+  function onCategoryChange(el) {
+    if (el.checked) {
+      activeCategories.push(el.value);
+    } else {
+      activeCategories = activeCategories.filter(function(c){return c !== el.value;});
+    }
+    applyFilters();
+  }
+
+  function applyFilters() {
+    var search = document.getElementById('search-input').value.toLowerCase().trim();
+    var avail = document.querySelector('input[name="avail"]:checked').value;
+    var sort = document.getElementById('sort-select').value;
+
+    var filtered = allProducts.filter(function(p) {
+      if (activeCategories.length && !activeCategories.includes(p.category)) return false;
+      if (avail === 'in-stock' && !p.inStock) return false;
+      if (avail === 'on-order' && p.inStock) return false;
+      if (search) {
+        var haystack = (p.title + ' ' + p.category + ' ' + p.sku + ' ' + p.description + ' ' + (p.tags||[]).join(' ')).toLowerCase();
+        if (!haystack.includes(search)) return false;
+      }
+      return true;
+    });
+
+    if (sort === 'name-az') {
+      filtered.sort(function(a,b){return a.title.localeCompare(b.title);});
+    } else if (sort === 'category') {
+      filtered.sort(function(a,b){return a.category.localeCompare(b.category) || a.title.localeCompare(b.title);});
+    }
+
+    renderGrid(filtered);
+  }
+
+  function renderGrid(products) {
+    var grid = document.getElementById('product-grid');
+    var count = document.getElementById('result-count');
+    count.textContent = products.length + ' product' + (products.length !== 1 ? 's' : '');
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="no-results" style="grid-column:1/-1"><i class="fas fa-search"></i><p>No products match your filters.</p><button class="btn btn-outline btn-sm" style="margin-top:16px" onclick="resetFilters()">Clear Filters</button></div>';
+      return;
+    }
+
+    var configured = window.TW && window.TW.shopify && window.TW.shopify.configured;
+    var html = products.map(function(p) {
+      var stockClass = p.inStock ? 'stock-in' : 'stock-order';
+      var stockIcon = p.inStock ? 'fa-circle' : 'fa-clock';
+      var stockText = p.inStock ? 'In Stock' : 'On Order';
+      var addBtn = configured
+        ? '<button class="btn btn-primary btn-sm" onclick="addToCart(\'' + p.handle + '\')"><i class="fas fa-cart-plus"></i> Add to Cart</button>'
+        : '<button class="btn btn-primary btn-sm" onclick="addToCart(\'' + p.handle + '\')"><i class="fas fa-cart-plus"></i> Add to Enquiry</button>';
+      return '<div class="product-card" id="card-' + p.handle + '" data-handle="' + p.handle + '">' +
+        '<div class="product-head">' +
+          '<div class="product-icon ' + p.iconClass + '"><i class="fas ' + p.icon + '"></i></div>' +
+          '<span class="product-cat">' + p.category + '</span>' +
+        '</div>' +
+        '<div class="product-body">' +
+          '<div class="product-name"><a href="/product.html?handle=' + p.handle + '">' + p.title + '</a></div>' +
+          '<div class="product-desc">' + p.description + '</div>' +
+          '<div class="spec-list">' +
+            (p.specs || []).slice(0,4).map(function(s){return '<div class="spec-row"><span class="key">' + s.key + '</span><span class="val">' + s.value + '</span></div>';}).join('') +
+          '</div>' +
+        '</div>' +
+        '<div class="product-foot">' +
+          '<span class="stock-badge ' + stockClass + '"><i class="fas ' + stockIcon + '"></i> ' + stockText + '</span>' +
+          '<div class="product-price">' + (p.priceDisplay || 'POA') + '</div>' +
+          '<div class="product-actions">' +
+            addBtn +
+            '<a href="/#enquiry" class="btn btn-outline btn-sm"><i class="fas fa-envelope"></i> Quote</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    grid.innerHTML = html;
+
+    // Enrich with Dicker Data if enabled
+    if (window.TW && window.TW.dickerData && window.TW.dickerData.enabled) {
+      products.forEach(function(p) {
+        var el = document.getElementById('card-' + p.handle);
+        if (el) DickerData.enrichProduct(el, p.sku);
+      });
+    }
+  }
+
+  function addToCart(handle) {
+    var product = allProducts.find(function(p){return p.handle === handle;});
+    if (!product) return;
+    Cart.add(product, product.shopifyVariantId, 1);
+  }
+
+  function resetFilters() {
+    document.getElementById('search-input').value = '';
+    document.querySelectorAll('input[name="avail"]')[0].checked = true;
+    document.querySelectorAll('#category-filters input').forEach(function(el){el.checked=false;});
+    activeCategories = [];
+    applyFilters();
+  }
+
+  // Init
+  (async function() {
+    var products = await ShopifyAPI.fetchProducts();
+    allProducts = products;
+    buildCategoryFilters(products);
+    applyFilters();
+
+    // Notify availability radio for changes
+    document.querySelectorAll('input[name="avail"]').forEach(function(el){
+      el.addEventListener('change', applyFilters);
+    });
+  })();
+
+  Cart.renderCartBadge();
+</script>
+</body>
+</html>

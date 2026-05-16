@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product — Tensor Works | Enterprise AI Hardware</title>
+  <meta name="description" content="Detailed product information for enterprise AI hardware from Tensor Works." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /></noscript>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal:        #0D7377;
+      --teal-lt:     #14a8ae;
+      --teal-dk:     #095457;
+      --teal-pale:   rgba(13,115,119,.10);
+      --orange:      #E07B39;
+      --orange-lt:   #f09050;
+      --bg:          #090e10;
+      --bg2:         #0f1518;
+      --bg3:         #151d21;
+      --bg4:         #1c262c;
+      --bdr:         #223039;
+      --bdr2:        #2d3f4a;
+      --txt:         #e2eaed;
+      --txt2:        #8fa8b2;
+      --txt3:        #6e8898;
+      --white:       #ffffff;
+      --r:           10px;
+      --rsm:         6px;
+      --sh:          0 4px 24px rgba(0,0,0,.5);
+      --shmd:        0 8px 48px rgba(0,0,0,.6);
+      --tr:          .2s ease;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); line-height: 1.65; overflow-x: hidden; }
+    a { color: var(--teal-lt); text-decoration: none; }
+    ::selection { background: var(--teal); color: #fff; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--teal-dk); border-radius: 3px; }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: var(--r); font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: var(--tr); text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--teal), var(--teal-dk)); color: #fff; box-shadow: 0 4px 20px rgba(13,115,119,.45); }
+    .btn-primary:hover { background: linear-gradient(135deg, var(--teal-lt), var(--teal)); box-shadow: 0 6px 30px rgba(13,115,119,.6); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--txt); border: 1px solid var(--bdr2); }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal-lt); transform: translateY(-1px); }
+
+    /* Header */
+    header { position: sticky; top: 0; z-index: 200; background: rgba(9,14,16,.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--bdr); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; color: var(--white); letter-spacing: -.3px; }
+    .logo-mark { width: 34px; height: 34px; background: linear-gradient(135deg, var(--teal), var(--teal-dk)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-weight: 900; }
+    .logo span { color: var(--teal-lt); }
+    nav { display: flex; align-items: center; gap: 6px; }
+    nav a { color: var(--txt2); font-size: 14px; font-weight: 500; padding: 6px 14px; border-radius: var(--rsm); transition: var(--tr); white-space: nowrap; }
+    nav a:hover { color: var(--white); background: var(--bg3); }
+    .header-cta { display: flex; align-items: center; gap: 10px; }
+    .hamburger { display: none; background: none; border: none; color: var(--txt); font-size: 20px; cursor: pointer; padding: 6px; }
+    @media (max-width: 768px) {
+      nav { display: none; }
+      nav.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--bg2); border-bottom: 1px solid var(--bdr); padding: 16px; gap: 4px; }
+      nav.open a { width: 100%; padding: 10px 16px; }
+      .hamburger { display: block; }
+      .header-cta .btn:not(.cart-btn) { display: none; }
+    }
+
+    /* Footer */
+    footer { background: var(--bg2); border-top: 1px solid var(--bdr); padding: 48px 0 32px; }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--bdr); }
+    @media (max-width: 700px) { .footer-inner { grid-template-columns: 1fr; } }
+    .footer-brand p { font-size: 13px; color: var(--txt3); line-height: 1.7; max-width: 300px; margin-top: 14px; }
+    .footer-col h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--txt2); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 13px; color: var(--txt3); margin-bottom: 9px; transition: color var(--tr); }
+    .footer-col a:hover { color: var(--teal-lt); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 28px; }
+    .footer-bottom p { font-size: 12px; color: var(--txt3); }
+    .footer-bottom a { font-size: 12px; color: var(--txt3); }
+    .footer-bottom a:hover { color: var(--teal-lt); }
+
+    /* Breadcrumb */
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--txt3); padding: 20px 0 0; }
+    .breadcrumb a { color: var(--txt3); }
+    .breadcrumb a:hover { color: var(--teal-lt); }
+    .breadcrumb i { font-size: 10px; }
+
+    /* Product layout */
+    .product-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; padding: 36px 0 80px; align-items: start; }
+    @media (max-width: 860px) { .product-layout { grid-template-columns: 1fr; } }
+
+    /* Product image area */
+    .product-image-area { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; position: sticky; top: 80px; }
+    .product-big-icon { font-size: 80px; }
+    .product-image-sku { font-size: 12px; color: var(--txt3); font-family: monospace; }
+
+    /* Product info */
+    .product-cat-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--teal-pale); border: 1px solid var(--teal-dk); border-radius: 40px; padding: 4px 14px; font-size: 11px; font-weight: 700; color: var(--teal-lt); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 16px; }
+    .product-title { font-size: clamp(24px,4vw,38px); font-weight: 900; color: var(--white); margin-bottom: 16px; line-height: 1.1; }
+    .stock-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 20px; }
+    .stock-badge i { font-size: 7px; }
+    .stock-in    { background: rgba(13,115,119,.15); color: var(--teal-lt); border: 1px solid var(--teal-dk); }
+    .stock-order { background: rgba(224,123,57,.12); color: var(--orange-lt); border: 1px solid rgba(224,123,57,.3); }
+    .stock-low   { background: rgba(255,200,0,.1); color: #ffc94d; border: 1px solid rgba(255,200,0,.2); }
+    .product-description { font-size: 15px; color: var(--txt2); line-height: 1.75; margin-bottom: 28px; }
+    .specs-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
+    .specs-table tr { border-bottom: 1px solid var(--bdr); }
+    .specs-table tr:last-child { border-bottom: none; }
+    .specs-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--txt3); padding: 10px 0; text-align: left; }
+    .specs-table td:first-child { font-size: 13px; color: var(--txt3); padding: 10px 0; width: 40%; }
+    .specs-table td:last-child { font-size: 13px; font-weight: 600; color: var(--white); padding: 10px 0; }
+    .product-price-row { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .product-price-label { font-size: 13px; color: var(--txt3); }
+    .product-price { font-size: 22px; font-weight: 800; color: var(--teal-lt); }
+    .product-cta { display: flex; flex-direction: column; gap: 10px; }
+    .product-cta .btn { justify-content: center; }
+    @media (max-width: 480px) { .product-image-area { aspect-ratio: auto; padding: 48px; } }
+
+    /* Related products */
+    .related-section { padding: 64px 0; border-top: 1px solid var(--bdr); }
+    .related-title { font-size: 22px; font-weight: 800; color: var(--white); margin-bottom: 28px; }
+    .related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    @media (max-width: 700px) { .related-grid { grid-template-columns: 1fr; } }
+    .related-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 20px; display: flex; gap: 16px; align-items: flex-start; transition: border-color var(--tr); }
+    .related-card:hover { border-color: var(--teal-dk); }
+    .related-icon { width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .related-icon.teal   { background: rgba(13,115,119,.2); color: var(--teal-lt); }
+    .related-icon.orange { background: rgba(224,123,57,.15); color: var(--orange-lt); }
+    .related-icon.blue   { background: rgba(88,166,255,.1); color: #58a6ff; }
+    .related-icon.purple { background: rgba(160,100,255,.1); color: #b084ff; }
+    .related-icon.green  { background: rgba(0,200,100,.1); color: #3ddc84; }
+    .related-info { flex: 1; }
+    .related-name { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .related-cat  { font-size: 11px; color: var(--txt3); margin-bottom: 8px; }
+
+    /* Error state */
+    .product-error { padding: 80px 24px; text-align: center; }
+    .product-error h2 { font-size: 24px; color: var(--white); margin-bottom: 12px; }
+    .product-error p { color: var(--txt2); margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+
+<header id="site-header"></header>
+
+<div class="container">
+  <div class="breadcrumb" id="breadcrumb">
+    <a href="/">Home</a>
+    <i class="fas fa-chevron-right"></i>
+    <a href="/products.html">Products</a>
+    <i class="fas fa-chevron-right"></i>
+    <span id="breadcrumb-name">Loading…</span>
+  </div>
+</div>
+
+<div class="container" id="product-container">
+  <div style="padding:80px 0;text-align:center;color:var(--txt2)">
+    <i class="fas fa-spinner fa-spin" style="font-size:32px;color:var(--teal-lt);margin-bottom:16px"></i>
+    <p>Loading product…</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="related-section" id="related-section" style="display:none">
+    <div class="related-title">Related Products</div>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</div>
+
+<div id="cart-drawer"></div>
+<div id="cart-overlay"></div>
+<footer id="site-footer"></footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/shopify.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/dicker.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+  injectNav('products');
+  injectFooter();
+  Cart.renderCartBadge();
+
+  var currentProduct = null;
+
+  function iconBgColor(cls) {
+    return {teal:'rgba(13,115,119,.2)',orange:'rgba(224,123,57,.15)',blue:'rgba(88,166,255,.1)',purple:'rgba(160,100,255,.1)',green:'rgba(0,200,100,.1)'}[cls] || 'rgba(13,115,119,.2)';
+  }
+  function iconColor(cls) {
+    return {teal:'var(--teal-lt)',orange:'var(--orange-lt)',blue:'#58a6ff',purple:'#b084ff',green:'#3ddc84'}[cls] || 'var(--teal-lt)';
+  }
+
+  function renderProduct(product) {
+    currentProduct = product;
+    document.title = product.title + ' — Tensor Works';
+    document.getElementById('breadcrumb-name').textContent = product.title;
+
+    var configured = window.TW && window.TW.shopify && window.TW.shopify.configured;
+    var stockClass = product.inStock ? 'stock-in' : 'stock-order';
+    var stockIcon = product.inStock ? 'fa-circle' : 'fa-clock';
+    var stockText = product.inStock ? 'In Stock' : 'On Order';
+
+    var specsHTML = (product.specs || []).map(function(s) {
+      return '<tr><td>' + s.key + '</td><td>' + s.value + '</td></tr>';
+    }).join('');
+
+    var addBtn = configured
+      ? '<button class="btn btn-primary" onclick="addToCart()"><i class="fas fa-cart-plus"></i> Add to Cart</button>'
+      : '<button class="btn btn-primary" onclick="addToCart()"><i class="fas fa-cart-plus"></i> Add to Enquiry</button>';
+
+    var html =
+      '<div class="product-layout" id="product-detail">' +
+        '<div class="product-image-area">' +
+          '<div class="product-big-icon" style="color:' + iconColor(product.iconClass) + '"><i class="fas ' + product.icon + '"></i></div>' +
+          '<div class="product-image-sku">' + product.sku + '</div>' +
+        '</div>' +
+        '<div class="product-info">' +
+          '<span class="product-cat-badge"><i class="fas fa-tag"></i> ' + product.category + '</span>' +
+          '<h1 class="product-title">' + product.title + '</h1>' +
+          '<span class="stock-badge ' + stockClass + '"><i class="fas ' + stockIcon + '"></i> ' + stockText + '</span>' +
+          '<p class="product-description">' + product.description + '</p>' +
+          (specsHTML ? '<table class="specs-table"><thead><tr><th colspan="2">Specifications</th></tr></thead><tbody>' + specsHTML + '</tbody></table>' : '') +
+          '<div class="product-price-row">' +
+            '<span class="product-price-label">Price:</span>' +
+            '<span class="product-price">' + (product.priceDisplay || 'POA') + '</span>' +
+          '</div>' +
+          '<div class="product-cta">' +
+            addBtn +
+            '<a href="/#enquiry" class="btn btn-outline"><i class="fas fa-envelope"></i> Get a Quote</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('product-container').innerHTML = html;
+
+    // Enrich with Dicker Data
+    if (window.TW && window.TW.dickerData && window.TW.dickerData.enabled) {
+      var detailEl = document.getElementById('product-detail');
+      if (detailEl) DickerData.enrichProduct(detailEl, product.sku);
+    }
+  }
+
+  function renderRelated(currentProduct, allProducts) {
+    var related = allProducts.filter(function(p) {
+      return p.handle !== currentProduct.handle && p.category === currentProduct.category;
+    }).slice(0, 3);
+
+    if (related.length === 0) {
+      related = allProducts.filter(function(p) {
+        return p.handle !== currentProduct.handle;
+      }).slice(0, 3);
+    }
+
+    if (related.length === 0) return;
+
+    var html = related.map(function(p) {
+      return '<a href="/product.html?handle=' + p.handle + '" class="related-card">' +
+        '<div class="related-icon ' + p.iconClass + '"><i class="fas ' + p.icon + '"></i></div>' +
+        '<div class="related-info">' +
+          '<div class="related-name">' + p.title + '</div>' +
+          '<div class="related-cat">' + p.category + '</div>' +
+          '<span style="font-size:12px;color:var(--teal-lt)">View details →</span>' +
+        '</div>' +
+      '</a>';
+    }).join('');
+
+    var section = document.getElementById('related-section');
+    document.getElementById('related-grid').innerHTML = html;
+    section.style.display = 'block';
+  }
+
+  function addToCart() {
+    if (!currentProduct) return;
+    Cart.add(currentProduct, currentProduct.shopifyVariantId, 1);
+  }
+
+  (async function() {
+    var params = new URLSearchParams(window.location.search);
+    var handle = params.get('handle');
+
+    if (!handle) {
+      document.getElementById('product-container').innerHTML =
+        '<div class="product-error"><h2>Product not found</h2><p>No product handle specified.</p><a href="/products.html" class="btn btn-primary">Browse Products</a></div>';
+      return;
+    }
+
+    var product = await ShopifyAPI.fetchProduct(handle);
+
+    if (!product) {
+      document.getElementById('product-container').innerHTML =
+        '<div class="product-error"><h2>Product not found</h2><p>The product "' + handle + '" could not be found.</p><a href="/products.html" class="btn btn-primary">Browse Products</a></div>';
+      return;
+    }
+
+    renderProduct(product);
+
+    var allProducts = await ShopifyAPI.fetchProducts();
+    renderRelated(product, allProducts);
+  })();
+</script>
+</body>
+</html>

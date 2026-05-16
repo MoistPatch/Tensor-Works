@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account — Tensor Works | Enterprise AI Hardware</title>
+  <meta name="description" content="Manage your Tensor Works account, view order history and saved quotes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /></noscript>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal:        #0D7377;
+      --teal-lt:     #14a8ae;
+      --teal-dk:     #095457;
+      --teal-pale:   rgba(13,115,119,.10);
+      --orange:      #E07B39;
+      --orange-lt:   #f09050;
+      --bg:          #090e10;
+      --bg2:         #0f1518;
+      --bg3:         #151d21;
+      --bg4:         #1c262c;
+      --bdr:         #223039;
+      --bdr2:        #2d3f4a;
+      --txt:         #e2eaed;
+      --txt2:        #8fa8b2;
+      --txt3:        #6e8898;
+      --white:       #ffffff;
+      --r:           10px;
+      --rsm:         6px;
+      --sh:          0 4px 24px rgba(0,0,0,.5);
+      --shmd:        0 8px 48px rgba(0,0,0,.6);
+      --tr:          .2s ease;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); line-height: 1.65; overflow-x: hidden; }
+    a { color: var(--teal-lt); text-decoration: none; }
+    ::selection { background: var(--teal); color: #fff; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--teal-dk); border-radius: 3px; }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: var(--r); font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: var(--tr); text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--teal), var(--teal-dk)); color: #fff; box-shadow: 0 4px 20px rgba(13,115,119,.45); }
+    .btn-primary:hover { background: linear-gradient(135deg, var(--teal-lt), var(--teal)); box-shadow: 0 6px 30px rgba(13,115,119,.6); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--txt); border: 1px solid var(--bdr2); }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal-lt); transform: translateY(-1px); }
+
+    /* Header */
+    header { position: sticky; top: 0; z-index: 200; background: rgba(9,14,16,.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--bdr); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; color: var(--white); letter-spacing: -.3px; }
+    .logo-mark { width: 34px; height: 34px; background: linear-gradient(135deg, var(--teal), var(--teal-dk)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-weight: 900; }
+    .logo span { color: var(--teal-lt); }
+    nav { display: flex; align-items: center; gap: 6px; }
+    nav a { color: var(--txt2); font-size: 14px; font-weight: 500; padding: 6px 14px; border-radius: var(--rsm); transition: var(--tr); white-space: nowrap; }
+    nav a:hover { color: var(--white); background: var(--bg3); }
+    .header-cta { display: flex; align-items: center; gap: 10px; }
+    .hamburger { display: none; background: none; border: none; color: var(--txt); font-size: 20px; cursor: pointer; padding: 6px; }
+    @media (max-width: 768px) {
+      nav { display: none; }
+      nav.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--bg2); border-bottom: 1px solid var(--bdr); padding: 16px; gap: 4px; }
+      nav.open a { width: 100%; padding: 10px 16px; }
+      .hamburger { display: block; }
+      .header-cta .btn:not(.cart-btn) { display: none; }
+    }
+
+    /* Footer */
+    footer { background: var(--bg2); border-top: 1px solid var(--bdr); padding: 48px 0 32px; }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--bdr); }
+    @media (max-width: 700px) { .footer-inner { grid-template-columns: 1fr; } }
+    .footer-brand p { font-size: 13px; color: var(--txt3); line-height: 1.7; max-width: 300px; margin-top: 14px; }
+    .footer-col h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--txt2); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 13px; color: var(--txt3); margin-bottom: 9px; transition: color var(--tr); }
+    .footer-col a:hover { color: var(--teal-lt); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 28px; }
+    .footer-bottom p { font-size: 12px; color: var(--txt3); }
+    .footer-bottom a { font-size: 12px; color: var(--txt3); }
+    .footer-bottom a:hover { color: var(--teal-lt); }
+
+    /* Page */
+    .page-header { background: var(--bg2); border-bottom: 1px solid var(--bdr); padding: 48px 0 40px; }
+    .page-header h1 { font-size: clamp(24px,4vw,36px); font-weight: 900; color: var(--white); margin-bottom: 8px; }
+    .page-header p { font-size: 15px; color: var(--txt2); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--txt3); margin-bottom: 20px; }
+    .breadcrumb a { color: var(--txt3); }
+    .breadcrumb a:hover { color: var(--teal-lt); }
+    .breadcrumb i { font-size: 10px; }
+
+    .account-section { padding: 56px 0 80px; }
+    .account-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; max-width: 900px; }
+    @media (max-width: 700px) { .account-layout { grid-template-columns: 1fr; } }
+
+    .account-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 36px; }
+    .account-card h2 { font-size: 20px; font-weight: 800; color: var(--white); margin-bottom: 10px; }
+    .account-card p { font-size: 14px; color: var(--txt2); line-height: 1.7; margin-bottom: 24px; }
+
+    .account-benefits { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 36px; }
+    .account-benefits h3 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 20px; }
+    .benefit-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+    .benefit-item:last-child { margin-bottom: 0; }
+    .benefit-icon { width: 38px; height: 38px; background: var(--teal-pale); border: 1px solid var(--teal-dk); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--teal-lt); font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+    .benefit-info h4 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+    .benefit-info p { font-size: 13px; color: var(--txt2); line-height: 1.5; margin: 0; }
+
+    .shopify-note { background: var(--bg3); border: 1px solid var(--bdr); border-radius: var(--rsm); padding: 14px 18px; margin-top: 20px; font-size: 12px; color: var(--txt3); line-height: 1.6; }
+    .shopify-note i { color: var(--teal-lt); margin-right: 4px; }
+
+    .divider { border: none; border-top: 1px solid var(--bdr); margin: 24px 0; }
+    .btn-full { width: 100%; justify-content: center; }
+    .btn-sm { padding: 10px 20px; font-size: 13px; }
+    .register-link { display: block; text-align: center; font-size: 13px; color: var(--txt3); margin-top: 14px; }
+    .register-link a { color: var(--teal-lt); }
+  </style>
+</head>
+<body>
+
+<header id="site-header"></header>
+
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <span>Account</span>
+    </div>
+    <h1>Your Account</h1>
+    <p>Sign in to access order history, saved quotes, and fast reorder.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="account-section">
+    <div class="account-layout">
+
+      <div class="account-card">
+        <h2>Sign In</h2>
+        <p>Access your account to view order history, track shipments, and manage saved quotes.</p>
+        <a id="login-link" href="https://YOUR-STORE.myshopify.com/account/login" class="btn btn-primary btn-full">
+          <i class="fas fa-sign-in-alt"></i> Sign In to Account
+        </a>
+        <hr class="divider" />
+        <a id="register-link" href="https://YOUR-STORE.myshopify.com/account/register" class="btn btn-outline btn-full btn-sm">
+          <i class="fas fa-user-plus"></i> Create an Account
+        </a>
+        <p class="register-link">New to Tensor Works? <a id="register-link-2" href="https://YOUR-STORE.myshopify.com/account/register">Register here</a></p>
+        <div class="shopify-note">
+          <i class="fas fa-info-circle"></i>
+          When Shopify is configured, this page will show your full order history, saved quotes, and account details. Account authentication is handled securely through Shopify's customer portal.
+        </div>
+      </div>
+
+      <div class="account-benefits">
+        <h3>Your TensorWorks Account</h3>
+        <div class="benefit-item">
+          <div class="benefit-icon"><i class="fas fa-receipt"></i></div>
+          <div class="benefit-info">
+            <h4>Order History</h4>
+            <p>View all past orders, track delivery status, and download invoices in one place.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon"><i class="fas fa-file-alt"></i></div>
+          <div class="benefit-info">
+            <h4>Saved Quotes</h4>
+            <p>Save and revisit formal quotes for future reference or internal procurement approvals.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon"><i class="fas fa-bolt"></i></div>
+          <div class="benefit-info">
+            <h4>Fast Reorder</h4>
+            <p>Reorder previously purchased hardware or software with a single click.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon"><i class="fas fa-headset"></i></div>
+          <div class="benefit-info">
+            <h4>Dedicated Support</h4>
+            <p>Logged-in customers get priority access to your dedicated account manager.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="cart-drawer"></div>
+<div id="cart-overlay"></div>
+<footer id="site-footer"></footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/shopify.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/dicker.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+  injectNav('account');
+  injectFooter();
+  Cart.renderCartBadge();
+
+  // Update links to use configured Shopify domain
+  (function() {
+    var domain = window.TW && window.TW.shopify && window.TW.shopify.domain
+      ? window.TW.shopify.domain
+      : 'YOUR-STORE.myshopify.com';
+    var loginUrl = 'https://' + domain + '/account/login';
+    var registerUrl = 'https://' + domain + '/account/register';
+    var loginEl = document.getElementById('login-link');
+    var regEl = document.getElementById('register-link');
+    var reg2El = document.getElementById('register-link-2');
+    if (loginEl) loginEl.href = loginUrl;
+    if (regEl) regEl.href = registerUrl;
+    if (reg2El) reg2El.href = registerUrl;
+  })();
+</script>
+</body>
+</html>

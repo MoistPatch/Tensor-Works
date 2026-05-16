@@ -406,27 +406,7 @@
 <body>
 
 <!-- ══ HEADER ══ -->
-<header>
-  <div class="container">
-    <div class="header-inner">
-      <a href="#" class="logo">
-        <div class="logo-mark">TW</div>
-        Tensor<span>Works</span>
-      </a>
-      <nav id="nav">
-        <a href="#products">Products</a>
-        <a href="#features">Why Tensor Works</a>
-        <a href="#enquiry">Enquire</a>
-      </nav>
-      <div class="header-cta">
-        <a href="#enquiry" class="btn btn-primary">Get a Quote</a>
-        <button class="hamburger" aria-label="Toggle navigation" onclick="document.getElementById('nav').classList.toggle('open')">
-          <i class="fas fa-bars" aria-hidden="true"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-</header>
+<header id="site-header"></header>
 
 <!-- ══ HERO ══ -->
 <section class="hero">
@@ -781,38 +761,21 @@
 </section>
 
 <!-- ══ FOOTER ══ -->
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <a href="#" class="logo">
-          <div class="logo-mark">TW</div>
-          Tensor<span>Works</span>
-        </a>
-        <p>Enterprise AI hardware supply and consulting for Australian government, research and enterprise organisations.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Hardware</h4>
-        <a href="#products">H100 GPU</a>
-        <a href="#products">DGX H200</a>
-        <a href="#products">RTX 6000 Ada</a>
-        <a href="#products">BlueField-3 DPU</a>
-        <a href="#products">AI Enterprise</a>
-        <a href="#products">PowerEdge XE9680</a>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <a href="#features">Why Tensor Works</a>
-        <a href="#enquiry">Contact</a>
-        <a href="mailto:sam@vantyx.com.au">sam@vantyx.com.au</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2025 Tensor Works. All rights reserved. ABN listed on request.</p>
-      <a href="mailto:sam@vantyx.com.au">sam@vantyx.com.au</a>
-    </div>
-  </div>
-</footer>
+<footer id="site-footer"></footer>
+
+<div id="cart-drawer"></div>
+<div id="cart-overlay"></div>
+
+<script src="/js/config.js"></script>
+<script src="/js/shopify.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/dicker.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+  injectNav('home');
+  injectFooter();
+  Cart.renderCartBadge();
+</script>
 
 <script>
   // Form submission via Web3Forms
