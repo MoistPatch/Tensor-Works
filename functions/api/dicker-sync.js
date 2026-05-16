@@ -110,9 +110,10 @@ export async function onRequest(context) {
 
   try {
     // Load existing products and import queue
-    const [productsFile, queueFile] = await Promise.all([
+    const [productsFile, queueFile, costChangesFile] = await Promise.all([
       ghGet(PRODUCTS_FILE, githubToken).catch(() => null),
       ghGet(QUEUE_FILE, githubToken).catch(() => null),
+      ghGet('data/cost-changes.json', githubToken).catch(() => null),
     ]);
 
     const existingProducts = productsFile
@@ -129,31 +130,86 @@ export async function onRequest(context) {
     const dickerProducts = await fetchDickerCatalog(dickerKey);
     const normalized = dickerProducts.map(normalizeDickerProduct).filter(p => p.sku);
 
+    // Cost change detection
+    const costChanges = [];
+    const COST_CHANGE_THRESHOLD = 0.05; // 5%
+    const timestamp = new Date().toISOString();
+    for (const newProd of normalized) {
+      const existing = existingProducts.find(p => p.sku === newProd.sku);
+      if (!existing || !existing.costExGst || !newProd.costExGst) continue;
+      const pctChange = (newProd.costExGst - existing.costExGst) / existing.costExGst;
+      if (Math.abs(pctChange) >= COST_CHANGE_THRESHOLD) {
+        costChanges.push({
+          sku: newProd.sku,
+          title: newProd.title,
+          oldCost: existing.costExGst,
+          newCost: newProd.costExGst,
+          pctChange: Math.round(pctChange * 1000) / 10, // one decimal
+          direction: pctChange > 0 ? 'increase' : 'decrease',
+          detectedAt: timestamp,
+        });
+      }
+    }
+
     // Find products not already imported or queued
     const newProducts = normalized.filter(p => !existingSkus.has(p.sku) && !queuedSkus.has(p.sku));
 
-    if (newProducts.length === 0) {
-      return jsonResponse({ synced: true, newProducts: 0, totalFetched: normalized.length });
+    if (costChanges.length === 0 && newProducts.length === 0) {
+      return jsonResponse({ synced: true, newProducts: 0, costChanges: 0, totalFetched: normalized.length });
     }
 
     // Add new products to import queue
-    const timestamp = new Date().toISOString();
     const newQueueItems = newProducts.map(p => ({ ...p, status: 'pending', queuedAt: timestamp }));
     const updatedQueue = [...queue, ...newQueueItems];
 
-    await ghPut(
-      QUEUE_FILE,
-      JSON.stringify(updatedQueue, null, 2),
-      queueFile ? queueFile.sha : null,
-      'Dicker Data hourly sync: ' + newProducts.length + ' new product(s) queued',
-      githubToken
-    );
+    // Update costs on existing products
+    for (const change of costChanges) {
+      const idx = existingProducts.findIndex(p => p.sku === change.sku);
+      if (idx >= 0) existingProducts[idx].costExGst = change.newCost;
+    }
+
+    const puts = [
+      ghPut(
+        QUEUE_FILE,
+        JSON.stringify(updatedQueue, null, 2),
+        queueFile ? queueFile.sha : null,
+        'Dicker Data hourly sync: ' + newProducts.length + ' new product(s) queued',
+        githubToken
+      ),
+      ghPut(
+        PRODUCTS_FILE,
+        JSON.stringify(existingProducts, null, 2),
+        productsFile ? productsFile.sha : null,
+        'Dicker Data sync: update cost prices',
+        githubToken
+      ),
+    ];
+
+    if (costChanges.length > 0) {
+      const existingChanges = costChangesFile
+        ? JSON.parse(atob(costChangesFile.content.replace(/\s/g, '')))
+        : { changes: [] };
+      existingChanges.changes = [...costChanges, ...existingChanges.changes].slice(0, 200);
+      puts.push(
+        ghPut(
+          'data/cost-changes.json',
+          JSON.stringify(existingChanges, null, 2),
+          costChangesFile ? costChangesFile.sha : null,
+          'Dicker Data sync: ' + costChanges.length + ' cost change(s) detected',
+          githubToken
+        )
+      );
+    }
+
+    await Promise.all(puts);
 
     return jsonResponse({
       synced: true,
       newProducts: newProducts.length,
       totalFetched: normalized.length,
       queuedSkus: newProducts.map(p => p.sku),
+      costChanges: costChanges.length,
+      ...(costChanges.length <= 10 ? { costChangeDetails: costChanges } : {}),
     });
   } catch (e) {
     return jsonResponse({ error: e.message }, 500);
