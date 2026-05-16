@@ -1,0 +1,15 @@
+name: Daily Orchestration Pipeline
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run full agent pipeline
+        run: |
+          curl -sf -X POST "${{ vars.SITE_URL }}/api/orchestrate" \
+            -H "X-Sync-Secret: ${{ secrets.SYNC_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -o /tmp/result.json && cat /tmp/result.json || echo "Pipeline failed"
