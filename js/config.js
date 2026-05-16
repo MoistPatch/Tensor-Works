@@ -155,7 +155,7 @@ window.TW = {
       category: 'Networking',
       sku: 'MLX-IB-NDR400',
       priceDisplay: 'POA',
-      shopifyVariantId: null,
+      shopifyVariantId: '43751354892366',
       image: null,
       iconClass: 'green',
       icon: 'fa-network-wired',
