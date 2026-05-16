@@ -6,8 +6,11 @@
   <title>Tensor Works — Enterprise AI Hardware</title>
   <meta name="description" content="Tensor Works supplies enterprise-grade AI compute infrastructure — NVIDIA H100, DGX systems, InfiniBand networking and full-stack AI solutions to government, research and enterprise in Australia." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /></noscript>
   <style>
     /* ── Reset & tokens ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,7 +29,7 @@
       --bdr2:        #2d3f4a;
       --txt:         #e2eaed;
       --txt2:        #8fa8b2;
-      --txt3:        #506070;
+      --txt3:        #6e8898;
       --white:       #ffffff;
       --r:           10px;
       --rsm:         6px;
@@ -417,8 +420,8 @@
       </nav>
       <div class="header-cta">
         <a href="#enquiry" class="btn btn-primary">Get a Quote</a>
-        <button class="hamburger" onclick="document.getElementById('nav').classList.toggle('open')">
-          <i class="fas fa-bars"></i>
+        <button class="hamburger" aria-label="Toggle navigation" onclick="document.getElementById('nav').classList.toggle('open')">
+          <i class="fas fa-bars" aria-hidden="true"></i>
         </button>
       </div>
     </div>
