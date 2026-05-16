@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "createdAt": null,
+  "lastUpdated": null,
+
+  "skills": {
+    "pricing": {
+      "learnedMarkups": {},
+      "competitorDifferentials": {},
+      "elasticityNotes": {},
+      "seasonalPatterns": {},
+      "successfulStrategies": []
+    },
+    "products": {
+      "topPerformers": [],
+      "slowMovers": [],
+      "bundleSuccessRates": {},
+      "categoryTrends": {}
+    },
+    "competitors": {
+      "pricingBehaviours": {},
+      "restockPatterns": {},
+      "promotionCycles": {}
+    },
+    "campaigns": {
+      "successfulFormats": [],
+      "highCTRTriggers": [],
+      "seasonalOpportunities": []
+    }
+  },
+
+  "history": {
+    "priceChanges": [],
+    "rankingChanges": [],
+    "bundleChanges": [],
+    "campaignOutcomes": [],
+    "intelligenceRuns": [],
+    "anomaliesDetected": []
+  },
+
+  "patterns": {
+    "weeklyTrafficShape": {},
+    "productViewCorrelations": {},
+    "priceElasticityByCategory": {},
+    "competitorResponseLag": {}
+  },
+
+  "constraints": {
+    "maxPriceChangePercent": 15,
+    "minConfidenceToAutoApply": 0.75,
+    "minMarginAUD": 500,
+    "maxAutoRankingShift": 3,
+    "requireHumanApprovalAbove": {
+      "priceChangePercent": 10,
+      "priceChangeAUD": 5000
+    },
+    "blacklistedActions": [],
+    "frozenProducts": []
+  },
+
+  "simulations": [],
+
+  "decisionLog": [],
+
+  "meta": {
+    "totalRunCount": 0,
+    "lastOrchestrationAt": null,
+    "dataQualityScore": 0,
+    "learningConfidence": 0,
+    "notes": []
+  }
+}
