@@ -296,6 +296,7 @@
   <button class="tab-btn" onclick="switchTab('quotes')" id="tabnav-quotes"><i class="fas fa-file-invoice-dollar"></i> Quotes</button>
   <button class="tab-btn" onclick="switchTab('reporting')" id="tabnav-reporting"><i class="fas fa-chart-pie"></i> Reporting</button>
   <button class="tab-btn" onclick="switchTab('monitor')" id="tabnav-monitor"><i class="fas fa-heartbeat"></i> Monitor</button>
+  <button class="tab-btn" onclick="switchTab('agents')" id="tabnav-agents"><i class="fas fa-project-diagram"></i> Agents</button>
 </nav>
 
 <div class="admin-body">
@@ -713,6 +714,48 @@
     </div>
   </div>
 
+  <!-- ── Agents tab ───────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-agents">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">Agent Control</div><div class="panel-subtitle">Live agent registry — spawn, monitor, and kill AI agents</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" onclick="runParallelOrchestrate()"><i class="fas fa-rocket"></i> Run Parallel Pipeline</button>
+          <button class="btn btn-warning btn-sm" onclick="killAllAgents()"><i class="fas fa-skull"></i> Kill All</button>
+          <button class="btn btn-outline btn-sm" onclick="loadAgents()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" style="margin-bottom:24px">
+        <div class="stat-card"><div class="stat-card-label">Running</div><div class="stat-card-value" id="ag-running" style="color:var(--teal-lt)">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Completed</div><div class="stat-card-value" id="ag-completed" style="color:var(--green)">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Failed</div><div class="stat-card-value" id="ag-failed" style="color:var(--red)">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Killed</div><div class="stat-card-value" id="ag-killed" style="color:var(--orange)">—</div></div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-outline" onclick="loadAgents('all')">All</button>
+        <button class="btn btn-sm btn-outline" onclick="loadAgents('running')">Running</button>
+        <button class="btn btn-sm btn-outline" onclick="loadAgents('completed')">Completed</button>
+        <button class="btn btn-sm btn-outline" onclick="loadAgents('failed')">Failed</button>
+      </div>
+
+      <div id="agents-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading agents...</div></div>
+
+      <div class="section-label" style="margin-top:24px">Task Queue</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <div class="stat-card" style="flex:1"><div class="stat-card-label">Pending</div><div class="stat-card-value" id="tq-pending">—</div></div>
+        <div class="stat-card" style="flex:1"><div class="stat-card-label">Claimed</div><div class="stat-card-value" id="tq-claimed">—</div></div>
+        <div class="stat-card" style="flex:1"><div class="stat-card-label">Completed</div><div class="stat-card-value" id="tq-completed">—</div></div>
+        <div class="stat-card" style="flex:1"><div class="stat-card-label">Dead</div><div class="stat-card-value" id="tq-dead" style="color:var(--red)">—</div></div>
+      </div>
+      <div id="task-queue-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading queue...</div></div>
+
+      <div class="section-label" style="margin-top:24px">Multi-Agent Intelligence Reports</div>
+      <div id="multi-agent-reports"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
+    </div>
+  </div>
+
 </div>
 </div><!-- /tab-content-products -->
 
@@ -986,6 +1029,7 @@
     else if (name === 'quotes') loadQuotes();
     else if (name === 'reporting') loadReporting();
     else if (name === 'monitor') loadMonitor();
+    else if (name === 'agents') loadAgents();
     else if (name === 'simulations') loadSimHistory();
     else if (name === 'datahealth') loadDataHealth();
   };
@@ -2151,6 +2195,115 @@
           '</div>';
         }).join('')
       : '<div class="panel-empty">No history yet</div>';
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     AGENTS TAB
+  ══════════════════════════════════════════════════════════════════ */
+  var _agentFilter = 'all';
+  window.loadAgents = async function(filter) {
+    if (filter) _agentFilter = filter;
+    var el = document.getElementById('agents-list');
+    el.innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div>';
+    try {
+      var url = '/api/agent-manager' + (_agentFilter && _agentFilter !== 'all' ? '?status=' + _agentFilter : '');
+      var r = await fetch(url);
+      var data = await r.json();
+      var agents = data.agents || [];
+      var s = data.summary || {};
+      document.getElementById('ag-running').textContent = s.running || 0;
+      document.getElementById('ag-completed').textContent = s.completed || 0;
+      document.getElementById('ag-failed').textContent = s.failed || 0;
+      document.getElementById('ag-killed').textContent = s.killed || 0;
+
+      if (!agents.length) { el.innerHTML = '<div class="panel-empty">No agents' + (_agentFilter !== 'all' ? ' with status: ' + _agentFilter : '') + '</div>'; }
+      else {
+        var statusColor = { running:'var(--teal-lt)', completed:'var(--green)', failed:'var(--red)', killed:'var(--orange)' };
+        el.innerHTML = '<div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>Agent ID</th><th>Type</th><th>Task</th><th>Status</th><th>Spawned</th><th>Actions</th></tr></thead><tbody>' +
+          agents.map(function(a) {
+            var sc = statusColor[a.status] || 'var(--txt3)';
+            return '<tr>' +
+              '<td style="font-family:monospace;font-size:11px;color:var(--txt3)">' + escHtml((a.agentId||'').slice(0,24)) + '</td>' +
+              '<td style="font-weight:600;color:var(--white)">' + escHtml(a.type||'—') + '</td>' +
+              '<td style="color:var(--txt2)">' + escHtml(a.task||'—') + '</td>' +
+              '<td><span style="color:' + sc + ';font-weight:700;text-transform:uppercase;font-size:11px">' + escHtml(a.status||'—') + '</span>' + (a.killSignal ? ' <span style="color:var(--red);font-size:10px">⚡KILL</span>' : '') + '</td>' +
+              '<td style="font-size:12px;color:var(--txt3)">' + fmtDate(a.spawnedAt) + '</td>' +
+              '<td>' + (a.status === 'running' ? '<button class="btn btn-warning btn-sm" onclick="killAgent(\'' + escHtml(a.agentId) + '\')"><i class="fas fa-skull"></i></button>' : '') + '</td>' +
+            '</tr>';
+          }).join('') + '</tbody></table></div>';
+      }
+      loadTaskQueue();
+      loadMultiAgentReports();
+    } catch(e) {
+      el.innerHTML = '<div class="panel-empty" style="color:var(--red)">' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  window.killAgent = async function(agentId) {
+    if (!confirm('Kill agent ' + agentId + '?')) return;
+    try {
+      await fetch('/api/agent-manager', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'kill', agentId }) });
+      loadAgents();
+    } catch(e) { alert('Failed: ' + e.message); }
+  };
+
+  window.killAllAgents = async function() {
+    if (!confirm('Kill ALL running agents?')) return;
+    try {
+      await fetch('/api/agent-manager', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'kill-all' }) });
+      loadAgents();
+    } catch(e) { alert('Failed: ' + e.message); }
+  };
+
+  window.runParallelOrchestrate = async function() {
+    var statusEl = document.getElementById('dash-action-status');
+    var agentsEl = document.getElementById('agents-list');
+    agentsEl.innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Launching parallel pipeline — spawning agents...</div>';
+    try {
+      var r = await fetch('/api/parallel-orchestrate', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
+      var d = await r.json();
+      var msg = 'Pipeline complete — ' + (d.succeeded||0) + ' tasks succeeded';
+      if (d.failed) msg += ', ' + d.failed + ' failed';
+      if (d.killed) msg += ', ' + d.killed + ' timed out';
+      msg += ' in ' + Math.round((d.totalDuration||0)/1000) + 's';
+      agentsEl.innerHTML = '<div style="color:var(--green);padding:12px;font-size:13px"><i class="fas fa-check"></i> ' + escHtml(msg) + '</div>';
+      setTimeout(loadAgents, 1000);
+    } catch(e) {
+      agentsEl.innerHTML = '<div style="color:var(--red);padding:12px;font-size:13px">Failed: ' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  async function loadTaskQueue() {
+    try {
+      var r = await fetch('/api/task-queue');
+      var data = await r.json();
+      document.getElementById('tq-pending').textContent = data.pending || 0;
+      document.getElementById('tq-claimed').textContent = data.claimed || 0;
+      document.getElementById('tq-completed').textContent = data.completed || 0;
+      document.getElementById('tq-dead').textContent = data.dead || 0;
+      var el = document.getElementById('task-queue-list');
+      var tasks = data.pendingTasks || [];
+      el.innerHTML = tasks.length
+        ? '<div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>Task ID</th><th>Type</th><th>Priority</th><th>Enqueued</th></tr></thead><tbody>' +
+          tasks.map(function(t) {
+            return '<tr><td style="font-family:monospace;font-size:11px;color:var(--txt3)">' + escHtml((t.taskId||'').slice(0,20)) + '</td><td>' + escHtml(t.type||'') + '</td><td>' + (t.priority||2) + '</td><td style="font-size:12px;color:var(--txt3)">' + fmtDate(t.enqueuedAt) + '</td></tr>';
+          }).join('') + '</tbody></table></div>'
+        : '<div class="panel-empty">Queue empty</div>';
+    } catch(_) {}
+  }
+
+  async function loadMultiAgentReports() {
+    var el = document.getElementById('multi-agent-reports');
+    try {
+      var r = await fetch('/api/agent-manager?type=multi-agent-report');
+      var data = await r.json();
+      // Load from data file directly since agent-manager filters by type
+      var r2 = await fetch('/api/brain'); // use brain to check if multi-agent-report exists
+      // Try fetching reports via a dedicated approach - load from reporting
+      el.innerHTML = '<div style="font-size:13px;color:var(--txt3);padding:12px">Run the parallel pipeline to generate multi-agent intelligence reports. Each run spawns 4 specialized Claude agents: Pricing, Competitor, Demand, and Risk.</div>';
+    } catch(_) {
+      el.innerHTML = '<div class="panel-empty">No reports yet</div>';
+    }
   }
 
   /* ── Init ─────────────────────────────────────────────────────── */
