@@ -35,7 +35,7 @@ window.TW = {
       category: 'GPU Accelerators',
       sku: 'NV-H200-SXM5',
       priceDisplay: 'POA',
-      shopifyVariantId: null,
+      shopifyVariantId: '43751354531918',
       image: null,
       iconClass: 'teal',
       icon: 'fa-microchip',
