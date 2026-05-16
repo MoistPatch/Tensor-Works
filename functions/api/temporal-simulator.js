@@ -113,11 +113,37 @@ const DEFAULT_STRATEGIES = [
 ];
 
 // ── Core simulation engine ────────────────────────────────────────────────────
-function simulateStrategy(strategy, periods, periodType, marketEnv, baseProducts) {
+function simulateStrategy(strategy, periods, periodType, marketEnv, baseProducts, gymConfig) {
   const timeline = [];
   let cumulativeRevenue = 0;
   let cumulativeLeads = 0;
   let cumulativeQuotes = 0;
+
+  // Build simulation params from gym config with fallbacks
+  const params = {
+    priceElasticity:      gymConfig?.simulationParams?.priceElasticity      ?? -1.5,
+    charmPricingLift:     gymConfig?.simulationParams?.charmPricingLift      ?? 0.08,
+    baseLeadRate:         gymConfig?.simulationParams?.baseLeadRate          ?? 0.015,
+    leadToQuoteRate:      gymConfig?.simulationParams?.leadToQuoteRate       ?? 0.40,
+    quoteAcceptanceRate:  gymConfig?.simulationParams?.quoteAcceptanceRate   ?? 0.30,
+    marketGrowthRate:     gymConfig?.simulationParams?.marketGrowthRate      ?? 0.02,
+    eventProbability:     gymConfig?.simulationParams?.eventProbability      ?? 0.10,
+    seasonalAmplitude:    gymConfig?.simulationParams?.seasonalAmplitude     ?? 0.25,
+  };
+
+  // Apply custom formula overrides
+  for (const formula of (gymConfig?.formulas || [])) {
+    if (!formula.active) continue;
+    if (formula.type === 'price-elasticity' && formula.parameters?.elasticity != null) {
+      params.priceElasticity = formula.parameters.elasticity;
+    }
+    if (formula.type === 'lead-rate' && formula.parameters?.rate != null) {
+      params.baseLeadRate = formula.parameters.rate;
+    }
+    if (formula.type === 'conversion-rate' && formula.parameters?.leadToQuote != null) {
+      params.leadToQuoteRate = formula.parameters.leadToQuote;
+    }
+  }
 
   // Rolling market state (mutable across periods)
   const marketState = {
@@ -134,12 +160,12 @@ function simulateStrategy(strategy, periods, periodType, marketEnv, baseProducts
     // 2. Compute demand for this period
     const waveDemand = marketEnv.baseWeeklyDemand * (1 + marketEnv.demandAmplitude * Math.sin(marketState.demandPhase));
     const seasonalDemand = waveDemand * marketEnv.seasonalFactors.getSeasonalMultiplier(period, periodType);
-    const growthDemand = seasonalDemand * Math.pow(1 + marketEnv.marketGrowthRate, period);
+    const growthDemand = seasonalDemand * Math.pow(1 + params.marketGrowthRate, period);
 
     // 3. Random market event (stochastic shock)
     let eventMultiplier = 1;
     let eventName = null;
-    if (Math.random() < marketEnv.eventProbability) {
+    if (Math.random() < params.eventProbability) {
       const event = marketEnv.possibleEvents[Math.floor(Math.random() * marketEnv.possibleEvents.length)];
       eventMultiplier = event.demandMultiplier;
       eventName = event.name;
@@ -152,12 +178,11 @@ function simulateStrategy(strategy, periods, periodType, marketEnv, baseProducts
     const adjustedDemand = growthDemand * eventMultiplier;
 
     // 4. Apply strategy genes
-    // Price elasticity of demand for B2B hardware (-1.5)
-    const priceElasticity = -1.5;
-    const priceEffect = Math.pow(strategy.genes.pricingMultiplier, priceElasticity);
+    // Price elasticity of demand for B2B hardware
+    const priceEffect = Math.pow(strategy.genes.pricingMultiplier, params.priceElasticity);
 
-    // Charm pricing (e.g. $9,999 vs $10,000) boosts conversion ~8%
-    const charmEffect = strategy.genes.charmPricing ? 1.08 : 1.0;
+    // Charm pricing (e.g. $9,999 vs $10,000) boosts conversion
+    const charmEffect = strategy.genes.charmPricing ? (1 + params.charmPricingLift) : 1.0;
 
     // Campaign frequency drives lead generation volume
     const freqMultiplier = { daily: 1.3, 'twice-weekly': 1.2, weekly: 1.0, fortnightly: 0.7 };
@@ -172,16 +197,15 @@ function simulateStrategy(strategy, periods, periodType, marketEnv, baseProducts
     // 5. Period outcome calculations
     const periodSessions = Math.round(adjustedDemand * priceEffect * charmEffect * competitorEffect);
 
-    // B2B session-to-lead rate: typically 1–2%
-    const baseLeadRate = 0.015;
-    const leadRate = baseLeadRate * campaignEffect * frameEffect;
+    // B2B session-to-lead rate
+    const leadRate = params.baseLeadRate * campaignEffect * frameEffect;
     const periodLeads = Math.round(periodSessions * leadRate);
 
-    // ~40% of leads progress to formal quotes
-    const periodQuotes = Math.round(periodLeads * 0.4);
+    // Leads to formal quotes
+    const periodQuotes = Math.round(periodLeads * params.leadToQuoteRate);
 
-    // ~30% of quotes accepted
-    const periodAccepted = Math.round(periodQuotes * 0.3);
+    // Quotes accepted
+    const periodAccepted = Math.round(periodQuotes * params.quoteAcceptanceRate);
 
     // Average deal value: use real product prices or default AUD 15,000 for GPU/AI hardware
     const pricedProducts = baseProducts.filter(p => p.priceIncGst);
@@ -241,6 +265,37 @@ function simulateStrategy(strategy, periods, periodType, marketEnv, baseProducts
       ) / 100,
     },
     timeline,
+  };
+}
+
+// ── Confidence scoring ────────────────────────────────────────────────────────
+function computeStrategyConfidence(stratResult, isWinner, allResults, gymConfig) {
+  const threshold = gymConfig?.confidenceThreshold ?? 0.95;
+
+  const sum = stratResult.summary || {};
+  const fitnessComponent    = Math.min(1, (sum.overallFitnessScore || 0));
+  const resilienceComponent = sum.resilienceScore || 0;
+  const growthComponent     = sum.growthTrajectory > 0 ? Math.min(1, sum.growthTrajectory + 0.5) : 0.3;
+  const winnerComponent     = isWinner ? 1.0 : 0.3;
+
+  // Revenue consistency: low variance = high confidence
+  const revenues = (stratResult.timeline || []).map(t => t.revenueAUD || 0);
+  const avgRev = revenues.reduce((a, b) => a + b, 0) / Math.max(revenues.length, 1);
+  const variance = revenues.reduce((sum, r) => sum + Math.pow(r - avgRev, 2), 0) / Math.max(revenues.length, 1);
+  const consistencyComponent = avgRev > 0 ? Math.max(0, 1 - Math.sqrt(variance) / avgRev) : 0;
+
+  const score = (
+    fitnessComponent    * 0.30 +
+    resilienceComponent * 0.25 +
+    growthComponent     * 0.20 +
+    winnerComponent     * 0.15 +
+    consistencyComponent* 0.10
+  );
+
+  return {
+    score:          Math.round(score * 1000) / 1000,
+    meetsThreshold: score >= threshold,
+    threshold,
   };
 }
 
@@ -304,11 +359,17 @@ export async function onRequest(context) {
       return jsonResponse({ error: 'No elite strategies found in evolution.json. Run the strategy-evolver first.' }, 400);
     }
 
-    const [productsRes, analyticsRes, compRes] = await Promise.all([
+    const [productsRes, analyticsRes, compRes, gymResElite] = await Promise.all([
       loadJSON('data/products.json', token, []),
       loadJSON('data/analytics.json', token, { sessions: [] }),
       loadJSON('data/competitor-prices.json', token, { products: [] }),
+      loadJSON('data/gym-config.json', token, {
+        formulas: [],
+        simulationParams: {},
+        confidenceThreshold: 0.95,
+      }),
     ]);
+    const gymConfig = gymResElite.data;
 
     const baseProducts = productsRes.data || [];
     const analytics = analyticsRes.data || {};
@@ -323,7 +384,7 @@ export async function onRequest(context) {
     const periodType = 'week';
 
     const strategyResults = elites.map(elite =>
-      simulateStrategy({ id: elite.id || ('elite-' + elite.fitnessScore), name: elite.name || 'Elite Strategy', genes: elite.genes }, periods, periodType, marketEnv, baseProducts)
+      simulateStrategy({ id: elite.id || ('elite-' + elite.fitnessScore), name: elite.name || 'Elite Strategy', genes: elite.genes }, periods, periodType, marketEnv, baseProducts, gymConfig)
     );
 
     // Sort by fitness
@@ -351,7 +412,7 @@ export async function onRequest(context) {
       : DEFAULT_STRATEGIES;
 
     // Step 1: Load baseline state
-    const [productsRes, analyticsRes, compRes, trendsRes, brainRes, evolutionRes, forexRes] = await Promise.all([
+    const [productsRes, analyticsRes, compRes, trendsRes, brainRes, evolutionRes, forexRes, gymRes] = await Promise.all([
       loadJSON('data/products.json', token, []),
       loadJSON('data/analytics.json', token, { sessions: [] }),
       loadJSON('data/competitor-prices.json', token, { products: [] }),
@@ -359,7 +420,13 @@ export async function onRequest(context) {
       loadJSON('data/brain.json', token, {}),
       loadJSON('data/evolution.json', token, { elites: [] }),
       loadJSON('data/forex.json', token, { current: 0.65 }),
+      loadJSON('data/gym-config.json', token, {
+        formulas: [],
+        simulationParams: {},
+        confidenceThreshold: 0.95,
+      }),
     ]);
+    const gymConfig = gymRes.data;
 
     const baseProducts = productsRes.data || [];
     const analytics = analyticsRes.data || {};
@@ -376,7 +443,7 @@ export async function onRequest(context) {
 
     // Step 3: Simulate each strategy
     const strategyResults = strategies.map(strategy =>
-      simulateStrategy(strategy, periods, periodType, marketEnv, baseProducts)
+      simulateStrategy(strategy, periods, periodType, marketEnv, baseProducts, gymConfig)
     );
 
     // Step 5: Call Claude for narrative analysis
@@ -391,7 +458,7 @@ export async function onRequest(context) {
     try {
       const claudeRaw = await callClaude(
         apiKey,
-        'You are a business strategy analyst. Given simulation results for multiple strategies trialled over time, identify the winner and explain WHY it outperforms using the multi-disciplinary framework (physics demand waves, psychology of pricing, biological fitness, historical patterns, consumer behaviour, marketing principles). Return ONLY valid JSON: { "winner": { "strategyId": "string", "reason": "string" }, "keyInsights": [{ "insight": "string", "discipline": "string" }], "marketConditionAdvice": "string (what market conditions favour which strategy)", "riskWarnings": [{ "risk": "string", "affectedStrategy": "string" }], "narrative": "string (2-3 sentence plain English summary for the business owner)" }',
+        'You are a senior business analyst. Given simulation results for multiple strategies, explain which strategy wins and why, what market conditions drove the result, and what risks to watch. Return ONLY valid JSON: { "winner": { "strategyId": "string", "reason": "string" }, "keyInsights": [{ "insight": "string" }], "marketConditionAdvice": "string", "riskWarnings": [{ "risk": "string", "affectedStrategy": "string" }], "narrative": "string" }',
         [{
           role: 'user',
           content: JSON.stringify({
@@ -422,6 +489,24 @@ export async function onRequest(context) {
       claudeResult.narrative = `The ${sorted[0]?.strategyName || 'top'} strategy achieved the highest simulated fitness score over ${periods} ${periodType}s. Claude narrative analysis was unavailable.`;
     }
 
+    // Step 5b: Add confidence scores to each result
+    const winnerId = claudeResult?.winner?.strategyId;
+    strategyResults.forEach(r => {
+      r.confidence = computeStrategyConfidence(r, r.strategyId === winnerId, strategyResults, gymConfig);
+    });
+
+    // Only recommend strategies that meet the confidence threshold
+    const recommendations = strategyResults
+      .filter(r => r.confidence.meetsThreshold)
+      .sort((a, b) => b.confidence.score - a.confidence.score)
+      .map(r => ({
+        strategyId: r.strategyId,
+        strategyName: r.strategyName,
+        confidenceScore: r.confidence.score,
+        totalRevenueAUD: r.summary.totalRevenueAUD,
+        genes: r.genes,
+      }));
+
     // Step 6: Build run record and save
     const runRecord = {
       runId: 'tsim-' + Date.now(),
@@ -436,6 +521,7 @@ export async function onRequest(context) {
       insights: claudeResult.keyInsights,
       narrative: claudeResult.narrative,
       riskWarnings: claudeResult.riskWarnings,
+      recommendations,
     };
 
     const simStore = await loadJSON('data/temporal-simulations.json', token, { runs: [] });
@@ -455,6 +541,7 @@ export async function onRequest(context) {
       narrative: claudeResult.narrative,
       strategyResults: strategyResults.map(s => ({ ...s })),  // full timelines in response
       insights: claudeResult.keyInsights,
+      recommendations,
     });
   }
 

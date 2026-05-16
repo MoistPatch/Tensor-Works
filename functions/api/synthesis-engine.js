@@ -753,7 +753,7 @@ export async function onRequest(context) {
   const leadList = leads.leads || leads || [];
 
   // ── Claude Synthesis ──────────────────────────────────────────────────────
-  const claudeSystem = 'You are a multi-disciplinary business strategist synthesising insights from physics, psychology, biology, mathematics, history, consumer behaviour, and marketing into actionable B2B AI hardware sales strategy. Return ONLY valid JSON: { "executiveSummary": "string", "topOpportunities": [{ "discipline": "string", "opportunity": "string", "action": "string", "expectedImpact": "string", "timeframe": "immediate|short-term|long-term" }], "criticalRisks": [{ "discipline": "string", "risk": "string", "mitigation": "string" }], "convergenceInsight": "string (what the alignment/misalignment between disciplines reveals)", "recommendedFocus": "string (single most important thing to do next)" }';
+  const claudeSystem = 'You are a senior business strategist. Using the quantitative analysis provided, synthesise insights into actionable B2B AI hardware sales strategy. Return ONLY valid JSON: { "executiveSummary": "string", "topOpportunities": [{ "opportunity": "string", "action": "string", "expectedImpact": "string", "timeframe": "immediate|short-term|long-term" }], "criticalRisks": [{ "risk": "string", "mitigation": "string" }], "convergenceInsight": "string", "recommendedFocus": "string" }';
 
   const claudeUserPayload = JSON.stringify({
     convergenceScore: Math.round(convergenceScore * 1000) / 1000,
