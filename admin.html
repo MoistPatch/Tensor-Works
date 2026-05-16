@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tensor Works — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #0D7377; --teal-lt: #14a8ae; --teal-dk: #095457;
+      --bg: #090e10; --bg2: #0f1518; --bg3: #151d21; --bg4: #1c262c;
+      --bdr: #223039; --bdr2: #2d3f4a;
+      --txt: #e2eaed; --txt2: #8fa8b2; --txt3: #6e8898; --white: #fff;
+      --r: 10px; --rsm: 6px; --tr: .2s ease;
+      --red: #f85149; --green: #3ddc84; --orange: #E07B39;
+    }
+    html, body { height: 100%; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); display: flex; flex-direction: column; }
+
+    /* Header */
+    .admin-header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 60px; background: var(--bg2); border-bottom: 1px solid var(--bdr); flex-shrink: 0; }
+    .admin-logo { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; color: var(--white); }
+    .admin-logo .logo-mark { width: 30px; height: 30px; background: linear-gradient(135deg, var(--teal), var(--teal-dk)); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; color: #fff; }
+    .admin-logo span { color: var(--teal-lt); }
+    .admin-logo .badge { font-size: 11px; font-weight: 600; color: var(--txt3); background: var(--bg3); border: 1px solid var(--bdr); padding: 2px 8px; border-radius: 20px; margin-left: 4px; }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    #deploy-status { font-size: 13px; color: var(--txt3); }
+    #deploy-status.success { color: var(--green); }
+    #deploy-status.error { color: var(--red); }
+    #deploy-status.loading { color: var(--teal-lt); }
+
+    /* Layout */
+    .admin-layout { display: grid; grid-template-columns: 280px 1fr; flex: 1; overflow: hidden; }
+
+    /* Sidebar */
+    .sidebar { background: var(--bg2); border-right: 1px solid var(--bdr); display: flex; flex-direction: column; overflow: hidden; }
+    .sidebar-header { padding: 16px; border-bottom: 1px solid var(--bdr); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .sidebar-header h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--txt3); }
+    .product-list { flex: 1; overflow-y: auto; padding: 8px; }
+    .product-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--rsm); cursor: pointer; transition: var(--tr); margin-bottom: 2px; border: 1px solid transparent; }
+    .product-item:hover { background: var(--bg3); }
+    .product-item.active { background: var(--bg3); border-color: var(--teal-dk); }
+    .product-item-icon { width: 32px; height: 32px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+    .product-item-icon.teal { background: rgba(13,115,119,.2); color: var(--teal-lt); }
+    .product-item-icon.orange { background: rgba(224,123,57,.15); color: #f09050; }
+    .product-item-icon.blue { background: rgba(88,166,255,.1); color: #58a6ff; }
+    .product-item-icon.purple { background: rgba(160,100,255,.1); color: #b084ff; }
+    .product-item-icon.green { background: rgba(0,200,100,.1); color: #3ddc84; }
+    .product-item-info { flex: 1; min-width: 0; }
+    .product-item-name { font-size: 13px; font-weight: 600; color: var(--txt); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-item-cat { font-size: 11px; color: var(--txt3); }
+    .stock-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .stock-dot.in { background: var(--green); }
+    .stock-dot.out { background: var(--orange); }
+    .sidebar-footer { padding: 12px; border-top: 1px solid var(--bdr); flex-shrink: 0; }
+
+    /* Main panel */
+    .main-panel { overflow-y: auto; padding: 32px; }
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--txt3); gap: 12px; }
+    .empty-state i { font-size: 48px; }
+
+    /* Form */
+    .product-form { max-width: 800px; }
+    .form-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--bdr); }
+    .form-title { font-size: 20px; font-weight: 800; color: var(--white); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); }
+    input[type="text"], textarea, select {
+      background: var(--bg3); border: 1px solid var(--bdr2); border-radius: var(--rsm);
+      color: var(--txt); font-family: inherit; font-size: 14px; padding: 10px 12px;
+      transition: border-color var(--tr); outline: none; width: 100%;
+    }
+    input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--teal); }
+    textarea { resize: vertical; min-height: 80px; }
+    select option { background: var(--bg3); }
+
+    /* Toggle */
+    .toggle-wrap { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+    .toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--bg4); border: 1px solid var(--bdr2); border-radius: 12px; cursor: pointer; transition: var(--tr); }
+    .toggle-slider::before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: var(--txt3); border-radius: 50%; transition: var(--tr); }
+    .toggle input:checked + .toggle-slider { background: var(--teal); border-color: var(--teal); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: #fff; }
+    .toggle-label { font-size: 14px; color: var(--txt2); }
+
+    /* Specs */
+    .specs-section { margin-bottom: 20px; }
+    .specs-section label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); margin-bottom: 10px; }
+    .spec-row { display: grid; grid-template-columns: 1fr 1fr 36px; gap: 8px; margin-bottom: 8px; align-items: center; }
+    .spec-row input { margin: 0; }
+    .btn-icon { width: 36px; height: 36px; background: none; border: 1px solid var(--bdr2); border-radius: var(--rsm); color: var(--txt3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: var(--tr); }
+    .btn-icon:hover { border-color: var(--red); color: var(--red); }
+    .btn-add-spec { background: none; border: 1px dashed var(--bdr2); border-radius: var(--rsm); color: var(--txt3); padding: 8px 14px; font-size: 13px; cursor: pointer; transition: var(--tr); font-family: inherit; width: 100%; margin-top: 4px; }
+    .btn-add-spec:hover { border-color: var(--teal); color: var(--teal-lt); }
+
+    /* Danger zone */
+    .danger-zone { margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(248,81,73,.2); }
+    .danger-zone h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--red); margin-bottom: 12px; }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: var(--rsm); font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: var(--tr); font-family: inherit; }
+    .btn-primary { background: linear-gradient(135deg, var(--teal), var(--teal-dk)); color: #fff; }
+    .btn-primary:hover { background: linear-gradient(135deg, var(--teal-lt), var(--teal)); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-outline { background: transparent; color: var(--txt2); border: 1px solid var(--bdr2); }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal-lt); }
+    .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(248,81,73,.3); }
+    .btn-danger:hover { background: rgba(248,81,73,.1); border-color: var(--red); }
+    .btn-sm { padding: 7px 14px; font-size: 13px; }
+    .btn-green { background: linear-gradient(135deg, #1a7a3a, #0f5228); color: #fff; }
+    .btn-green:hover { background: linear-gradient(135deg, #22a050, #1a7a3a); }
+
+    /* Loading */
+    .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(9,14,16,.8); z-index: 100; align-items: center; justify-content: center; flex-direction: column; gap: 16px; color: var(--teal-lt); font-size: 15px; font-weight: 600; }
+    .loading-overlay.show { display: flex; }
+    .spinner { width: 36px; height: 36px; border: 3px solid var(--bdr2); border-top-color: var(--teal-lt); border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <span id="loading-msg">Loading products...</span>
+</div>
+
+<header class="admin-header">
+  <div class="admin-logo">
+    <div class="logo-mark">TW</div>
+    Tensor<span>Works</span>
+    <span class="badge">Admin</span>
+  </div>
+  <div class="header-actions">
+    <span id="deploy-status"></span>
+    <a href="/products.html" class="btn btn-outline btn-sm" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+    <button class="btn btn-green" id="save-btn" onclick="saveProducts()"><i class="fas fa-rocket"></i> Save &amp; Deploy</button>
+  </div>
+</header>
+
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h3>Products (<span id="product-count">0</span>)</h3>
+    </div>
+    <div class="product-list" id="product-list"></div>
+    <div class="sidebar-footer">
+      <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="addProduct()">
+        <i class="fas fa-plus"></i> Add Product
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-panel" id="main-panel">
+    <div class="empty-state" id="empty-state">
+      <i class="fas fa-microchip"></i>
+      <p>Select a product to edit, or add a new one</p>
+    </div>
+    <div class="product-form" id="product-form" style="display:none"></div>
+  </main>
+</div>
+
+<script>
+(function() {
+  var state = { products: [], sha: null, selectedIdx: null, dirty: false };
+
+  var ICON_CLASSES = ['teal', 'orange', 'blue', 'purple', 'green'];
+  var CATEGORIES = ['GPU Accelerators', 'DGX Systems', 'Workstation GPU', 'Data Processing Unit', 'Software Suite', 'Server Platform', 'Networking'];
+
+  function setLoading(show, msg) {
+    var el = document.getElementById('loading');
+    el.classList.toggle('show', show);
+    if (msg) document.getElementById('loading-msg').textContent = msg;
+  }
+
+  function setStatus(msg, type) {
+    var el = document.getElementById('deploy-status');
+    el.textContent = msg;
+    el.className = type || '';
+  }
+
+  function slugify(str) {
+    return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+
+  async function loadProducts() {
+    setLoading(true, 'Loading products...');
+    try {
+      var r = await fetch('/api/admin');
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      state.products = data.products || [];
+      state.sha = data.sha;
+      renderList();
+      setStatus('');
+    } catch (e) {
+      setStatus('Load failed: ' + e.message, 'error');
+      // Fall back to config.js products
+      if (window.TW && window.TW.products) {
+        state.products = JSON.parse(JSON.stringify(window.TW.products));
+        renderList();
+      }
+    }
+    setLoading(false);
+  }
+
+  function renderList() {
+    var list = document.getElementById('product-list');
+    document.getElementById('product-count').textContent = state.products.length;
+    if (state.products.length === 0) {
+      list.innerHTML = '<p style="text-align:center;color:var(--txt3);font-size:13px;padding:20px">No products yet</p>';
+      return;
+    }
+    list.innerHTML = state.products.map(function(p, i) {
+      return '<div class="product-item' + (state.selectedIdx === i ? ' active' : '') + '" onclick="selectProduct(' + i + ')">' +
+        '<div class="product-item-icon ' + (p.iconClass || 'teal') + '"><i class="fas ' + (p.icon || 'fa-microchip') + '"></i></div>' +
+        '<div class="product-item-info">' +
+          '<div class="product-item-name">' + escHtml(p.title || 'Untitled') + '</div>' +
+          '<div class="product-item-cat">' + escHtml(p.category || '') + '</div>' +
+        '</div>' +
+        '<div class="stock-dot ' + (p.inStock ? 'in' : 'out') + '" title="' + (p.inStock ? 'In Stock' : 'On Order') + '"></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function selectProduct(idx) {
+    state.selectedIdx = idx;
+    renderList();
+    renderForm();
+  }
+
+  function renderForm() {
+    var p = state.products[state.selectedIdx];
+    if (!p) return;
+    document.getElementById('empty-state').style.display = 'none';
+    var form = document.getElementById('product-form');
+    form.style.display = 'block';
+
+    var specsHtml = (p.specs || []).map(function(s, si) {
+      return '<div class="spec-row" id="spec-row-' + si + '">' +
+        '<input type="text" placeholder="Key (e.g. Memory)" value="' + escAttr(s.key) + '" onchange="updateSpec(' + si + ',\'key\',this.value)">' +
+        '<input type="text" placeholder="Value (e.g. 80GB HBM3)" value="' + escAttr(s.value) + '" onchange="updateSpec(' + si + ',\'value\',this.value)">' +
+        '<button class="btn-icon" onclick="removeSpec(' + si + ')" title="Remove"><i class="fas fa-trash-alt"></i></button>' +
+      '</div>';
+    }).join('');
+
+    var iconClassOptions = ICON_CLASSES.map(function(c) {
+      return '<option value="' + c + '"' + (p.iconClass === c ? ' selected' : '') + '>' + c + '</option>';
+    }).join('');
+
+    var categoryOptions = CATEGORIES.map(function(c) {
+      return '<option value="' + c + '"' + (p.category === c ? ' selected' : '') + '>' + c + '</option>';
+    }).join('');
+
+    form.innerHTML =
+      '<div class="form-header">' +
+        '<div class="form-title">' + escHtml(p.title || 'New Product') + '</div>' +
+      '</div>' +
+
+      '<div class="form-grid">' +
+        '<div class="form-group">' +
+          '<label>Title</label>' +
+          '<input type="text" value="' + escAttr(p.title) + '" oninput="updateField(\'title\',this.value);this.closest(\'.product-form\').querySelector(\'.form-title\').textContent=this.value||\'New Product\'">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Handle (URL slug)</label>' +
+          '<input type="text" value="' + escAttr(p.handle) + '" oninput="updateField(\'handle\',this.value)">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Category</label>' +
+          '<select onchange="updateField(\'category\',this.value)">' + categoryOptions + '<option value="">Other</option></select>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>SKU</label>' +
+          '<input type="text" value="' + escAttr(p.sku) + '" oninput="updateField(\'sku\',this.value)">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Price Display</label>' +
+          '<input type="text" value="' + escAttr(p.priceDisplay || 'POA') + '" oninput="updateField(\'priceDisplay\',this.value)" placeholder="POA">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Shopify Variant ID</label>' +
+          '<input type="text" value="' + escAttr(p.shopifyVariantId || '') + '" oninput="updateField(\'shopifyVariantId\',this.value)" placeholder="e.g. 43751354466382">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Icon Class (colour)</label>' +
+          '<select onchange="updateField(\'iconClass\',this.value);renderList()">' + iconClassOptions + '</select>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Icon (FontAwesome)</label>' +
+          '<input type="text" value="' + escAttr(p.icon || 'fa-microchip') + '" oninput="updateField(\'icon\',this.value)" placeholder="fa-microchip">' +
+        '</div>' +
+        '<div class="form-group full">' +
+          '<label>Description</label>' +
+          '<textarea oninput="updateField(\'description\',this.value)">' + escHtml(p.description || '') + '</textarea>' +
+        '</div>' +
+        '<div class="form-group full">' +
+          '<label>Tags (comma-separated)</label>' +
+          '<input type="text" value="' + escAttr((p.tags || []).join(', ')) + '" oninput="updateField(\'tags\',this.value.split(\',\').map(function(t){return t.trim();}).filter(Boolean))">' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="specs-section">' +
+        '<label>Specs</label>' +
+        '<div id="specs-container">' + specsHtml + '</div>' +
+        '<button class="btn-add-spec" onclick="addSpec()"><i class="fas fa-plus"></i> Add Spec</button>' +
+      '</div>' +
+
+      '<div class="toggle-wrap">' +
+        '<label class="toggle"><input type="checkbox"' + (p.inStock ? ' checked' : '') + ' onchange="updateField(\'inStock\',this.checked);renderList()"><span class="toggle-slider"></span></label>' +
+        '<span class="toggle-label">In Stock</span>' +
+      '</div>' +
+
+      '<div class="danger-zone">' +
+        '<h4><i class="fas fa-exclamation-triangle"></i> Danger Zone</h4>' +
+        '<button class="btn btn-danger btn-sm" onclick="deleteProduct()"><i class="fas fa-trash-alt"></i> Delete Product</button>' +
+      '</div>';
+  }
+
+  window.updateField = function(field, value) {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx][field] = value;
+    state.dirty = true;
+    if (field === 'title' && !state.products[state.selectedIdx]._handleEdited) {
+      state.products[state.selectedIdx].handle = slugify(value);
+    }
+    renderList();
+  };
+
+  window.updateSpec = function(si, field, value) {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx].specs[si][field] = value;
+    state.dirty = true;
+  };
+
+  window.addSpec = function() {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx].specs = state.products[state.selectedIdx].specs || [];
+    state.products[state.selectedIdx].specs.push({ key: '', value: '' });
+    state.dirty = true;
+    renderForm();
+  };
+
+  window.removeSpec = function(si) {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx].specs.splice(si, 1);
+    state.dirty = true;
+    renderForm();
+  };
+
+  window.selectProduct = selectProduct;
+  window.renderList = renderList;
+
+  window.addProduct = function() {
+    var p = {
+      handle: 'new-product-' + Date.now(),
+      title: 'New Product',
+      category: 'GPU Accelerators',
+      sku: '',
+      priceDisplay: 'POA',
+      shopifyVariantId: null,
+      image: null,
+      iconClass: 'teal',
+      icon: 'fa-microchip',
+      description: '',
+      specs: [{ key: '', value: '' }],
+      inStock: true,
+      tags: [],
+    };
+    state.products.push(p);
+    state.dirty = true;
+    selectProduct(state.products.length - 1);
+  };
+
+  window.deleteProduct = function() {
+    if (state.selectedIdx === null) return;
+    var name = state.products[state.selectedIdx].title || 'this product';
+    if (!confirm('Delete "' + name + '"? This cannot be undone.')) return;
+    state.products.splice(state.selectedIdx, 1);
+    state.selectedIdx = null;
+    state.dirty = true;
+    document.getElementById('empty-state').style.display = 'flex';
+    document.getElementById('product-form').style.display = 'none';
+    renderList();
+  };
+
+  window.saveProducts = async function() {
+    var btn = document.getElementById('save-btn');
+    btn.disabled = true;
+    setLoading(true, 'Saving and deploying...');
+    setStatus('Saving...', 'loading');
+    try {
+      var r = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ products: state.products, sha: state.sha }),
+      });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      // Refresh SHA after save
+      var refresh = await fetch('/api/admin');
+      var refreshData = await refresh.json();
+      state.sha = refreshData.sha;
+      state.dirty = false;
+      setStatus('Saved — deploying in ~60s', 'success');
+      setTimeout(function() { setStatus(''); }, 8000);
+    } catch (e) {
+      setStatus('Error: ' + e.message, 'error');
+    }
+    setLoading(false);
+    btn.disabled = false;
+  };
+
+  function escHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escAttr(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  }
+
+  // Warn before leaving with unsaved changes
+  window.addEventListener('beforeunload', function(e) {
+    if (state.dirty) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  loadProducts();
+})();
+</script>
+
+</body>
+</html>
