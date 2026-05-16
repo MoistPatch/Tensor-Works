@@ -297,6 +297,7 @@
   <button class="tab-btn" onclick="switchTab('reporting')" id="tabnav-reporting"><i class="fas fa-chart-pie"></i> Reporting</button>
   <button class="tab-btn" onclick="switchTab('monitor')" id="tabnav-monitor"><i class="fas fa-heartbeat"></i> Monitor</button>
   <button class="tab-btn" onclick="switchTab('agents')" id="tabnav-agents"><i class="fas fa-project-diagram"></i> Agents</button>
+  <button class="tab-btn" onclick="switchTab('synthesis')" id="tabnav-synthesis"><i class="fas fa-atom"></i> Synthesis</button>
 </nav>
 
 <div class="admin-body">
@@ -756,6 +757,67 @@
     </div>
   </div>
 
+  <!-- ── Synthesis tab ────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-synthesis">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">Convergence Algorithm</div><div class="panel-subtitle">Multi-disciplinary synthesis — physics, psychology, biology, mathematics, history, consumer behaviour, marketing</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" onclick="runSynthesis()"><i class="fas fa-atom"></i> Run Synthesis</button>
+          <button class="btn btn-outline btn-sm" onclick="runEvolver()"><i class="fas fa-dna"></i> Evolve Strategies</button>
+          <button class="btn btn-outline btn-sm" onclick="runTemporalSim()"><i class="fas fa-clock"></i> Simulate 12 Weeks</button>
+        </div>
+      </div>
+
+      <!-- Convergence Score -->
+      <div class="card" style="margin-bottom:24px" id="synthesis-convergence-card">
+        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+          <div style="text-align:center">
+            <div style="font-size:48px;font-weight:900;color:var(--teal-lt)" id="synth-score">—</div>
+            <div style="font-size:12px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px">Convergence Score</div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px" id="synth-focus">Run synthesis to see insights</div>
+            <div style="font-size:13px;color:var(--txt2)" id="synth-summary"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Discipline Scores -->
+      <div class="section-label">Discipline Scores</div>
+      <div class="stat-grid" style="margin-bottom:24px" id="synth-disciplines">
+        <div class="stat-card"><div class="stat-card-label">Physics</div><div class="stat-card-value" id="sd-physics">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Psychology</div><div class="stat-card-value" id="sd-psychology">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Biology</div><div class="stat-card-value" id="sd-biology">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Mathematics</div><div class="stat-card-value" id="sd-mathematics">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">History</div><div class="stat-card-value" id="sd-history">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Consumer Behaviour</div><div class="stat-card-value" id="sd-consumerBehaviour">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Marketing</div><div class="stat-card-value" id="sd-marketing">—</div></div>
+      </div>
+
+      <div class="two-col" style="margin-bottom:24px">
+        <div>
+          <div class="section-label">Top Opportunities</div>
+          <div id="synth-opportunities"><div class="panel-empty">Run synthesis to see opportunities</div></div>
+        </div>
+        <div>
+          <div class="section-label">Critical Risks</div>
+          <div id="synth-risks"><div class="panel-empty">Run synthesis to see risks</div></div>
+        </div>
+      </div>
+
+      <!-- Strategy Evolution -->
+      <div class="section-label">Strategy Evolution <span id="evol-generation" style="color:var(--txt3);font-size:12px;font-weight:400;margin-left:8px"></span></div>
+      <div class="card" style="margin-bottom:24px" id="evol-elites">
+        <div class="panel-empty">Evolve strategies to see elite performers</div>
+      </div>
+
+      <!-- Temporal Simulation -->
+      <div class="section-label">Temporal Simulation Results</div>
+      <div id="temporal-results"><div class="panel-empty">Run a simulation to see how strategies perform over 12 weeks</div></div>
+    </div>
+  </div>
+
 </div>
 </div><!-- /tab-content-products -->
 
@@ -1030,6 +1092,7 @@
     else if (name === 'reporting') loadReporting();
     else if (name === 'monitor') loadMonitor();
     else if (name === 'agents') loadAgents();
+    else if (name === 'synthesis') loadSynthesis();
     else if (name === 'simulations') loadSimHistory();
     else if (name === 'datahealth') loadDataHealth();
   };
@@ -2304,6 +2367,167 @@
     } catch(_) {
       el.innerHTML = '<div class="panel-empty">No reports yet</div>';
     }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SYNTHESIS TAB
+  ══════════════════════════════════════════════════════════════════ */
+  window.loadSynthesis = async function() {
+    try {
+      var r = await fetch('/api/synthesis-engine');
+      var data = await r.json();
+      if (data.reports && data.reports[0]) renderSynthesis(data.reports[0]);
+      loadEvolution();
+      loadTemporalResults();
+    } catch(e) {}
+  };
+
+  window.runSynthesis = async function() {
+    document.getElementById('synth-score').textContent = '…';
+    document.getElementById('synth-focus').textContent = 'Running multi-disciplinary analysis…';
+    try {
+      var r = await fetch('/api/synthesis-engine', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
+      var data = await r.json();
+      renderSynthesis(data);
+    } catch(e) {
+      document.getElementById('synth-focus').textContent = 'Error: ' + e.message;
+    }
+  };
+
+  function renderSynthesis(data) {
+    if (!data) return;
+    var score = data.convergenceScore;
+    document.getElementById('synth-score').textContent = score != null ? Math.round(score * 100) + '%' : '—';
+    document.getElementById('synth-focus').textContent = data.recommendedFocus || '—';
+    document.getElementById('synth-summary').textContent = data.executiveSummary || '';
+
+    var ds = data.disciplineScores || {};
+    ['physics','psychology','biology','mathematics','history','consumerBehaviour','marketing'].forEach(function(d) {
+      var el = document.getElementById('sd-' + d);
+      if (el) {
+        var v = ds[d];
+        var pct = v != null ? Math.round(v * 100) : null;
+        el.textContent = pct != null ? pct + '%' : '—';
+        el.style.color = pct >= 70 ? 'var(--green)' : pct >= 45 ? 'var(--orange)' : pct != null ? 'var(--red)' : 'var(--txt3)';
+      }
+    });
+
+    var opps = data.topOpportunities || [];
+    document.getElementById('synth-opportunities').innerHTML = opps.length
+      ? opps.map(function(o) {
+          return '<div class="card" style="margin-bottom:8px;padding:12px">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">' +
+              '<span class="chip chip-teal" style="font-size:10px">' + escHtml(o.discipline||'') + '</span>' +
+              '<span style="font-size:10px;color:var(--txt3)">' + escHtml(o.timeframe||'') + '</span>' +
+            '</div>' +
+            '<div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">' + escHtml(o.opportunity||'') + '</div>' +
+            '<div style="font-size:12px;color:var(--txt2)">' + escHtml(o.action||'') + '</div>' +
+          '</div>';
+        }).join('')
+      : '<div class="panel-empty">No opportunities identified</div>';
+
+    var risks = data.criticalRisks || [];
+    document.getElementById('synth-risks').innerHTML = risks.length
+      ? risks.map(function(r) {
+          return '<div class="card" style="margin-bottom:8px;padding:12px;border-left:3px solid var(--red)">' +
+            '<span class="chip" style="background:rgba(239,68,68,.15);color:var(--red);font-size:10px">' + escHtml(r.discipline||'') + '</span>' +
+            '<div style="font-size:13px;font-weight:600;color:var(--white);margin:6px 0 4px">' + escHtml(r.risk||'') + '</div>' +
+            '<div style="font-size:12px;color:var(--txt2)">' + escHtml(r.mitigation||'') + '</div>' +
+          '</div>';
+        }).join('')
+      : '<div class="panel-empty">No critical risks identified</div>';
+  }
+
+  window.runEvolver = async function() {
+    document.getElementById('evol-elites').innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Evolving strategy population…</div>';
+    try {
+      var r = await fetch('/api/strategy-evolver', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'evolve' }) });
+      var data = await r.json();
+      renderEvolution(data);
+    } catch(e) {
+      document.getElementById('evol-elites').innerHTML = '<div style="color:var(--red);font-size:13px">' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  async function loadEvolution() {
+    try {
+      var r = await fetch('/api/strategy-evolver');
+      var data = await r.json();
+      renderEvolution(data);
+    } catch(_) {}
+  }
+
+  function renderEvolution(data) {
+    if (!data) return;
+    document.getElementById('evol-generation').textContent = data.generation ? 'Generation ' + data.generation + ' · Pop: ' + (data.populationSize||0) : '';
+    var elites = data.elites || [];
+    if (!elites.length) { document.getElementById('evol-elites').innerHTML = '<div class="panel-empty">No elite strategies yet — click Evolve Strategies</div>'; return; }
+    document.getElementById('evol-elites').innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px">' +
+      elites.map(function(s, i) {
+        var g = s.genes || {};
+        return '<div class="card" style="border:1px solid var(--teal-lt)40">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
+            '<span style="font-weight:700;color:var(--teal-lt)">Elite #' + (i+1) + '</span>' +
+            '<span style="font-size:13px;font-weight:700;color:var(--white)">' + (s.fitnessScore != null ? Math.round(s.fitnessScore*100) + '%' : '—') + '</span>' +
+          '</div>' +
+          '<div style="font-size:12px;color:var(--txt2);display:grid;gap:3px">' +
+            '<div>Pricing: <strong>' + (g.pricingMultiplier ? (g.pricingMultiplier > 1 ? '+' : '') + Math.round((g.pricingMultiplier-1)*100) + '%' : '—') + '</strong>' + (g.charmPricing ? ' · charm ✓' : '') + '</div>' +
+            '<div>Campaign: <strong>' + escHtml(g.campaignType||'—') + '</strong> · ' + escHtml(g.messagingFrame||'—') + '</div>' +
+            '<div>Segment: <strong>' + escHtml(g.targetSegment||'—') + '</strong> · ' + escHtml(g.launchDayOfWeek||'—') + '</div>' +
+            '<div>Discount: <strong>' + (g.discountDepth ? Math.round(g.discountDepth*100) + '%' : 'none') + '</strong>' + (g.bundlingEnabled ? ' · bundles ✓' : '') + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('') + '</div>';
+  }
+
+  window.runTemporalSim = async function() {
+    document.getElementById('temporal-results').innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Simulating 12 weeks across 3 strategies…</div>';
+    try {
+      var r = await fetch('/api/temporal-simulator', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'run', periods:12, periodType:'week' }) });
+      var data = await r.json();
+      renderTemporalResults(data);
+    } catch(e) {
+      document.getElementById('temporal-results').innerHTML = '<div style="color:var(--red);font-size:13px">' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  async function loadTemporalResults() {
+    try {
+      var r = await fetch('/api/temporal-simulator');
+      var data = await r.json();
+      var runs = data.runs || [];
+      if (runs.length) renderTemporalResults(runs[0]);
+    } catch(_) {}
+  }
+
+  function renderTemporalResults(data) {
+    var el = document.getElementById('temporal-results');
+    if (!data) { el.innerHTML = '<div class="panel-empty">No simulation data</div>'; return; }
+    var results = data.strategyResults || data.results || [];
+    var winner = data.winner;
+    var narrative = data.narrative;
+    el.innerHTML =
+      (narrative ? '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--teal-lt)"><div style="font-size:13px;color:var(--txt2)">' + escHtml(narrative) + '</div></div>' : '') +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px">' +
+      results.map(function(s) {
+        var isWinner = winner && winner.strategyId === s.strategyId;
+        var sum = s.summary || {};
+        return '<div class="card" style="' + (isWinner ? 'border:1px solid var(--green)' : '') + '">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
+            '<span style="font-weight:700;color:' + (isWinner?'var(--green)':'var(--white)') + '">' + escHtml(s.strategyName||s.strategyId) + '</span>' +
+            (isWinner ? '<span class="chip chip-teal" style="font-size:10px">WINNER</span>' : '') +
+          '</div>' +
+          '<div style="font-size:12px;color:var(--txt2);display:grid;gap:3px">' +
+            '<div>Total Revenue: <strong>A$' + Math.round(sum.totalRevenueAUD||0).toLocaleString('en-AU') + '</strong></div>' +
+            '<div>Total Leads: <strong>' + (sum.totalLeads||0) + '</strong> · Quotes: <strong>' + (sum.totalQuotes||0) + '</strong></div>' +
+            '<div>Resilience: <strong>' + Math.round((sum.resilienceScore||0)*100) + '%</strong></div>' +
+            '<div>Growth: <strong>' + (sum.growthTrajectory >= 0 ? '+' : '') + Math.round((sum.growthTrajectory||0)*100) + '%</strong></div>' +
+          '</div>' +
+        '</div>';
+      }).join('') + '</div>' +
+      (data.insights ? '<div style="display:grid;gap:8px">' + (data.insights||[]).slice(0,4).map(function(ins) {
+        return '<div style="font-size:13px;padding:8px 12px;background:var(--bg3);border-radius:var(--rsm)"><span class="chip" style="font-size:10px;margin-right:6px">' + escHtml(ins.discipline||'') + '</span>' + escHtml(ins.insight||'') + '</div>';
+      }).join('') + '</div>' : '');
   }
 
   /* ── Init ─────────────────────────────────────────────────────── */
