@@ -815,6 +815,92 @@
       <!-- Temporal Simulation -->
       <div class="section-label">Temporal Simulation Results</div>
       <div id="temporal-results"><div class="panel-empty">Run a simulation to see how strategies perform over 12 weeks</div></div>
+
+      <!-- Simulation Gym -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:8px">
+        <div class="section-label" style="margin:0">Simulation Gym</div>
+        <button class="btn btn-outline btn-sm" onclick="loadGym()"><i class="fas fa-sync-alt"></i> Refresh</button>
+      </div>
+      <div class="card" style="margin-bottom:16px" id="gym-params-card">
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Core Parameters</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px">
+          <div class="form-group">
+            <label>Price Elasticity</label>
+            <input type="number" id="gym-elasticity" step="0.01" placeholder="-1.5" />
+          </div>
+          <div class="form-group">
+            <label>Charm Pricing Lift</label>
+            <input type="number" id="gym-charm" step="0.01" placeholder="0.08" />
+          </div>
+          <div class="form-group">
+            <label>Base Lead Rate</label>
+            <input type="number" id="gym-leadrate" step="0.001" placeholder="0.015" />
+          </div>
+          <div class="form-group">
+            <label>Lead → Quote Rate</label>
+            <input type="number" id="gym-leadquote" step="0.01" placeholder="0.40" />
+          </div>
+          <div class="form-group">
+            <label>Quote Acceptance Rate</label>
+            <input type="number" id="gym-acceptance" step="0.01" placeholder="0.30" />
+          </div>
+          <div class="form-group">
+            <label>Market Growth Rate</label>
+            <input type="number" id="gym-growth" step="0.001" placeholder="0.02" />
+          </div>
+          <div class="form-group">
+            <label>Event Probability</label>
+            <input type="number" id="gym-eventprob" step="0.01" placeholder="0.10" />
+          </div>
+          <div class="form-group">
+            <label>Seasonal Amplitude</label>
+            <input type="number" id="gym-seasonal" step="0.01" placeholder="0.25" />
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
+          <div class="form-group" style="flex:1;min-width:160px;margin:0">
+            <label>Confidence Threshold (%)</label>
+            <input type="number" id="gym-confidence" step="1" min="50" max="100" placeholder="95" />
+          </div>
+          <button class="btn btn-primary btn-sm" style="margin-top:auto" onclick="saveGymParams()"><i class="fas fa-save"></i> Save Parameters</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Add Custom Formula</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="gym-fname" placeholder="e.g. Power-law demand elasticity" />
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select id="gym-ftype">
+              <option value="price-elasticity">Price Elasticity</option>
+              <option value="lead-rate">Lead Rate</option>
+              <option value="conversion-rate">Conversion Rate</option>
+              <option value="seasonal">Seasonal</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Description</label>
+          <input type="text" id="gym-fdesc" placeholder="What does this formula do and why?" />
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Parameters (JSON)</label>
+          <textarea id="gym-fparams" rows="3" placeholder='{"elasticity": -1.8, "threshold": 500}'></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Source / Reference</label>
+          <input type="text" id="gym-fsource" placeholder="e.g. Journal of B2B Marketing, 2024" />
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addGymFormula()"><i class="fas fa-plus"></i> Add Formula</button>
+      </div>
+
+      <div class="section-label">Active Formulas</div>
+      <div id="gym-formulas"><div class="panel-empty">No custom formulas added yet</div></div>
     </div>
   </div>
 
@@ -2379,6 +2465,7 @@
       if (data.reports && data.reports[0]) renderSynthesis(data.reports[0]);
       loadEvolution();
       loadTemporalResults();
+      loadGym();
     } catch(e) {}
   };
 
@@ -2416,12 +2503,12 @@
     document.getElementById('synth-opportunities').innerHTML = opps.length
       ? opps.map(function(o) {
           return '<div class="card" style="margin-bottom:8px;padding:12px">' +
-            '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">' +
-              '<span class="chip chip-teal" style="font-size:10px">' + escHtml(o.discipline||'') + '</span>' +
+            '<div style="display:flex;justify-content:flex-end;margin-bottom:4px">' +
               '<span style="font-size:10px;color:var(--txt3)">' + escHtml(o.timeframe||'') + '</span>' +
             '</div>' +
             '<div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">' + escHtml(o.opportunity||'') + '</div>' +
-            '<div style="font-size:12px;color:var(--txt2)">' + escHtml(o.action||'') + '</div>' +
+            '<div style="font-size:12px;color:var(--txt2);margin-bottom:4px">' + escHtml(o.action||'') + '</div>' +
+            (o.expectedImpact ? '<div style="font-size:11px;color:var(--teal-lt)">' + escHtml(o.expectedImpact) + '</div>' : '') +
           '</div>';
         }).join('')
       : '<div class="panel-empty">No opportunities identified</div>';
@@ -2430,8 +2517,7 @@
     document.getElementById('synth-risks').innerHTML = risks.length
       ? risks.map(function(r) {
           return '<div class="card" style="margin-bottom:8px;padding:12px;border-left:3px solid var(--red)">' +
-            '<span class="chip" style="background:rgba(239,68,68,.15);color:var(--red);font-size:10px">' + escHtml(r.discipline||'') + '</span>' +
-            '<div style="font-size:13px;font-weight:600;color:var(--white);margin:6px 0 4px">' + escHtml(r.risk||'') + '</div>' +
+            '<div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">' + escHtml(r.risk||'') + '</div>' +
             '<div style="font-size:12px;color:var(--txt2)">' + escHtml(r.mitigation||'') + '</div>' +
           '</div>';
         }).join('')
@@ -2512,11 +2598,18 @@
       results.map(function(s) {
         var isWinner = winner && winner.strategyId === s.strategyId;
         var sum = s.summary || {};
+        var conf = s.confidence || {};
+        var confPct = conf.score != null ? Math.round(conf.score * 100) : null;
+        var meetsThreshold = conf.meetsThreshold;
         return '<div class="card" style="' + (isWinner ? 'border:1px solid var(--green)' : '') + '">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
             '<span style="font-weight:700;color:' + (isWinner?'var(--green)':'var(--white)') + '">' + escHtml(s.strategyName||s.strategyId) + '</span>' +
-            (isWinner ? '<span class="chip chip-teal" style="font-size:10px">WINNER</span>' : '') +
+            '<div style="display:flex;gap:4px;align-items:center">' +
+              (isWinner ? '<span class="chip chip-teal" style="font-size:10px">WINNER</span>' : '') +
+              (confPct != null ? '<span class="chip" style="font-size:10px;background:' + (meetsThreshold?'rgba(16,185,129,.15)':'rgba(107,114,128,.15)') + ';color:' + (meetsThreshold?'var(--green)':'var(--txt3)') + '">' + confPct + '% conf</span>' : '') +
+            '</div>' +
           '</div>' +
+          (meetsThreshold ? '<div style="font-size:11px;color:var(--green);margin-bottom:6px"><i class="fas fa-check-circle"></i> Recommended — meets 95% confidence threshold</div>' : '') +
           '<div style="font-size:12px;color:var(--txt2);display:grid;gap:3px">' +
             '<div>Total Revenue: <strong>A$' + Math.round(sum.totalRevenueAUD||0).toLocaleString('en-AU') + '</strong></div>' +
             '<div>Total Leads: <strong>' + (sum.totalLeads||0) + '</strong> · Quotes: <strong>' + (sum.totalQuotes||0) + '</strong></div>' +
@@ -2525,10 +2618,153 @@
           '</div>' +
         '</div>';
       }).join('') + '</div>' +
+      (data.recommendations && data.recommendations.length ? '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--green)"><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px"><i class="fas fa-check-circle"></i> RECOMMENDED STRATEGIES (' + data.recommendations.length + ')</div>' + data.recommendations.map(function(r){ return '<div style="font-size:13px;color:var(--txt2);margin-top:4px">' + escHtml(r.strategyName) + ' — ' + Math.round(r.confidenceScore*100) + '% confidence</div>'; }).join('') + '</div>' : '') +
       (data.insights ? '<div style="display:grid;gap:8px">' + (data.insights||[]).slice(0,4).map(function(ins) {
-        return '<div style="font-size:13px;padding:8px 12px;background:var(--bg3);border-radius:var(--rsm)"><span class="chip" style="font-size:10px;margin-right:6px">' + escHtml(ins.discipline||'') + '</span>' + escHtml(ins.insight||'') + '</div>';
+        return '<div style="font-size:13px;padding:8px 12px;background:var(--bg3);border-radius:var(--rsm)">' + escHtml(ins.insight||ins) + '</div>';
       }).join('') + '</div>' : '');
   }
+
+  /* ── Simulation Gym ───────────────────────────────────────────── */
+  var gymConfigCache = null;
+
+  window.loadGym = async function() {
+    try {
+      var r = await fetch('/api/gym');
+      var data = await r.json();
+      gymConfigCache = data;
+      renderGym(data);
+    } catch(e) {}
+  };
+
+  function renderGym(data) {
+    if (!data) return;
+    var p = data.simulationParams || {};
+    var fields = {
+      'gym-elasticity': p.priceElasticity,
+      'gym-charm': p.charmPricingLift,
+      'gym-leadrate': p.baseLeadRate,
+      'gym-leadquote': p.leadToQuoteRate,
+      'gym-acceptance': p.quoteAcceptanceRate,
+      'gym-growth': p.marketGrowthRate,
+      'gym-eventprob': p.eventProbability,
+      'gym-seasonal': p.seasonalAmplitude,
+    };
+    for (var id in fields) {
+      var el = document.getElementById(id);
+      if (el && fields[id] != null) el.value = fields[id];
+    }
+    var ct = document.getElementById('gym-confidence');
+    if (ct && data.confidenceThreshold != null) ct.value = Math.round(data.confidenceThreshold * 100);
+
+    var formulas = data.formulas || [];
+    var fEl = document.getElementById('gym-formulas');
+    if (!formulas.length) {
+      fEl.innerHTML = '<div class="panel-empty">No custom formulas added yet</div>';
+      return;
+    }
+    fEl.innerHTML = formulas.map(function(f) {
+      return '<div class="card" style="margin-bottom:8px;padding:12px;opacity:' + (f.active ? '1' : '0.5') + '">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">' +
+          '<div style="flex:1">' +
+            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">' +
+              '<span style="font-size:13px;font-weight:600;color:var(--white)">' + escHtml(f.name||f.id) + '</span>' +
+              '<span class="chip" style="font-size:10px">' + escHtml(f.type||'') + '</span>' +
+              (f.active ? '<span class="chip chip-teal" style="font-size:10px">Active</span>' : '<span class="chip" style="font-size:10px;color:var(--txt3)">Inactive</span>') +
+            '</div>' +
+            (f.description ? '<div style="font-size:12px;color:var(--txt2);margin-bottom:4px">' + escHtml(f.description) + '</div>' : '') +
+            (f.source ? '<div style="font-size:11px;color:var(--txt3)">Source: ' + escHtml(f.source) + '</div>' : '') +
+            (f.parameters && Object.keys(f.parameters).length ? '<div style="font-size:11px;color:var(--txt3);margin-top:4px">Params: ' + escHtml(JSON.stringify(f.parameters)) + '</div>' : '') +
+          '</div>' +
+          '<div style="display:flex;gap:6px;flex-shrink:0">' +
+            '<button class="btn btn-outline btn-sm" onclick="toggleGymFormula(\'' + escAttr(f.id) + '\')">' + (f.active ? 'Disable' : 'Enable') + '</button>' +
+            '<button class="btn btn-outline btn-sm" style="color:var(--red);border-color:var(--red)" onclick="removeGymFormula(\'' + escAttr(f.id) + '\')"><i class="fas fa-trash"></i></button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  window.saveGymParams = async function() {
+    var params = {};
+    var elasticity = parseFloat(document.getElementById('gym-elasticity').value);
+    var charm = parseFloat(document.getElementById('gym-charm').value);
+    var leadrate = parseFloat(document.getElementById('gym-leadrate').value);
+    var leadquote = parseFloat(document.getElementById('gym-leadquote').value);
+    var acceptance = parseFloat(document.getElementById('gym-acceptance').value);
+    var growth = parseFloat(document.getElementById('gym-growth').value);
+    var eventprob = parseFloat(document.getElementById('gym-eventprob').value);
+    var seasonal = parseFloat(document.getElementById('gym-seasonal').value);
+    var confPct = parseFloat(document.getElementById('gym-confidence').value);
+
+    if (!isNaN(elasticity)) params.priceElasticity = elasticity;
+    if (!isNaN(charm)) params.charmPricingLift = charm;
+    if (!isNaN(leadrate)) params.baseLeadRate = leadrate;
+    if (!isNaN(leadquote)) params.leadToQuoteRate = leadquote;
+    if (!isNaN(acceptance)) params.quoteAcceptanceRate = acceptance;
+    if (!isNaN(growth)) params.marketGrowthRate = growth;
+    if (!isNaN(eventprob)) params.eventProbability = eventprob;
+    if (!isNaN(seasonal)) params.seasonalAmplitude = seasonal;
+
+    var promises = [];
+    if (Object.keys(params).length) {
+      promises.push(fetch('/api/gym', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'update-params', params }) }));
+    }
+    if (!isNaN(confPct) && confPct >= 50 && confPct <= 100) {
+      promises.push(fetch('/api/gym', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'set-confidence-threshold', threshold: confPct / 100 }) }));
+    }
+    if (!promises.length) return;
+    try {
+      await Promise.all(promises);
+      await loadGym();
+      alert('Parameters saved.');
+    } catch(e) {
+      alert('Error: ' + e.message);
+    }
+  };
+
+  window.addGymFormula = async function() {
+    var name = document.getElementById('gym-fname').value.trim();
+    var type = document.getElementById('gym-ftype').value;
+    var desc = document.getElementById('gym-fdesc').value.trim();
+    var paramsRaw = document.getElementById('gym-fparams').value.trim();
+    var source = document.getElementById('gym-fsource').value.trim();
+    if (!name) { alert('Formula name is required.'); return; }
+    var parameters = {};
+    if (paramsRaw) {
+      try { parameters = JSON.parse(paramsRaw); } catch(_) { alert('Parameters must be valid JSON.'); return; }
+    }
+    try {
+      var r = await fetch('/api/gym', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action:'add-formula', formula: { name, type, description: desc, parameters, source } }),
+      });
+      var data = await r.json();
+      if (data.error) { alert(data.error); return; }
+      document.getElementById('gym-fname').value = '';
+      document.getElementById('gym-fdesc').value = '';
+      document.getElementById('gym-fparams').value = '';
+      document.getElementById('gym-fsource').value = '';
+      await loadGym();
+    } catch(e) {
+      alert('Error: ' + e.message);
+    }
+  };
+
+  window.toggleGymFormula = async function(id) {
+    try {
+      await fetch('/api/gym', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'toggle-formula', id }) });
+      await loadGym();
+    } catch(e) {}
+  };
+
+  window.removeGymFormula = async function(id) {
+    if (!confirm('Remove this formula?')) return;
+    try {
+      await fetch('/api/gym', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'remove-formula', id }) });
+      await loadGym();
+    } catch(e) {}
+  };
 
   /* ── Init ─────────────────────────────────────────────────────── */
   loadProducts(); loadDashboard();
