@@ -95,7 +95,7 @@ window.TW = {
       category: 'Data Processing Unit',
       sku: 'NV-BF3-400',
       priceDisplay: 'POA',
-      shopifyVariantId: null,
+      shopifyVariantId: '43751354728526',
       image: null,
       iconClass: 'purple',
       icon: 'fa-network-wired',
