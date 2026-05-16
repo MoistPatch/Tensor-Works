@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tensor Works — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #0D7377; --teal-lt: #14a8ae; --teal-dk: #095457;
+      --bg: #090e10; --bg2: #0f1518; --bg3: #151d21; --bg4: #1c262c;
+      --bdr: #223039; --bdr2: #2d3f4a;
+      --txt: #e2eaed; --txt2: #8fa8b2; --txt3: #6e8898; --white: #fff;
+      --r: 10px; --rsm: 6px; --tr: .2s ease;
+      --red: #f85149; --green: #3ddc84; --orange: #E07B39;
+    }
+    html, body { height: 100%; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--txt); display: flex; flex-direction: column; }
+
+    /* Header */
+    .admin-header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 60px; background: var(--bg2); border-bottom: 1px solid var(--bdr); flex-shrink: 0; }
+    .admin-logo { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; color: var(--white); }
+    .admin-logo .logo-mark { width: 30px; height: 30px; background: linear-gradient(135deg, var(--teal), var(--teal-dk)); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; color: #fff; }
+    .admin-logo span { color: var(--teal-lt); }
+    .admin-logo .badge { font-size: 11px; font-weight: 600; color: var(--txt3); background: var(--bg3); border: 1px solid var(--bdr); padding: 2px 8px; border-radius: 20px; margin-left: 4px; }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    #deploy-status { font-size: 13px; color: var(--txt3); }
+    #deploy-status.success { color: var(--green); }
+    #deploy-status.error { color: var(--red); }
+    #deploy-status.loading { color: var(--teal-lt); }
+
+    /* Tab bar */
+    .tab-bar { display: flex; align-items: center; gap: 6px; padding: 10px 24px; background: var(--bg2); border-bottom: 1px solid var(--bdr); flex-shrink: 0; }
+    .tab-btn { display: inline-flex; align-items: center; gap: 7px; padding: 7px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--txt3); font-family: inherit; transition: var(--tr); }
+    .tab-btn:hover { color: var(--txt2); background: var(--bg3); }
+    .tab-btn.active { background: linear-gradient(135deg, var(--teal), var(--teal-dk)); color: #fff; border-color: var(--teal-dk); }
+
+    /* Tab panels */
+    .tab-panel { display: none; flex: 1; overflow: hidden; }
+    .tab-panel.active { display: flex; flex-direction: column; }
+
+    /* Layout */
+    .admin-layout { display: grid; grid-template-columns: 280px 1fr; flex: 1; overflow: hidden; }
+
+    /* Sidebar */
+    .sidebar { background: var(--bg2); border-right: 1px solid var(--bdr); display: flex; flex-direction: column; overflow: hidden; }
+    .sidebar-header { padding: 16px; border-bottom: 1px solid var(--bdr); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .sidebar-header h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--txt3); }
+    .product-list { flex: 1; overflow-y: auto; padding: 8px; }
+    .product-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--rsm); cursor: pointer; transition: var(--tr); margin-bottom: 2px; border: 1px solid transparent; }
+    .product-item:hover { background: var(--bg3); }
+    .product-item.active { background: var(--bg3); border-color: var(--teal-dk); }
+    .product-item-icon { width: 32px; height: 32px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+    .product-item-icon.teal { background: rgba(13,115,119,.2); color: var(--teal-lt); }
+    .product-item-icon.orange { background: rgba(224,123,57,.15); color: #f09050; }
+    .product-item-icon.blue { background: rgba(88,166,255,.1); color: #58a6ff; }
+    .product-item-icon.purple { background: rgba(160,100,255,.1); color: #b084ff; }
+    .product-item-icon.green { background: rgba(0,200,100,.1); color: #3ddc84; }
+    .product-item-info { flex: 1; min-width: 0; }
+    .product-item-name { font-size: 13px; font-weight: 600; color: var(--txt); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-item-cat { font-size: 11px; color: var(--txt3); }
+    .stock-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .stock-dot.in { background: var(--green); }
+    .stock-dot.out { background: var(--orange); }
+    .sidebar-footer { padding: 12px; border-top: 1px solid var(--bdr); flex-shrink: 0; }
+
+    /* Main panel */
+    .main-panel { overflow-y: auto; padding: 32px; }
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--txt3); gap: 12px; }
+    .empty-state i { font-size: 48px; }
+
+    /* Form */
+    .product-form { max-width: 800px; }
+    .form-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--bdr); }
+    .form-title { font-size: 20px; font-weight: 800; color: var(--white); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); }
+    input[type="text"], input[type="number"], textarea, select {
+      background: var(--bg3); border: 1px solid var(--bdr2); border-radius: var(--rsm);
+      color: var(--txt); font-family: inherit; font-size: 14px; padding: 10px 12px;
+      transition: border-color var(--tr); outline: none; width: 100%;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus { border-color: var(--teal); }
+    textarea { resize: vertical; min-height: 80px; }
+    select option { background: var(--bg3); }
+
+    /* Toggle */
+    .toggle-wrap { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+    .toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--bg4); border: 1px solid var(--bdr2); border-radius: 12px; cursor: pointer; transition: var(--tr); }
+    .toggle-slider::before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: var(--txt3); border-radius: 50%; transition: var(--tr); }
+    .toggle input:checked + .toggle-slider { background: var(--teal); border-color: var(--teal); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: #fff; }
+    .toggle-label { font-size: 14px; color: var(--txt2); }
+
+    /* Specs */
+    .specs-section { margin-bottom: 20px; }
+    .specs-section label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); margin-bottom: 10px; }
+    .spec-row { display: grid; grid-template-columns: 1fr 1fr 36px; gap: 8px; margin-bottom: 8px; align-items: center; }
+    .spec-row input { margin: 0; }
+    .btn-icon { width: 36px; height: 36px; background: none; border: 1px solid var(--bdr2); border-radius: var(--rsm); color: var(--txt3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: var(--tr); }
+    .btn-icon:hover { border-color: var(--red); color: var(--red); }
+    .btn-add-spec { background: none; border: 1px dashed var(--bdr2); border-radius: var(--rsm); color: var(--txt3); padding: 8px 14px; font-size: 13px; cursor: pointer; transition: var(--tr); font-family: inherit; width: 100%; margin-top: 4px; }
+    .btn-add-spec:hover { border-color: var(--teal); color: var(--teal-lt); }
+
+    /* Danger zone */
+    .danger-zone { margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(248,81,73,.2); }
+    .danger-zone h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--red); margin-bottom: 12px; }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: var(--rsm); font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: var(--tr); font-family: inherit; }
+    .btn-primary { background: linear-gradient(135deg, var(--teal), var(--teal-dk)); color: #fff; }
+    .btn-primary:hover { background: linear-gradient(135deg, var(--teal-lt), var(--teal)); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-outline { background: transparent; color: var(--txt2); border: 1px solid var(--bdr2); }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal-lt); }
+    .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(248,81,73,.3); }
+    .btn-danger:hover { background: rgba(248,81,73,.1); border-color: var(--red); }
+    .btn-sm { padding: 7px 14px; font-size: 13px; }
+    .btn-green { background: linear-gradient(135deg, #1a7a3a, #0f5228); color: #fff; }
+    .btn-green:hover { background: linear-gradient(135deg, #22a050, #1a7a3a); }
+    .btn-orange { background: linear-gradient(135deg, #b85c1a, #8a3d0f); color: #fff; }
+    .btn-orange:hover { background: linear-gradient(135deg, #d97020, #b85c1a); }
+
+    /* Loading */
+    .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(9,14,16,.8); z-index: 100; align-items: center; justify-content: center; flex-direction: column; gap: 16px; color: var(--teal-lt); font-size: 15px; font-weight: 600; }
+    .loading-overlay.show { display: flex; }
+    .spinner { width: 36px; height: 36px; border: 3px solid var(--bdr2); border-top-color: var(--teal-lt); border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Pricing Rules tab ── */
+    .tab-content-scroll { flex: 1; overflow-y: auto; padding: 32px; }
+    .section-header { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--bdr); }
+    .section-header h2 { font-size: 20px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+    .section-header p { font-size: 14px; color: var(--txt3); }
+
+    .pricing-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 24px; max-width: 900px; margin-bottom: 24px; }
+    .pricing-card h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); margin-bottom: 18px; }
+
+    .global-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    .cat-table { width: 100%; border-collapse: collapse; }
+    .cat-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); padding: 0 12px 10px; text-align: left; border-bottom: 1px solid var(--bdr); }
+    .cat-table th:not(:first-child) { text-align: center; }
+    .cat-table td { padding: 10px 12px; border-bottom: 1px solid var(--bdr); vertical-align: middle; }
+    .cat-table td:first-child { font-size: 13px; font-weight: 600; color: var(--txt); }
+    .cat-table td:not(:first-child) { text-align: center; }
+    .cat-table tr:last-child td { border-bottom: none; }
+    .cat-table input[type="number"] { width: 90px; text-align: center; padding: 7px 10px; font-size: 13px; }
+
+    .status-msg { font-size: 13px; padding: 10px 14px; border-radius: var(--rsm); margin-top: 16px; display: none; }
+    .status-msg.show { display: block; }
+    .status-msg.success { background: rgba(61,220,132,.1); border: 1px solid rgba(61,220,132,.3); color: var(--green); }
+    .status-msg.error { background: rgba(248,81,73,.1); border: 1px solid rgba(248,81,73,.3); color: var(--red); }
+    .status-msg.loading { background: rgba(20,168,174,.1); border: 1px solid rgba(20,168,174,.3); color: var(--teal-lt); }
+
+    /* ── Dicker Data tab ── */
+    .dicker-layout { max-width: 1000px; }
+
+    .status-card { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); margin-bottom: 24px; }
+    .status-indicator { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .status-indicator.green { background: var(--green); box-shadow: 0 0 8px rgba(61,220,132,.5); }
+    .status-indicator.orange { background: var(--orange); box-shadow: 0 0 8px rgba(224,123,57,.4); }
+    .status-card-info { flex: 1; }
+    .status-card-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
+    .status-card-sub { font-size: 12px; color: var(--txt3); }
+
+    .dicker-section { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); margin-bottom: 24px; overflow: hidden; }
+    .dicker-section-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--bdr); }
+    .dicker-section-header h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); }
+    .dicker-section-body { padding: 0; }
+
+    .queue-empty { padding: 32px; text-align: center; color: var(--txt3); font-size: 14px; }
+
+    .queue-item { display: grid; grid-template-columns: 28px 1fr auto auto; gap: 12px; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--bdr); }
+    .queue-item:last-child { border-bottom: none; }
+    .queue-item-check { display: flex; align-items: center; justify-content: center; }
+    .queue-item-check input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--teal); }
+    .queue-item-info { min-width: 0; }
+    .queue-item-desc { font-size: 13px; font-weight: 600; color: var(--txt); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .queue-item-meta { font-size: 12px; color: var(--txt3); margin-top: 2px; }
+    .queue-item-price { text-align: right; }
+    .queue-item-cost { font-size: 12px; color: var(--txt3); }
+    .queue-item-retail { font-size: 13px; font-weight: 700; color: var(--teal-lt); }
+    .queue-item-actions { display: flex; gap: 6px; }
+
+    .bulk-actions { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--bdr); background: var(--bg3); }
+    .bulk-actions span { font-size: 13px; color: var(--txt3); margin-right: 4px; }
+
+    .catalog-table { width: 100%; border-collapse: collapse; }
+    .catalog-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--txt3); padding: 10px 16px; text-align: left; border-bottom: 1px solid var(--bdr); background: var(--bg3); }
+    .catalog-table td { padding: 12px 16px; border-bottom: 1px solid var(--bdr); font-size: 13px; color: var(--txt2); }
+    .catalog-table tr:last-child td { border-bottom: none; }
+    .catalog-table td:first-child { font-weight: 600; color: var(--txt); font-family: monospace; font-size: 12px; }
+    .badge-stock { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .badge-stock.in { background: rgba(61,220,132,.15); color: var(--green); }
+    .badge-stock.out { background: rgba(224,123,57,.15); color: var(--orange); }
+  </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <span id="loading-msg">Loading products...</span>
+</div>
+
+<header class="admin-header">
+  <div class="admin-logo">
+    <div class="logo-mark">TW</div>
+    Tensor<span>Works</span>
+    <span class="badge">Admin</span>
+  </div>
+  <div class="header-actions">
+    <span id="deploy-status"></span>
+    <a href="/products.html" class="btn btn-outline btn-sm" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+    <button class="btn btn-green" id="save-btn" onclick="saveProducts()"><i class="fas fa-rocket"></i> Save &amp; Deploy</button>
+  </div>
+</header>
+
+<!-- Tab bar -->
+<nav class="tab-bar">
+  <button class="tab-btn active" id="tab-btn-products" onclick="switchTab('products')">
+    <i class="fas fa-microchip"></i> Products
+  </button>
+  <button class="tab-btn" id="tab-btn-pricing" onclick="switchTab('pricing')">
+    <i class="fas fa-tags"></i> Pricing Rules
+  </button>
+  <button class="tab-btn" id="tab-btn-dicker" onclick="switchTab('dicker')">
+    <i class="fas fa-truck-loading"></i> Dicker Data
+  </button>
+</nav>
+
+<!-- ══ Tab 1: Products ══ -->
+<div class="tab-panel active" id="tab-products">
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>Products (<span id="product-count">0</span>)</h3>
+      </div>
+      <div class="product-list" id="product-list"></div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="addProduct()">
+          <i class="fas fa-plus"></i> Add Product
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-panel" id="main-panel">
+      <div class="empty-state" id="empty-state">
+        <i class="fas fa-microchip"></i>
+        <p>Select a product to edit, or add a new one</p>
+      </div>
+      <div class="product-form" id="product-form" style="display:none"></div>
+    </main>
+  </div>
+</div>
+
+<!-- ══ Tab 2: Pricing Rules ══ -->
+<div class="tab-panel" id="tab-pricing">
+  <div class="tab-content-scroll">
+    <div class="section-header">
+      <h2>Pricing Rules</h2>
+      <p>Configure markup percentages and minimum margins used by the pricing agent to calculate retail prices from Dicker Data wholesale costs.</p>
+    </div>
+
+    <div class="pricing-card dicker-layout">
+      <h3>Global Defaults</h3>
+      <div class="global-grid">
+        <div class="form-group">
+          <label>Default Markup (%)</label>
+          <input type="number" id="pr-defaultMarkup" min="0" max="200" step="0.1" placeholder="20" />
+        </div>
+        <div class="form-group">
+          <label>Round Retail Price to Nearest ($)</label>
+          <input type="number" id="pr-roundTo" min="1" step="1" placeholder="100" />
+        </div>
+      </div>
+    </div>
+
+    <div class="pricing-card dicker-layout">
+      <h3>Category Rules</h3>
+      <table class="cat-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Markup (%)</th>
+            <th>Min Margin ($)</th>
+          </tr>
+        </thead>
+        <tbody id="pr-cat-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="dicker-layout" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="savePricingRules()">
+        <i class="fas fa-save"></i> Save Pricing Rules
+      </button>
+      <button class="btn btn-outline" onclick="loadPricingRules()">
+        <i class="fas fa-sync-alt"></i> Reload
+      </button>
+    </div>
+    <div class="status-msg dicker-layout" id="pr-status"></div>
+  </div>
+</div>
+
+<!-- ══ Tab 3: Dicker Data ══ -->
+<div class="tab-panel" id="tab-dicker">
+  <div class="tab-content-scroll">
+    <div class="section-header">
+      <h2>Dicker Data Integration</h2>
+      <p>Sync product catalog from Dicker Data and import products into your store.</p>
+    </div>
+
+    <div class="dicker-layout">
+      <!-- Status card -->
+      <div class="status-card" id="dd-status-card">
+        <div class="status-indicator orange" id="dd-status-dot"></div>
+        <div class="status-card-info">
+          <div class="status-card-title" id="dd-status-title">Checking connection...</div>
+          <div class="status-card-sub" id="dd-status-sub">Contacting API</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="syncCatalog()" id="dd-sync-btn">
+          <i class="fas fa-sync-alt"></i> Sync Catalog
+        </button>
+      </div>
+
+      <!-- Dicker status message -->
+      <div class="status-msg" id="dd-status-msg"></div>
+
+      <!-- Catalog preview -->
+      <div class="dicker-section" id="dd-catalog-section" style="display:none">
+        <div class="dicker-section-header">
+          <h3>Available Catalog (<span id="dd-catalog-count">0</span> products)</h3>
+          <button class="btn btn-primary btn-sm" onclick="addAllToQueue()">
+            <i class="fas fa-plus"></i> Add New to Queue
+          </button>
+        </div>
+        <div class="dicker-section-body" style="overflow-x:auto">
+          <table class="catalog-table" id="dd-catalog-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Cost ex GST</th>
+                <th>RRP ex GST</th>
+                <th>Stock</th>
+              </tr>
+            </thead>
+            <tbody id="dd-catalog-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Import queue -->
+      <div class="dicker-section">
+        <div class="dicker-section-header">
+          <h3>Import Queue (<span id="dd-queue-count">0</span> pending)</h3>
+          <button class="btn btn-outline btn-sm" onclick="loadQueue()">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
+        <div class="dicker-section-body" id="dd-queue-body">
+          <div class="queue-empty">No products in queue</div>
+        </div>
+        <div class="bulk-actions" id="dd-bulk-actions" style="display:none">
+          <span>Selected:</span>
+          <button class="btn btn-green btn-sm" onclick="bulkApprove()">
+            <i class="fas fa-check"></i> Approve Selected
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="bulkReject()">
+            <i class="fas fa-times"></i> Reject Selected
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  /* ─────────────────────────────────────────
+     TAB SWITCHING
+  ───────────────────────────────────────── */
+  var currentTab = 'products';
+
+  window.switchTab = function(tab) {
+    var panels = ['products', 'pricing', 'dicker'];
+    panels.forEach(function(t) {
+      document.getElementById('tab-panel-' + t) || document.getElementById('tab-' + t);
+      var panel = document.getElementById('tab-' + t);
+      var btn = document.getElementById('tab-btn-' + t);
+      if (panel) panel.classList.toggle('active', t === tab);
+      if (btn) btn.classList.toggle('active', t === tab);
+    });
+    currentTab = tab;
+    // Lazy-load tab data
+    if (tab === 'pricing' && !pricingState.loaded) loadPricingRules();
+    if (tab === 'dicker' && !dickerState.loaded) { loadQueue(); checkDickerStatus(); }
+  };
+
+  /* ─────────────────────────────────────────
+     PRODUCTS TAB
+  ───────────────────────────────────────── */
+  var state = { products: [], sha: null, selectedIdx: null, dirty: false };
+
+  var ICON_CLASSES = ['teal', 'orange', 'blue', 'purple', 'green'];
+  var CATEGORIES = ['GPU Accelerators', 'DGX Systems', 'Workstation GPU', 'Data Processing Unit', 'Software Suite', 'Server Platform', 'Networking'];
+
+  function setLoading(show, msg) {
+    var el = document.getElementById('loading');
+    el.classList.toggle('show', show);
+    if (msg) document.getElementById('loading-msg').textContent = msg;
+  }
+
+  function setStatus(msg, type) {
+    var el = document.getElementById('deploy-status');
+    el.textContent = msg;
+    el.className = type || '';
+  }
+
+  function slugify(str) {
+    return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+
+  async function loadProducts() {
+    setLoading(true, 'Loading products...');
+    try {
+      var r = await fetch('/api/admin');
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      state.products = data.products || [];
+      state.sha = data.sha;
+      renderList();
+      setStatus('');
+    } catch (e) {
+      setStatus('Load failed: ' + e.message, 'error');
+      // Fall back to config.js products
+      if (window.TW && window.TW.products) {
+        state.products = JSON.parse(JSON.stringify(window.TW.products));
+        renderList();
+      }
+    }
+    setLoading(false);
+  }
+
+  function renderList() {
+    var list = document.getElementById('product-list');
+    document.getElementById('product-count').textContent = state.products.length;
+    if (state.products.length === 0) {
+      list.innerHTML = '<p style="text-align:center;color:var(--txt3);font-size:13px;padding:20px">No products yet</p>';
+      return;
+    }
+    list.innerHTML = state.products.map(function(p, i) {
+      return '<div class="product-item' + (state.selectedIdx === i ? ' active' : '') + '" onclick="selectProduct(' + i + ')">' +
+        '<div class="product-item-icon ' + (p.iconClass || 'teal') + '"><i class="fas ' + (p.icon || 'fa-microchip') + '"></i></div>' +
+        '<div class="product-item-info">' +
+          '<div class="product-item-name">' + escHtml(p.title || 'Untitled') + '</div>' +
+          '<div class="product-item-cat">' + escHtml(p.category || '') + '</div>' +
+        '</div>' +
+        '<div class="stock-dot ' + (p.inStock ? 'in' : 'out') + '" title="' + (p.inStock ? 'In Stock' : 'On Order') + '"></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function selectProduct(idx) {
+    state.selectedIdx = idx;
+    renderList();
+    renderForm();
+  }
+
+  function renderForm() {
+    var p = state.products[state.selectedIdx];
+    if (!p) return;
+    document.getElementById('empty-state').style.display = 'none';
+    var form = document.getElementById('product-form');
+    form.style.display = 'block';
+
+    var specsHtml = (p.specs || []).map(function(s, si) {
+      return '<div class="spec-row" id="spec-row-' + si + '">' +
+        '<input type="text" placeholder="Key (e.g. Memory)" value="' + escAttr(s.key) + '" onchange="updateSpec(' + si + ',\'key\',this.value)">' +
+        '<input type="text" placeholder="Value (e.g. 80GB HBM3)" value="' + escAttr(s.value) + '" onchange="updateSpec(' + si + ',\'value\',this.value)">' +
+        '<button class="btn-icon" onclick="removeSpec(' + si + ')" title="Remove"><i class="fas fa-trash-alt"></i></button>' +
+      '</div>';
+    }).join('');
+
+    var iconClassOptions = ICON_CLASSES.map(function(c) {
+      return '<option value="' + c + '"' + (p.iconClass === c ? ' selected' : '') + '>' + c + '</option>';
+    }).join('');
+
+    var categoryOptions = CATEGORIES.map(function(c) {
+      return '<option value="' + c + '"' + (p.category === c ? ' selected' : '') + '>' + c + '</option>';
+    }).join('');
+
+    form.innerHTML =
+      '<div class="form-header">' +
+        '<div class="form-title">' + escHtml(p.title || 'New Product') + '</div>' +
+      '</div>' +
+
+      '<div class="form-grid">' +
+        '<div class="form-group">' +
+          '<label>Title</label>' +
+          '<input type="text" value="' + escAttr(p.title) + '" oninput="updateField(\'title\',this.value);this.closest(\'.product-form\').querySelector(\'.form-title\').textContent=this.value||\'New Product\'">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Handle (URL slug)</label>' +
+          '<input type="text" value="' + escAttr(p.handle) + '" oninput="updateField(\'handle\',this.value)">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Category</label>' +
+          '<select onchange="updateField(\'category\',this.value)">' + categoryOptions + '<option value="">Other</option></select>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>SKU</label>' +
+          '<input type="text" value="' + escAttr(p.sku) + '" oninput="updateField(\'sku\',this.value)">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Price Display</label>' +
+          '<input type="text" value="' + escAttr(p.priceDisplay || 'POA') + '" oninput="updateField(\'priceDisplay\',this.value)" placeholder="POA">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Shopify Variant ID</label>' +
+          '<input type="text" value="' + escAttr(p.shopifyVariantId || '') + '" oninput="updateField(\'shopifyVariantId\',this.value)" placeholder="e.g. 43751354466382">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Icon Class (colour)</label>' +
+          '<select onchange="updateField(\'iconClass\',this.value);renderList()">' + iconClassOptions + '</select>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Icon (FontAwesome)</label>' +
+          '<input type="text" value="' + escAttr(p.icon || 'fa-microchip') + '" oninput="updateField(\'icon\',this.value)" placeholder="fa-microchip">' +
+        '</div>' +
+        '<div class="form-group full">' +
+          '<label>Description</label>' +
+          '<textarea oninput="updateField(\'description\',this.value)">' + escHtml(p.description || '') + '</textarea>' +
+        '</div>' +
+        '<div class="form-group full">' +
+          '<label>Tags (comma-separated)</label>' +
+          '<input type="text" value="' + escAttr((p.tags || []).join(', ')) + '" oninput="updateField(\'tags\',this.value.split(\',\').map(function(t){return t.trim();}).filter(Boolean))">' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="specs-section">' +
+        '<label>Specs</label>' +
+        '<div id="specs-container">' + specsHtml + '</div>' +
+        '<button class="btn-add-spec" onclick="addSpec()"><i class="fas fa-plus"></i> Add Spec</button>' +
+      '</div>' +
+
+      '<div class="toggle-wrap">' +
+        '<label class="toggle"><input type="checkbox"' + (p.inStock ? ' checked' : '') + ' onchange="updateField(\'inStock\',this.checked);renderList()"><span class="toggle-slider"></span></label>' +
+        '<span class="toggle-label">In Stock</span>' +
+      '</div>' +
+
+      '<div class="danger-zone">' +
+        '<h4><i class="fas fa-exclamation-triangle"></i> Danger Zone</h4>' +
+        '<button class="btn btn-danger btn-sm" onclick="deleteProduct()"><i class="fas fa-trash-alt"></i> Delete Product</button>' +
+      '</div>';
+  }
+
+  window.updateField = function(field, value) {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx][field] = value;
+    state.dirty = true;
+    if (field === 'title' && !state.products[state.selectedIdx]._handleEdited) {
+      state.products[state.selectedIdx].handle = slugify(value);
+    }
+    renderList();
+  };
+
+  window.updateSpec = function(si, field, value) {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx].specs[si][field] = value;
+    state.dirty = true;
+  };
+
+  window.addSpec = function() {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx].specs = state.products[state.selectedIdx].specs || [];
+    state.products[state.selectedIdx].specs.push({ key: '', value: '' });
+    state.dirty = true;
+    renderForm();
+  };
+
+  window.removeSpec = function(si) {
+    if (state.selectedIdx === null) return;
+    state.products[state.selectedIdx].specs.splice(si, 1);
+    state.dirty = true;
+    renderForm();
+  };
+
+  window.selectProduct = selectProduct;
+  window.renderList = renderList;
+
+  window.addProduct = function() {
+    var p = {
+      handle: 'new-product-' + Date.now(),
+      title: 'New Product',
+      category: 'GPU Accelerators',
+      sku: '',
+      priceDisplay: 'POA',
+      shopifyVariantId: null,
+      image: null,
+      iconClass: 'teal',
+      icon: 'fa-microchip',
+      description: '',
+      specs: [{ key: '', value: '' }],
+      inStock: true,
+      tags: [],
+    };
+    state.products.push(p);
+    state.dirty = true;
+    selectProduct(state.products.length - 1);
+  };
+
+  window.deleteProduct = function() {
+    if (state.selectedIdx === null) return;
+    var name = state.products[state.selectedIdx].title || 'this product';
+    if (!confirm('Delete "' + name + '"? This cannot be undone.')) return;
+    state.products.splice(state.selectedIdx, 1);
+    state.selectedIdx = null;
+    state.dirty = true;
+    document.getElementById('empty-state').style.display = 'flex';
+    document.getElementById('product-form').style.display = 'none';
+    renderList();
+  };
+
+  window.saveProducts = async function() {
+    var btn = document.getElementById('save-btn');
+    btn.disabled = true;
+    setLoading(true, 'Saving and deploying...');
+    setStatus('Saving...', 'loading');
+    try {
+      var r = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ products: state.products, sha: state.sha }),
+      });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      // Refresh SHA after save
+      var refresh = await fetch('/api/admin');
+      var refreshData = await refresh.json();
+      state.sha = refreshData.sha;
+      state.dirty = false;
+      setStatus('Saved — deploying in ~60s', 'success');
+      setTimeout(function() { setStatus(''); }, 8000);
+    } catch (e) {
+      setStatus('Error: ' + e.message, 'error');
+    }
+    setLoading(false);
+    btn.disabled = false;
+  };
+
+  /* ─────────────────────────────────────────
+     PRICING RULES TAB
+  ───────────────────────────────────────── */
+  var pricingState = { rules: null, sha: null, loaded: false };
+  var PR_CATEGORIES = [
+    'GPU Accelerators',
+    'DGX Systems',
+    'Workstation GPU',
+    'Data Processing Unit',
+    'Software Suite',
+    'Server Platform',
+    'Networking',
+  ];
+
+  function showPrStatus(msg, type) {
+    var el = document.getElementById('pr-status');
+    el.textContent = msg;
+    el.className = 'status-msg dicker-layout show ' + (type || '');
+  }
+
+  function hidePrStatus() {
+    var el = document.getElementById('pr-status');
+    el.className = 'status-msg dicker-layout';
+  }
+
+  function renderPricingForm(rules) {
+    // Global fields
+    document.getElementById('pr-defaultMarkup').value = Math.round(rules.defaultMarkup * 100 * 100) / 100;
+    document.getElementById('pr-roundTo').value = rules.roundTo || 100;
+
+    // Category table
+    var tbody = document.getElementById('pr-cat-tbody');
+    tbody.innerHTML = PR_CATEGORIES.map(function(cat) {
+      var cfg = (rules.categories && rules.categories[cat]) || {};
+      var markup = cfg.markup !== undefined ? Math.round(cfg.markup * 100 * 100) / 100 : '';
+      var minMargin = cfg.minMargin !== undefined ? cfg.minMargin : '';
+      return '<tr>' +
+        '<td>' + escHtml(cat) + '</td>' +
+        '<td><input type="number" min="0" max="200" step="0.1" value="' + markup + '" data-cat="' + escAttr(cat) + '" data-field="markup" /></td>' +
+        '<td><input type="number" min="0" step="1" value="' + minMargin + '" data-cat="' + escAttr(cat) + '" data-field="minMargin" /></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  window.loadPricingRules = async function() {
+    showPrStatus('Loading pricing rules...', 'loading');
+    try {
+      var r = await fetch('/api/pricing-rules');
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      pricingState.rules = data.rules;
+      pricingState.sha = data.sha;
+      pricingState.loaded = true;
+      renderPricingForm(data.rules);
+      hidePrStatus();
+    } catch (e) {
+      showPrStatus('Failed to load pricing rules: ' + e.message, 'error');
+    }
+  };
+
+  window.savePricingRules = async function() {
+    showPrStatus('Saving pricing rules...', 'loading');
+
+    // Read global values
+    var defaultMarkup = parseFloat(document.getElementById('pr-defaultMarkup').value) / 100;
+    var roundTo = parseInt(document.getElementById('pr-roundTo').value, 10) || 100;
+
+    if (isNaN(defaultMarkup) || defaultMarkup < 0) {
+      showPrStatus('Default markup must be a positive number', 'error');
+      return;
+    }
+
+    // Read category values
+    var categories = {};
+    var rows = document.querySelectorAll('#pr-cat-tbody tr');
+    rows.forEach(function(row) {
+      var inputs = row.querySelectorAll('input[data-cat]');
+      if (!inputs.length) return;
+      var cat = inputs[0].dataset.cat;
+      var markupInput = row.querySelector('input[data-field="markup"]');
+      var marginInput = row.querySelector('input[data-field="minMargin"]');
+      var markup = parseFloat(markupInput.value) / 100;
+      var minMargin = parseFloat(marginInput.value) || 0;
+      if (!isNaN(markup)) {
+        categories[cat] = { markup: markup, minMargin: minMargin };
+      }
+    });
+
+    var rules = {
+      defaultMarkup: defaultMarkup,
+      currency: (pricingState.rules && pricingState.rules.currency) || 'AUD',
+      gstInclusive: true,
+      roundTo: roundTo,
+      categories: categories,
+    };
+
+    try {
+      var r = await fetch('/api/pricing-rules', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rules: rules }),
+      });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      pricingState.rules = rules;
+      showPrStatus('Pricing rules saved successfully.', 'success');
+      setTimeout(hidePrStatus, 5000);
+    } catch (e) {
+      showPrStatus('Error saving pricing rules: ' + e.message, 'error');
+    }
+  };
+
+  /* ─────────────────────────────────────────
+     DICKER DATA TAB
+  ───────────────────────────────────────── */
+  var dickerState = {
+    loaded: false,
+    catalog: [],
+    catalogMock: true,
+    catalogConnected: false,
+    queue: [],
+    queueSha: null,
+    pricingCache: {},
+  };
+
+  function showDdMsg(msg, type) {
+    var el = document.getElementById('dd-status-msg');
+    el.textContent = msg;
+    el.className = 'status-msg show ' + (type || '');
+  }
+
+  function hideDdMsg() {
+    document.getElementById('dd-status-msg').className = 'status-msg';
+  }
+
+  function setDdStatus(connected, mock) {
+    var dot = document.getElementById('dd-status-dot');
+    var title = document.getElementById('dd-status-title');
+    var sub = document.getElementById('dd-status-sub');
+    if (connected && !mock) {
+      dot.className = 'status-indicator green';
+      title.textContent = 'API Connected';
+      sub.textContent = 'Receiving live data from Dicker Data';
+    } else {
+      dot.className = 'status-indicator orange';
+      title.textContent = 'Waiting for API Key — infrastructure ready';
+      sub.textContent = 'Set DICKER_DATA_API_KEY environment variable to enable live sync';
+    }
+  }
+
+  function formatAUD(amount) {
+    return 'A$' + Number(amount).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  async function getRetailPrice(costExGst, category) {
+    var key = costExGst + '|' + category;
+    if (dickerState.pricingCache[key]) return dickerState.pricingCache[key];
+    try {
+      var r = await fetch('/api/pricing-agent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ costExGst: costExGst, category: category }),
+      });
+      var data = await r.json();
+      if (data.error) return null;
+      dickerState.pricingCache[key] = data;
+      return data;
+    } catch (_) { return null; }
+  }
+
+  window.checkDickerStatus = async function() {
+    try {
+      var r = await fetch('/api/dicker-catalog');
+      var data = await r.json();
+      setDdStatus(data.connected, data.mock);
+    } catch (e) {
+      setDdStatus(false, true);
+    }
+  };
+
+  window.syncCatalog = async function() {
+    var btn = document.getElementById('dd-sync-btn');
+    btn.disabled = true;
+    showDdMsg('Syncing catalog from Dicker Data...', 'loading');
+
+    try {
+      var r = await fetch('/api/dicker-catalog');
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+
+      dickerState.catalog = data.products || [];
+      dickerState.catalogMock = data.mock;
+      dickerState.catalogConnected = data.connected;
+      setDdStatus(data.connected, data.mock);
+
+      // Render catalog table
+      renderCatalog(dickerState.catalog);
+
+      // Find products not already in queue (by SKU)
+      var queueSkus = dickerState.queue.map(function(q) { return q.sku; });
+      var newProducts = dickerState.catalog.filter(function(p) {
+        return queueSkus.indexOf(p.sku) === -1;
+      });
+
+      if (newProducts.length > 0) {
+        var addR = await fetch('/api/dicker-import', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'add', products: newProducts }),
+        });
+        var addData = await addR.json();
+        if (addData.error) throw new Error(addData.error);
+        showDdMsg('Catalog synced. ' + newProducts.length + ' new product(s) added to import queue.', 'success');
+      } else {
+        showDdMsg('Catalog synced. No new products to add (all already in queue).', 'success');
+      }
+
+      // Reload queue
+      await loadQueue();
+      setTimeout(hideDdMsg, 6000);
+    } catch (e) {
+      showDdMsg('Sync failed: ' + e.message, 'error');
+    }
+
+    btn.disabled = false;
+  };
+
+  function renderCatalog(products) {
+    var section = document.getElementById('dd-catalog-section');
+    var tbody = document.getElementById('dd-catalog-tbody');
+    document.getElementById('dd-catalog-count').textContent = products.length;
+    section.style.display = 'block';
+
+    tbody.innerHTML = products.map(function(p) {
+      var stockBadge = p.inStock
+        ? '<span class="badge-stock in">In Stock (' + (p.stockQty || 0) + ')</span>'
+        : '<span class="badge-stock out">Lead ' + (p.leadTimeDays || '?') + 'd</span>';
+      return '<tr>' +
+        '<td>' + escHtml(p.sku || '') + '</td>' +
+        '<td>' + escHtml(p.description || '') + '</td>' +
+        '<td>' + escHtml(p.category || '') + '</td>' +
+        '<td>' + formatAUD(p.costExGst) + '</td>' +
+        '<td>' + formatAUD(p.rrpExGst) + '</td>' +
+        '<td>' + stockBadge + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  window.loadQueue = async function() {
+    try {
+      var r = await fetch('/api/dicker-import');
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      dickerState.queue = data.queue || [];
+      dickerState.queueSha = data.sha;
+      dickerState.loaded = true;
+      renderQueue();
+    } catch (e) {
+      showDdMsg('Failed to load queue: ' + e.message, 'error');
+    }
+  };
+
+  async function renderQueue() {
+    var queue = dickerState.queue;
+    var countEl = document.getElementById('dd-queue-count');
+    countEl.textContent = queue.length;
+
+    var body = document.getElementById('dd-queue-body');
+    var bulkActions = document.getElementById('dd-bulk-actions');
+
+    if (queue.length === 0) {
+      body.innerHTML = '<div class="queue-empty">No products in queue</div>';
+      bulkActions.style.display = 'none';
+      return;
+    }
+
+    bulkActions.style.display = 'flex';
+
+    // Render items with placeholder for pricing
+    body.innerHTML = queue.map(function(item, idx) {
+      return '<div class="queue-item" id="qi-' + idx + '">' +
+        '<div class="queue-item-check"><input type="checkbox" id="qi-chk-' + idx + '" /></div>' +
+        '<div class="queue-item-info">' +
+          '<div class="queue-item-desc">' + escHtml(item.description || item.sku || 'Unknown') + '</div>' +
+          '<div class="queue-item-meta">SKU: ' + escHtml(item.sku || '') + ' &nbsp;&middot;&nbsp; ' + escHtml(item.category || '') + '</div>' +
+        '</div>' +
+        '<div class="queue-item-price">' +
+          '<div class="queue-item-cost">Cost: ' + formatAUD(item.costExGst || 0) + ' ex GST</div>' +
+          '<div class="queue-item-retail" id="qi-retail-' + idx + '">Calculating...</div>' +
+        '</div>' +
+        '<div class="queue-item-actions">' +
+          '<button class="btn btn-green btn-sm" onclick="approveOne(' + idx + ')"><i class="fas fa-check"></i></button>' +
+          '<button class="btn btn-danger btn-sm" onclick="rejectOne(' + idx + ')"><i class="fas fa-times"></i></button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // Fetch pricing for each item async
+    queue.forEach(async function(item, idx) {
+      if (!item.costExGst) {
+        document.getElementById('qi-retail-' + idx).textContent = 'No cost data';
+        return;
+      }
+      var pricing = await getRetailPrice(item.costExGst, item.category || 'GPU Accelerators');
+      var el = document.getElementById('qi-retail-' + idx);
+      if (el) {
+        el.textContent = pricing ? ('Retail: ' + pricing.displayPrice + ' inc GST') : 'Pricing unavailable';
+      }
+    });
+  }
+
+  window.approveOne = async function(idx) {
+    await doQueueAction('approve', [idx]);
+  };
+
+  window.rejectOne = async function(idx) {
+    await doQueueAction('reject', [idx]);
+  };
+
+  window.bulkApprove = async function() {
+    var indices = getCheckedIndices();
+    if (indices.length === 0) { showDdMsg('No items selected.', 'error'); return; }
+    await doQueueAction('approve', indices);
+  };
+
+  window.bulkReject = async function() {
+    var indices = getCheckedIndices();
+    if (indices.length === 0) { showDdMsg('No items selected.', 'error'); return; }
+    await doQueueAction('reject', indices);
+  };
+
+  window.addAllToQueue = async function() {
+    if (dickerState.catalog.length === 0) {
+      showDdMsg('Sync catalog first.', 'error');
+      return;
+    }
+    await syncCatalog();
+  };
+
+  function getCheckedIndices() {
+    var indices = [];
+    dickerState.queue.forEach(function(_, idx) {
+      var chk = document.getElementById('qi-chk-' + idx);
+      if (chk && chk.checked) indices.push(idx);
+    });
+    return indices;
+  }
+
+  async function doQueueAction(action, indices) {
+    showDdMsg((action === 'approve' ? 'Approving' : 'Rejecting') + ' ' + indices.length + ' item(s)...', 'loading');
+    try {
+      var r = await fetch('/api/dicker-import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: action, indices: indices }),
+      });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      showDdMsg(data.message || 'Done.', 'success');
+      await loadQueue();
+      if (action === 'approve') {
+        // Refresh product count by reloading products in background
+        fetch('/api/admin').then(function(res) { return res.json(); }).then(function(d) {
+          if (d.products) {
+            state.products = d.products;
+            state.sha = d.sha;
+            renderList();
+          }
+        }).catch(function() {});
+      }
+      setTimeout(hideDdMsg, 5000);
+    } catch (e) {
+      showDdMsg('Error: ' + e.message, 'error');
+    }
+  }
+
+  /* ─────────────────────────────────────────
+     SHARED HELPERS
+  ───────────────────────────────────────── */
+  function escHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escAttr(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  }
+
+  // Warn before leaving with unsaved changes
+  window.addEventListener('beforeunload', function(e) {
+    if (state.dirty) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  loadProducts();
+})();
+</script>
+
+</body>
+</html>
