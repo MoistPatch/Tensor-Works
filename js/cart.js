@@ -18,6 +18,16 @@
     } catch (e) {}
   }
 
+  function buildCheckoutUrl(items) {
+    var tw = window.TW;
+    if (!tw || !tw.shopify || !tw.shopify.configured) return null;
+    var lines = items
+      .filter(function (i) { return i.variantId; })
+      .map(function (i) { return i.variantId + ':' + i.quantity; });
+    if (!lines.length) return null;
+    return 'https://' + tw.shopify.domain + '/cart/' + lines.join(',');
+  }
+
   var CartManager = {
     _drawerOpen: false,
 
@@ -46,19 +56,7 @@
       }
       saveCart(cart);
 
-      if (window.TW && window.TW.shopify && window.TW.shopify.configured && variantId) {
-        var lines = [{ merchandiseId: variantId, quantity: qty }];
-        if (!cart.cartId) {
-          window.ShopifyAPI.cartCreate(lines).then(function (result) {
-            var c = loadCart();
-            c.cartId = result.cartId;
-            c.checkoutUrl = result.checkoutUrl;
-            saveCart(c);
-          }).catch(function () {});
-        } else {
-          window.ShopifyAPI.cartLinesAdd(cart.cartId, lines).catch(function () {});
-        }
-      }
+      // checkout URL is built dynamically from variant IDs — no API call needed
 
       CartManager.renderCartBadge();
       CartManager.renderCartDrawer();
@@ -187,11 +185,12 @@
       }
 
       var subtotalCount = items.reduce(function (s, i) { return s + i.quantity; }, 0);
+      var checkoutUrl = buildCheckoutUrl(items);
       var checkoutHTML = '';
-      if (configured && cart.checkoutUrl) {
-        checkoutHTML = '<a href="' + cart.checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center">Checkout <i class="fas fa-arrow-right"></i></a>';
+      if (checkoutUrl) {
+        checkoutHTML = '<a href="' + checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center">Checkout <i class="fas fa-arrow-right"></i></a>';
       } else if (items.length > 0) {
-        checkoutHTML = '<a href="/cart.html" class="btn btn-primary" style="width:100%;justify-content:center">View Cart &amp; Enquire</a>';
+        checkoutHTML = '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fas fa-envelope"></i> Enquire to Order</a>';
       }
 
       drawer.innerHTML =
@@ -246,15 +245,10 @@
 
       var totalItems = items.reduce(function (s, i) { return s + i.quantity; }, 0);
 
-      var checkoutBtn = '';
-      if (configured && cart.checkoutUrl) {
-        checkoutBtn = '<a href="' + cart.checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px">Proceed to Checkout <i class="fas fa-arrow-right"></i></a>';
-      } else {
-        checkoutBtn = '<button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px;opacity:.7;cursor:default">' + (configured ? 'Checkout via Shopify' : 'Submit Enquiry') + '</button>';
-        if (!configured) {
-          checkoutBtn = '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px"><i class="fas fa-envelope"></i> Submit Enquiry</a>';
-        }
-      }
+      var checkoutUrl = buildCheckoutUrl(items);
+      var checkoutBtn = checkoutUrl
+        ? '<a href="' + checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px">Proceed to Checkout <i class="fas fa-arrow-right"></i></a>'
+        : '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px"><i class="fas fa-envelope"></i> Enquire to Order</a>';
 
       el.innerHTML = '<div class="cart-layout">' +
         '<div class="cart-main">' +
