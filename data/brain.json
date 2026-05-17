@@ -25,7 +25,23 @@
         "bundleSuggestionCount": 4
       }
     ],
-    "anomaliesDetected": []
+    "anomaliesDetected": [
+      {
+        "detectedAt": "2026-05-17T01:09:55.900Z",
+        "anomalies": [
+          {
+            "type": "traffic-spike",
+            "severity": "medium",
+            "metric": 4,
+            "baseline": 0.13333333333333333,
+            "detail": "Today sessions (4) above 300% of 30d avg (0.1)",
+            "businessImpact": "A sudden 30x surge in sessions versus the 30-day baseline could indicate a viral mention, paid campaign activation, competitor link, or bot/scraper activity. If genuine, it represents a rare opportunity to convert high-intent AI hardware buyers; if synthetic, it may skew analytics, inflate ad spend, and strain infrastructure without revenue benefit.",
+            "suggestedAction": "Verify traffic source in analytics (referrer, UTM, geo, device). Confirm site stability, checkout flow, and inventory levels for top AI hardware SKUs. If legitimate, amplify with retargeting and ensure customer support is staffed. If bot-driven, enable rate limiting, bot filtering (e.g., Cloudflare), and exclude from marketing attribution.",
+            "urgency": "medium"
+          }
+        ]
+      }
+    ]
   },
   "patterns": {
     "weeklyTrafficShape": {},
