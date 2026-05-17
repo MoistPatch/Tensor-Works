@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-05-17T01:11:08.005Z",
+  "lastChecked": "2026-05-17T06:27:41.493Z",
   "overallScore": 0.83,
   "belowThreshold": false,
   "recommendation": "Data quality good — system operating normally",
@@ -13,8 +13,8 @@
     "analytics": {
       "score": 0,
       "issues": 0,
-      "warnings": 5,
-      "total": 4
+      "warnings": 33,
+      "total": 32
     },
     "competitorPrices": {
       "score": 1,
@@ -40,6 +40,6 @@
     }
   },
   "totalIssues": 1,
-  "totalWarnings": 6,
+  "totalWarnings": 34,
   "newQuarantineItems": 0
 }
