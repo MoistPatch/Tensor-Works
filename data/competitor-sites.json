@@ -41,6 +41,12 @@
       "name": "Newegg (US reference pricing)",
       "addedAt": "2026-05-17T00:00:00.000Z",
       "lastCrawledAt": null
+    },
+    {
+      "url": "https://www.tomshardware.com/",
+      "name": "Toms Hardware",
+      "addedAt": "2026-05-17T06:13:14.483Z",
+      "lastCrawledAt": null
     }
   ]
 }
