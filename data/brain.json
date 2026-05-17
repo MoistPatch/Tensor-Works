@@ -180,6 +180,21 @@
             "urgency": "within-24h"
           }
         ]
+      },
+      {
+        "detectedAt": "2026-05-17T06:28:15.247Z",
+        "anomalies": [
+          {
+            "type": "traffic-spike",
+            "severity": "medium",
+            "metric": 32,
+            "baseline": 1.0666666666666667,
+            "detail": "Today sessions (32) above 300% of 30d avg (1.1)",
+            "businessImpact": "A 30x surge in sessions compared to the 30-day average suggests either a viral moment, a marketing campaign hit, referral traffic from a major source (e.g., tech blog, social media mention), or potentially bot/scraper activity. If genuine, this represents a significant revenue opportunity for AI hardware sales; if bot-driven, it may inflate analytics, skew conversion metrics, and strain server resources without yielding sales.",
+            "suggestedAction": "1) Immediately check traffic source attribution in analytics (referrer, UTM, geo, device) to identify the origin. 2) Verify server capacity and CDN performance to handle sustained load. 3) Check conversion rate and cart activity to confirm traffic quality. 4) If bot traffic, enable rate limiting and bot mitigation (Cloudflare/WAF). 5) If legitimate, ensure inventory levels are visible, prepare retargeting campaigns, and notify the sales/support team for increased inquiries.",
+            "urgency": "high"
+          }
+        ]
       }
     ]
   },
