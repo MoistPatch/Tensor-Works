@@ -3209,6 +3209,7 @@
       },
       competitors: (_pricingState.competitorData && _pricingState.competitorData.competitors) || [],
       businessRules: _pricingRules,
+      marketSignals: _pricingState.marketSignals || null,
     };
 
     try {
@@ -3304,9 +3305,9 @@
         html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Competitor Movements</div>' +
           insights.competitor_movements.map(function(i) { return '<div class="pi-insight-item">' + escHtml(i) + '</div>'; }).join('') + '</div>';
       }
-      if (insights.emerging_trends && insights.emerging_trends.length) {
-        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Emerging Trends</div>' +
-          insights.emerging_trends.map(function(i) { return '<div class="pi-insight-item">' + escHtml(i) + '</div>'; }).join('') + '</div>';
+      if (insights.emerging_demand_signals && insights.emerging_demand_signals.length) {
+        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Demand Signals</div>' +
+          insights.emerging_demand_signals.map(function(i) { return '<div class="pi-insight-item">' + escHtml(i) + '</div>'; }).join('') + '</div>';
       }
       if (insights.margin_risks && insights.margin_risks.length) {
         html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Margin Risks</div>' +
