@@ -1,0 +1,38 @@
+{
+  "lastGenerated": "2026-05-17T01:11:02.746Z",
+  "report": {
+    "generatedAt": "2026-05-17T01:11:02.746Z",
+    "revenueByProduct": [],
+    "marginByProduct": [],
+    "quotePipeline": {
+      "total": 0,
+      "byStatus": {
+        "draft": 0,
+        "sent": 0,
+        "viewed": 0,
+        "accepted": 0,
+        "rejected": 0,
+        "expired": 0
+      },
+      "totalValueAUD": 0,
+      "acceptanceRate": null
+    },
+    "leadToQuote": {
+      "totalLeads": 0,
+      "totalQuotes": 0,
+      "conversionPct": null
+    },
+    "topCustomers": [],
+    "sessionSummary": {
+      "sessions7d": 4,
+      "sessions30d": 4
+    },
+    "funnel": {
+      "product-view": 0,
+      "add-to-cart": 0,
+      "quote-started": 0,
+      "checkout-started": 0,
+      "purchase": 0
+    }
+  }
+}
