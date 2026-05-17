@@ -12,6 +12,19 @@
       "completedAt": null,
       "result": null,
       "error": null
+    },
+    {
+      "agentId": "run-1778980266223-competitor-agent",
+      "type": "competitor-agent",
+      "task": "multi-agent-intel",
+      "parentRunId": "run-1778980266223",
+      "status": "running",
+      "killSignal": false,
+      "spawnedAt": "2026-05-17T01:11:20.004Z",
+      "lastHeartbeat": "2026-05-17T01:11:20.004Z",
+      "completedAt": null,
+      "result": null,
+      "error": null
     }
   ]
 }
