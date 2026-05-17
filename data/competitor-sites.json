@@ -1,3 +1,10 @@
 {
-  "sites": []
+  "sites": [
+    {
+      "url": "https://www.scorptec.com.au/",
+      "name": "SCORPTEC",
+      "addedAt": "2026-05-17T01:15:51.229Z",
+      "lastCrawledAt": null
+    }
+  ]
 }
