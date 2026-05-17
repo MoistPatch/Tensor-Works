@@ -1,0 +1,104 @@
+name: Daily Agent Pipeline
+
+on:
+  schedule:
+    # Runs at 03:00 UTC daily — after midnight AU time
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      steps:
+        description: 'Steps to run (comma-separated: crawl,intelligence,campaigns,orchestrate)'
+        required: false
+        default: 'crawl,intelligence,campaigns,orchestrate'
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    env:
+      SITE: ${{ vars.SITE_URL || 'https://tensorworks.online' }}
+
+    steps:
+      - name: 1 — Competitor crawl
+        if: ${{ !inputs.steps || contains(inputs.steps, 'crawl') }}
+        run: |
+          echo "▶ Competitor crawl"
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST "${SITE}/api/competitor-crawl" \
+            -H "Authorization: Bearer ${{ secrets.CRAWL_SECRET }}" \
+            -H "Content-Type: application/json" \
+            --max-time 55)
+          HTTP=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "HTTP ${HTTP}"
+          echo "$BODY" | head -c 2000
+          if [ "$HTTP" -ge 500 ]; then
+            echo "::warning::Crawl returned ${HTTP} — continuing pipeline"
+          fi
+
+      - name: Wait after crawl
+        if: ${{ !inputs.steps || contains(inputs.steps, 'crawl') }}
+        run: sleep 15
+
+      - name: 2 — Intelligence analysis
+        if: ${{ !inputs.steps || contains(inputs.steps, 'intelligence') }}
+        run: |
+          echo "▶ Intelligence analysis"
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST "${SITE}/api/intelligence" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            --max-time 55)
+          HTTP=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "HTTP ${HTTP}"
+          echo "$BODY" | head -c 2000
+          if [ "$HTTP" -ge 500 ]; then
+            echo "::warning::Intelligence returned ${HTTP} — continuing pipeline"
+          fi
+
+      - name: Wait after intelligence
+        if: ${{ !inputs.steps || contains(inputs.steps, 'intelligence') }}
+        run: sleep 15
+
+      - name: 3 — Campaign strategist
+        if: ${{ !inputs.steps || contains(inputs.steps, 'campaigns') }}
+        run: |
+          echo "▶ Campaign strategist"
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST "${SITE}/api/campaign-strategist" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            --max-time 55)
+          HTTP=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "HTTP ${HTTP}"
+          echo "$BODY" | head -c 2000
+          if [ "$HTTP" -ge 500 ]; then
+            echo "::warning::Campaign strategist returned ${HTTP} — continuing pipeline"
+          fi
+
+      - name: Wait after campaigns
+        if: ${{ !inputs.steps || contains(inputs.steps, 'campaigns') }}
+        run: sleep 10
+
+      - name: 4 — Orchestrate
+        if: ${{ !inputs.steps || contains(inputs.steps, 'orchestrate') }}
+        run: |
+          echo "▶ Orchestrate"
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST "${SITE}/api/orchestrate" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            --max-time 55)
+          HTTP=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "HTTP ${HTTP}"
+          echo "$BODY" | head -c 2000
+          if [ "$HTTP" -ge 500 ]; then
+            echo "::error::Orchestration returned ${HTTP}"
+            exit 1
+          fi
+
+      - name: Summary
+        if: always()
+        run: echo "Pipeline complete at $(date -u)"

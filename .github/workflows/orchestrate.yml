@@ -1,8 +1,7 @@
 name: Daily Orchestration
+# Superseded by daily-pipeline.yml — kept for manual dispatch only
 
 on:
-  schedule:
-    - cron: '0 1 * * *'
   workflow_dispatch:
 
 jobs:
@@ -15,7 +14,7 @@ jobs:
           STATUS=$(curl -s -o /tmp/response.json -w "%{http_code}" \
             -X POST "${SITE}/api/orchestrate" \
             -H "Content-Type: application/json" \
-            -d '{}')
+            -d '{}' --max-time 55)
           echo "HTTP ${STATUS}"
           cat /tmp/response.json
           if [ "$STATUS" -ge 500 ]; then

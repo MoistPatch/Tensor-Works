@@ -1,29 +1,19 @@
 name: Daily Intelligence
+# Superseded by daily-pipeline.yml — kept for manual dispatch only
 
 on:
-  schedule:
-    - cron: '0 2 * * *'
   workflow_dispatch:
 
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - name: Crawl competitors
-        run: |
-          SITE="${{ vars.SITE_URL || 'https://tensorworks.online' }}"
-          curl -s -o /tmp/crawl.json -w "Crawl HTTP %{http_code}\n" \
-            -X POST "${SITE}/api/competitor-crawl" \
-            -H "Content-Type: application/json" -d '{}'
-          cat /tmp/crawl.json
-
       - name: Run intelligence analysis
         run: |
           SITE="${{ vars.SITE_URL || 'https://tensorworks.online' }}"
-          sleep 10
           STATUS=$(curl -s -o /tmp/intel.json -w "%{http_code}" \
             -X POST "${SITE}/api/intelligence" \
-            -H "Content-Type: application/json" -d '{}')
+            -H "Content-Type: application/json" -d '{}' --max-time 55)
           echo "Intelligence HTTP ${STATUS}"
           cat /tmp/intel.json
           if [ "$STATUS" -ge 500 ]; then
