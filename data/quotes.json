@@ -1,6 +1,28 @@
 {
   "quotes": [
     {
+      "id": 1779000071056,
+      "reference": "QUO-0002",
+      "customerName": "Samuel Joseph Tadich",
+      "email": "sam_tad@hotmail.com",
+      "company": "Vantyx",
+      "phone": "+61431367255",
+      "products": [],
+      "subtotalAUD": 0,
+      "gstAUD": 0,
+      "totalAUD": 0,
+      "status": "draft",
+      "validDays": 30,
+      "notes": "",
+      "customerMessage": "Hi \n\n$1000",
+      "tierId": null,
+      "createdAt": "2026-05-17T06:41:11.056Z",
+      "sentAt": null,
+      "viewedAt": null,
+      "expiresAt": null,
+      "respondedAt": null
+    },
+    {
       "id": 1779000009979,
       "reference": "QUO-0001",
       "customerName": "Samuel Joseph Tadich",
@@ -23,5 +45,5 @@
       "respondedAt": null
     }
   ],
-  "nextRef": 2
+  "nextRef": 3
 }
