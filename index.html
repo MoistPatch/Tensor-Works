@@ -965,6 +965,36 @@
 
       if (json.success) {
         success.classList.add('visible');
+
+        // Klaviyo — sync profile + track event (non-blocking)
+        const nameParts = document.getElementById('name').value.trim().split(' ');
+        const klaviyoPayload = {
+          email: document.getElementById('email').value.trim(),
+          firstName: nameParts[0] || '',
+          lastName: nameParts.slice(1).join(' ') || '',
+          company: document.getElementById('company').value.trim(),
+          properties: {
+            sector: document.getElementById('sector').value,
+            solutionInterest: document.getElementById('solution').value,
+            source: 'homepage-enquiry',
+          },
+        };
+        fetch('/api/klaviyo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'sync-profile', ...klaviyoPayload }),
+        }).catch(() => {});
+        fetch('/api/klaviyo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'track-event',
+            email: klaviyoPayload.email,
+            eventName: 'Quote Enquiry Submitted',
+            properties: klaviyoPayload.properties,
+          }),
+        }).catch(() => {});
+
         form.reset();
         setTimeout(() => success.classList.remove('visible'), 8000);
       } else {
