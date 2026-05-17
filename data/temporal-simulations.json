@@ -1,0 +1,804 @@
+{
+  "runs": [
+    {
+      "runId": "tsim-1779000346082",
+      "simulatedAt": "2026-05-17T06:45:46.082Z",
+      "periods": 12,
+      "periodType": "week",
+      "strategiesCompared": 3,
+      "results": [
+        {
+          "strategyId": "baseline-conservative",
+          "strategyName": "Conservative Hold",
+          "genes": {
+            "pricingMultiplier": 1,
+            "charmPricing": false,
+            "anchoringEnabled": false,
+            "discountDepth": 0,
+            "campaignType": "educational",
+            "messagingFrame": "trust",
+            "targetSegment": "all",
+            "campaignFrequency": "weekly",
+            "launchDayOfWeek": "tuesday",
+            "followUpTiming": 3,
+            "focusCategory": "all",
+            "bundlingEnabled": false,
+            "stockUrgencyThreshold": 0.2
+          },
+          "totalPeriods": 12,
+          "periodType": "week",
+          "summary": {
+            "totalRevenueAUD": 0,
+            "totalLeads": 12,
+            "totalQuotes": 0,
+            "avgRevenuePerPeriodAUD": 0,
+            "peakRevenueAUD": 0,
+            "troughRevenueAUD": 0,
+            "resilienceScore": 0,
+            "growthTrajectory": 0,
+            "overallFitnessScore": 0
+          },
+          "timeline": [
+            {
+              "period": 1,
+              "periodLabel": "week 1",
+              "marketDemand": 46,
+              "sessions": 46,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": null,
+              "competitorPressure": 20
+            },
+            {
+              "period": 2,
+              "periodLabel": "week 2",
+              "marketDemand": 45,
+              "sessions": 45,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": "supply-disruption",
+              "competitorPressure": 20
+            },
+            {
+              "period": 3,
+              "periodLabel": "week 3",
+              "marketDemand": 52,
+              "sessions": 52,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": null,
+              "competitorPressure": 20
+            },
+            {
+              "period": 4,
+              "periodLabel": "week 4",
+              "marketDemand": 52,
+              "sessions": 52,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": null,
+              "competitorPressure": 20
+            }
+          ],
+          "confidence": {
+            "score": 0.105,
+            "meetsThreshold": false,
+            "threshold": 0.95
+          }
+        },
+        {
+          "strategyId": "baseline-aggressive",
+          "strategyName": "Aggressive Growth",
+          "genes": {
+            "pricingMultiplier": 0.95,
+            "charmPricing": true,
+            "anchoringEnabled": true,
+            "discountDepth": 0.1,
+            "campaignType": "urgency",
+            "messagingFrame": "loss-aversion",
+            "targetSegment": "enterprise",
+            "campaignFrequency": "twice-weekly",
+            "launchDayOfWeek": "tuesday",
+            "followUpTiming": 1,
+            "focusCategory": "gpu",
+            "bundlingEnabled": true,
+            "stockUrgencyThreshold": 0.3
+          },
+          "totalPeriods": 12,
+          "periodType": "week",
+          "summary": {
+            "totalRevenueAUD": 0,
+            "totalLeads": 13,
+            "totalQuotes": 1,
+            "avgRevenuePerPeriodAUD": 0,
+            "peakRevenueAUD": 0,
+            "troughRevenueAUD": 0,
+            "resilienceScore": 0,
+            "growthTrajectory": 0,
+            "overallFitnessScore": 0
+          },
+          "timeline": [
+            {
+              "period": 1,
+              "periodLabel": "week 1",
+              "marketDemand": 46,
+              "sessions": 54,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": null,
+              "competitorPressure": 20
+            },
+            {
+              "period": 2,
+              "periodLabel": "week 2",
+              "marketDemand": 71,
+              "sessions": 82,
+              "leads": 2,
+              "quotes": 1,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": "demand-surge",
+              "competitorPressure": 20
+            },
+            {
+              "period": 3,
+              "periodLabel": "week 3",
+              "marketDemand": 52,
+              "sessions": 61,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": null,
+              "competitorPressure": 20
+            },
+            {
+              "period": 4,
+              "periodLabel": "week 4",
+              "marketDemand": 52,
+              "sessions": 61,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": null,
+              "competitorPressure": 20
+            }
+          ],
+          "confidence": {
+            "score": 0.21,
+            "meetsThreshold": false,
+            "threshold": 0.95
+          }
+        },
+        {
+          "strategyId": "baseline-relationship",
+          "strategyName": "Relationship Building",
+          "genes": {
+            "pricingMultiplier": 1.02,
+            "charmPricing": true,
+            "anchoringEnabled": true,
+            "discountDepth": 0.05,
+            "campaignType": "relationship",
+            "messagingFrame": "roi-focused",
+            "targetSegment": "government",
+            "campaignFrequency": "weekly",
+            "launchDayOfWeek": "wednesday",
+            "followUpTiming": 5,
+            "focusCategory": "all",
+            "bundlingEnabled": true,
+            "stockUrgencyThreshold": 0.1
+          },
+          "totalPeriods": 12,
+          "periodType": "week",
+          "summary": {
+            "totalRevenueAUD": 0,
+            "totalLeads": 12,
+            "totalQuotes": 0,
+            "avgRevenuePerPeriodAUD": 0,
+            "peakRevenueAUD": 0,
+            "troughRevenueAUD": 0,
+            "resilienceScore": 0,
+            "growthTrajectory": 0,
+            "overallFitnessScore": 0
+          },
+          "timeline": [
+            {
+              "period": 1,
+              "periodLabel": "week 1",
+              "marketDemand": 46,
+              "sessions": 48,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": null,
+              "competitorPressure": 20
+            },
+            {
+              "period": 2,
+              "periodLabel": "week 2",
+              "marketDemand": 45,
+              "sessions": 48,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": "supply-disruption",
+              "competitorPressure": 20
+            },
+            {
+              "period": 3,
+              "periodLabel": "week 3",
+              "marketDemand": 52,
+              "sessions": 55,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": null,
+              "competitorPressure": 20
+            },
+            {
+              "period": 4,
+              "periodLabel": "week 4",
+              "marketDemand": 52,
+              "sessions": 54,
+              "leads": 1,
+              "quotes": 0,
+              "acceptedDeals": 0,
+              "revenueAUD": 0,
+              "marginAUD": 0,
+              "event": null,
+              "competitorPressure": 20
+            }
+          ],
+          "confidence": {
+            "score": 0.105,
+            "meetsThreshold": false,
+            "threshold": 0.95
+          }
+        }
+      ],
+      "fullTimelines": {
+        "baseline-conservative": [
+          {
+            "period": 1,
+            "periodLabel": "week 1",
+            "marketDemand": 46,
+            "sessions": 46,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 2,
+            "periodLabel": "week 2",
+            "marketDemand": 45,
+            "sessions": 45,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": "supply-disruption",
+            "competitorPressure": 20
+          },
+          {
+            "period": 3,
+            "periodLabel": "week 3",
+            "marketDemand": 52,
+            "sessions": 52,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 4,
+            "periodLabel": "week 4",
+            "marketDemand": 52,
+            "sessions": 52,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 5,
+            "periodLabel": "week 5",
+            "marketDemand": 49,
+            "sessions": 49,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 6,
+            "periodLabel": "week 6",
+            "marketDemand": 46,
+            "sessions": 46,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 7,
+            "periodLabel": "week 7",
+            "marketDemand": 42,
+            "sessions": 42,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 8,
+            "periodLabel": "week 8",
+            "marketDemand": 41,
+            "sessions": 41,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 9,
+            "periodLabel": "week 9",
+            "marketDemand": 41,
+            "sessions": 41,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 10,
+            "periodLabel": "week 10",
+            "marketDemand": 43,
+            "sessions": 43,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": "forex-shift",
+            "competitorPressure": 20
+          },
+          {
+            "period": 11,
+            "periodLabel": "week 11",
+            "marketDemand": 47,
+            "sessions": 47,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": "supply-disruption",
+            "competitorPressure": 20
+          },
+          {
+            "period": 12,
+            "periodLabel": "week 12",
+            "marketDemand": 60,
+            "sessions": 60,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          }
+        ],
+        "baseline-aggressive": [
+          {
+            "period": 1,
+            "periodLabel": "week 1",
+            "marketDemand": 46,
+            "sessions": 54,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 2,
+            "periodLabel": "week 2",
+            "marketDemand": 71,
+            "sessions": 82,
+            "leads": 2,
+            "quotes": 1,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": "demand-surge",
+            "competitorPressure": 20
+          },
+          {
+            "period": 3,
+            "periodLabel": "week 3",
+            "marketDemand": 52,
+            "sessions": 61,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 4,
+            "periodLabel": "week 4",
+            "marketDemand": 52,
+            "sessions": 61,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 5,
+            "periodLabel": "week 5",
+            "marketDemand": 49,
+            "sessions": 58,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 6,
+            "periodLabel": "week 6",
+            "marketDemand": 46,
+            "sessions": 53,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 7,
+            "periodLabel": "week 7",
+            "marketDemand": 42,
+            "sessions": 49,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 8,
+            "periodLabel": "week 8",
+            "marketDemand": 41,
+            "sessions": 47,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 9,
+            "periodLabel": "week 9",
+            "marketDemand": 41,
+            "sessions": 48,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 10,
+            "periodLabel": "week 10",
+            "marketDemand": 45,
+            "sessions": 53,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 11,
+            "periodLabel": "week 11",
+            "marketDemand": 52,
+            "sessions": 60,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 12,
+            "periodLabel": "week 12",
+            "marketDemand": 48,
+            "sessions": 56,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": "competitor-price-drop",
+            "competitorPressure": 40
+          }
+        ],
+        "baseline-relationship": [
+          {
+            "period": 1,
+            "periodLabel": "week 1",
+            "marketDemand": 46,
+            "sessions": 48,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 2,
+            "periodLabel": "week 2",
+            "marketDemand": 45,
+            "sessions": 48,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": "supply-disruption",
+            "competitorPressure": 20
+          },
+          {
+            "period": 3,
+            "periodLabel": "week 3",
+            "marketDemand": 52,
+            "sessions": 55,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 4,
+            "periodLabel": "week 4",
+            "marketDemand": 52,
+            "sessions": 54,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 5,
+            "periodLabel": "week 5",
+            "marketDemand": 49,
+            "sessions": 52,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 6,
+            "periodLabel": "week 6",
+            "marketDemand": 46,
+            "sessions": 48,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 7,
+            "periodLabel": "week 7",
+            "marketDemand": 59,
+            "sessions": 62,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": "demand-surge",
+            "competitorPressure": 20
+          },
+          {
+            "period": 8,
+            "periodLabel": "week 8",
+            "marketDemand": 41,
+            "sessions": 42,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 9,
+            "periodLabel": "week 9",
+            "marketDemand": 41,
+            "sessions": 43,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 10,
+            "periodLabel": "week 10",
+            "marketDemand": 59,
+            "sessions": 62,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": "competitor-exit",
+            "competitorPressure": 20
+          },
+          {
+            "period": 11,
+            "periodLabel": "week 11",
+            "marketDemand": 52,
+            "sessions": 54,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          },
+          {
+            "period": 12,
+            "periodLabel": "week 12",
+            "marketDemand": 60,
+            "sessions": 63,
+            "leads": 1,
+            "quotes": 0,
+            "acceptedDeals": 0,
+            "revenueAUD": 0,
+            "marginAUD": 0,
+            "event": null,
+            "competitorPressure": 20
+          }
+        ]
+      },
+      "winner": {
+        "strategyId": "baseline-aggressive",
+        "reason": "Aggressive Growth was the only strategy to convert pipeline activity into a quote (1 quote) while also generating the highest lead volume (13). With zero revenue across all strategies in this simulation window, quote generation is the most meaningful leading indicator of future revenue, giving Aggressive Growth a decisive edge."
+      },
+      "insights": [
+        {
+          "insight": "All three strategies produced zero revenue over 12 weeks, indicating the simulation conditions (base demand of 36/week, 2% growth) were insufficient to convert leads into closed deals regardless of approach."
+        },
+        {
+          "insight": "Lead generation was nearly identical across strategies (12-13 leads), suggesting top-of-funnel activity is not the bottleneck — conversion to quote and close is."
+        },
+        {
+          "insight": "Only the aggressive strategy (charm pricing, anchoring, 10% discount depth, urgency messaging, GPU focus, bundling) produced a quote, signaling that pricing psychology and urgency tactics are critical to moving prospects down the funnel."
+        },
+        {
+          "insight": "Conservative and Relationship strategies, despite different segment targeting (all vs. government), produced identical funnel outcomes — suggesting passive or trust-only messaging fails to create momentum in this market."
+        }
+      ],
+      "narrative": "Across a 12-week simulation in a low-demand, low-growth market, none of the three baseline strategies generated revenue — a sobering result that highlights how difficult conversion is under current conditions. However, the Aggressive Growth strategy distinguished itself by producing the only quote in the dataset, driven by a deliberate stack of conversion levers: charm pricing, price anchoring, a 10% discount, loss-aversion messaging, twice-weekly campaign cadence, GPU category focus, and bundling. The Conservative Hold and Relationship Building strategies, while generating comparable lead volumes, failed to advance any prospect to the quote stage, suggesting that trust- and ROI-framed messaging without pricing pressure is insufficient to break buyer inertia. The strategic takeaway is clear: in constrained markets, activation tactics matter more than awareness tactics. That said, the aggressive approach carries real risks around margin erosion, segment concentration, and statistical fragility — a single quote is a directional signal, not proof. The recommended path forward is to adopt the aggressive playbook's conversion mechanics while broadening segment exposure and tightening discount governance to protect profitability.",
+      "riskWarnings": [
+        {
+          "risk": "Single quote outcome is a very thin signal — results may not be statistically robust and could reverse with different random seeds or slightly altered conditions.",
+          "affectedStrategy": "baseline-aggressive"
+        },
+        {
+          "risk": "10% discount depth combined with charm pricing and bundling may erode margins if scaled without monitoring unit economics.",
+          "affectedStrategy": "baseline-aggressive"
+        },
+        {
+          "risk": "Enterprise-only targeting narrows the addressable base; if enterprise demand softens, pipeline collapses entirely.",
+          "affectedStrategy": "baseline-aggressive"
+        },
+        {
+          "risk": "Zero quotes and zero revenue indicate the strategy is non-viable as-is; continuing to invest in trust-based educational campaigns without conversion mechanisms wastes budget.",
+          "affectedStrategy": "baseline-conservative"
+        },
+        {
+          "risk": "Government segment focus with 5-day follow-up cadence may be too slow for competitive cycles; long sales cycles compound the zero-quote outcome.",
+          "affectedStrategy": "baseline-relationship"
+        }
+      ],
+      "recommendations": []
+    }
+  ]
+}
