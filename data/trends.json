@@ -1,1 +1,13 @@
-{"daily": [], "weekly": []}
+{
+  "daily": [
+    {
+      "date": "2026-05-17",
+      "sessions": 4,
+      "productViews": {},
+      "pageViews": {},
+      "topProduct": null
+    }
+  ],
+  "weekly": [],
+  "updatedAt": "2026-05-17T01:09:54.618Z"
+}
