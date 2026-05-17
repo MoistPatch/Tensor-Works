@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tensor Works — Enterprise AI Hardware</title>
-  <meta name="description" content="Tensor Works supplies enterprise-grade AI compute infrastructure — NVIDIA H100, DGX systems, InfiniBand networking and full-stack AI solutions to government, research and enterprise in Australia." />
+  <title>Tensor Works — Custom AI Systems · OEM · ODM · Australia</title>
+  <meta name="description" content="Tensor Works designs and builds custom AI compute systems for Australian organisations. LLM inference nodes, training clusters, OEM/ODM manufacturing, and end-to-end AI hardware solutions." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
@@ -182,7 +182,7 @@
     }
     .badge i { color: var(--teal-lt); font-size: 11px; }
 
-    /* hardware stack */
+    /* capability stack */
     .hero-visual { position: relative; }
     .hw-stack { display: flex; flex-direction: column; gap: 16px; }
     .hw-card {
@@ -242,38 +242,38 @@
     .trust-item i { color: var(--teal-lt); font-size: 14px; }
 
     /* ══════════════════════════════════════════
-       PRODUCTS
+       SOLUTIONS
     ══════════════════════════════════════════ */
-    .products { background: var(--bg); }
-    .product-grid {
+    .solutions { background: var(--bg); }
+    .solution-grid {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
       margin-top: 56px;
     }
-    @media (max-width: 960px) { .product-grid { grid-template-columns: repeat(2,1fr); } }
-    @media (max-width: 580px) { .product-grid { grid-template-columns: 1fr; } }
-    .product-card {
+    @media (max-width: 960px) { .solution-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 580px) { .solution-grid { grid-template-columns: 1fr; } }
+    .solution-card {
       background: var(--bg2); border: 1px solid var(--bdr);
       border-radius: var(--r); overflow: hidden;
       display: flex; flex-direction: column;
       transition: transform var(--tr), border-color var(--tr), box-shadow var(--tr);
     }
-    .product-card:hover { transform: translateY(-4px); border-color: var(--teal-dk); box-shadow: 0 12px 40px rgba(0,0,0,.5); }
-    .product-head {
+    .solution-card:hover { transform: translateY(-4px); border-color: var(--teal-dk); box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+    .solution-head {
       padding: 28px 28px 0;
       display: flex; align-items: flex-start; justify-content: space-between;
     }
-    .product-icon {
+    .solution-icon {
       width: 52px; height: 52px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center; font-size: 22px;
     }
-    .product-cat {
+    .solution-cat {
       font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
       color: var(--txt3); background: var(--bg3); border: 1px solid var(--bdr);
       padding: 3px 10px; border-radius: 20px;
     }
-    .product-body { padding: 20px 28px; flex: 1; }
-    .product-name { font-size: 19px; font-weight: 800; color: var(--white); margin-bottom: 8px; }
-    .product-desc { font-size: 14px; color: var(--txt2); line-height: 1.6; margin-bottom: 16px; }
+    .solution-body { padding: 20px 28px; flex: 1; }
+    .solution-name { font-size: 19px; font-weight: 800; color: var(--white); margin-bottom: 8px; }
+    .solution-desc { font-size: 14px; color: var(--txt2); line-height: 1.6; margin-bottom: 16px; }
     .spec-list { display: flex; flex-direction: column; gap: 6px; }
     .spec-row {
       display: flex; justify-content: space-between;
@@ -283,32 +283,83 @@
     .spec-row:last-child { border-bottom: none; }
     .spec-row .key { color: var(--txt3); }
     .spec-row .val { color: var(--txt); font-weight: 600; }
-    .product-foot { padding: 0 28px 28px; }
-    .product-foot .btn { width: 100%; justify-content: center; }
+    .solution-foot { padding: 0 28px 28px; }
+    .solution-foot .btn { width: 100%; justify-content: center; }
 
     /* ══════════════════════════════════════════
-       FEATURES
+       PROCESS
     ══════════════════════════════════════════ */
-    .features { background: var(--bg2); }
-    .feature-grid {
+    .process { background: var(--bg2); }
+    .process-steps {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+      margin-top: 56px; position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute; top: 36px; left: calc(12.5% + 20px); right: calc(12.5% + 20px);
+      height: 1px; background: var(--bdr2); z-index: 0;
+    }
+    @media (max-width: 840px) { .process-steps { grid-template-columns: repeat(2,1fr); gap: 24px; } .process-steps::before { display: none; } }
+    @media (max-width: 480px) { .process-steps { grid-template-columns: 1fr; } }
+    .process-step { text-align: center; padding: 0 16px; position: relative; z-index: 1; }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--bg3); border: 2px solid var(--teal-dk);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; color: var(--teal-lt);
+      margin: 0 auto 20px;
+    }
+    .step-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+    .step-body  { font-size: 13px; color: var(--txt2); line-height: 1.6; }
+
+    /* ══════════════════════════════════════════
+       CAPABILITIES
+    ══════════════════════════════════════════ */
+    .capabilities { background: var(--bg); }
+    .cap-grid {
       display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 56px;
     }
-    @media (max-width: 840px) { .feature-grid { grid-template-columns: repeat(2,1fr); } }
-    @media (max-width: 520px) { .feature-grid { grid-template-columns: 1fr; } }
-    .feature-card {
-      background: var(--bg3); border: 1px solid var(--bdr); border-radius: var(--r);
+    @media (max-width: 840px) { .cap-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 520px) { .cap-grid { grid-template-columns: 1fr; } }
+    .cap-card {
+      background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r);
       padding: 32px 28px;
       transition: border-color var(--tr);
     }
-    .feature-card:hover { border-color: var(--teal-dk); }
-    .feature-icon {
+    .cap-card:hover { border-color: var(--teal-dk); }
+    .cap-icon {
       width: 48px; height: 48px; border-radius: 10px; margin-bottom: 20px;
       background: var(--teal-pale); border: 1px solid var(--teal-dk);
       display: flex; align-items: center; justify-content: center;
       color: var(--teal-lt); font-size: 20px;
     }
-    .feature-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
-    .feature-body  { font-size: 14px; color: var(--txt2); line-height: 1.65; }
+    .cap-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+    .cap-body  { font-size: 14px; color: var(--txt2); line-height: 1.65; }
+
+    /* ══════════════════════════════════════════
+       INDUSTRIES
+    ══════════════════════════════════════════ */
+    .industries { background: var(--bg2); }
+    .industry-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px;
+    }
+    @media (max-width: 840px) { .industry-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 520px) { .industry-grid { grid-template-columns: 1fr; } }
+    .industry-card {
+      background: var(--bg3); border: 1px solid var(--bdr); border-radius: var(--r);
+      padding: 24px 20px; display: flex; align-items: flex-start; gap: 16px;
+      transition: border-color var(--tr);
+    }
+    .industry-card:hover { border-color: var(--teal-dk); }
+    .industry-icon {
+      width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0;
+      background: var(--teal-pale); border: 1px solid var(--teal-dk);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--teal-lt); font-size: 16px;
+    }
+    .industry-content {}
+    .industry-name { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .industry-desc { font-size: 13px; color: var(--txt2); line-height: 1.55; }
 
     /* ══════════════════════════════════════════
        ENQUIRY FORM
@@ -324,6 +375,7 @@
       font-size: 14px; color: var(--txt2); margin-bottom: 16px;
     }
     .contact-detail i { color: var(--teal-lt); width: 18px; flex-shrink: 0; }
+    .contact-detail strong { color: var(--txt); }
 
     .form-card {
       background: var(--bg2); border: 1px solid var(--bdr);
@@ -414,59 +466,60 @@
     <div class="hero-inner">
 
       <div class="hero-content">
-        <div class="hero-eyebrow"><span class="dot"></span> Australian Authorised Reseller</div>
+        <div class="hero-eyebrow"><span class="dot"></span> Custom AI Systems · OEM · ODM · Australia</div>
         <h1 class="hero-title">
-          Enterprise-Grade<br>AI Hardware,<br><span class="accent">Delivered.</span>
+          We Build the Machines<br>That Run<br><span class="accent">Serious AI.</span>
         </h1>
         <p class="hero-body">
-          Tensor Works sources and supplies the compute infrastructure that powers
-          serious AI workloads — from single GPU nodes to full DGX clusters — for
-          government, research and enterprise buyers across Australia.
+          Tensor Works designs and manufactures custom AI compute systems for
+          organisations with workloads that standard hardware doesn't serve well.
+          LLM inference, training clusters, OEM builds, and end-to-end systems
+          engineered to your specification.
         </p>
         <div class="hero-actions">
-          <a href="#products" class="btn btn-primary"><i class="fas fa-microchip"></i> Browse Hardware</a>
-          <a href="#enquiry" class="btn btn-outline">Speak to an Expert</a>
+          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-drafting-compass"></i> Request a Quote</a>
+          <a href="#solutions" class="btn btn-outline">View Solutions</a>
         </div>
         <div class="hero-badges">
-          <span class="badge"><i class="fas fa-check-circle"></i> Dicker Data Partner</span>
-          <span class="badge"><i class="fas fa-flag"></i> 100% Australian Owned</span>
-          <span class="badge"><i class="fas fa-bolt"></i> Fast Fulfilment</span>
+          <span class="badge"><i class="fas fa-cogs"></i> OEM &amp; ODM Capable</span>
+          <span class="badge"><i class="fas fa-flag"></i> Australian-Built</span>
+          <span class="badge"><i class="fas fa-layer-group"></i> End-to-End Delivery</span>
         </div>
       </div>
 
       <div class="hero-visual">
         <div class="hw-stack">
           <div class="hw-card">
-            <div class="hw-icon teal"><i class="fas fa-microchip"></i></div>
+            <div class="hw-icon teal"><i class="fas fa-brain"></i></div>
             <div class="hw-info">
-              <div class="hw-name">NVIDIA H100 SXM5</div>
-              <div class="hw-spec">80 GB HBM3 · 3.35 TB/s · NVLink 4</div>
+              <div class="hw-name">LLM Inference Systems</div>
+              <div class="hw-spec">Optimised for local model serving · No cloud dependency</div>
             </div>
-            <span class="hw-badge avail">In Stock</span>
+            <span class="hw-badge avail">Available</span>
           </div>
           <div class="hw-card">
             <div class="hw-icon orange"><i class="fas fa-server"></i></div>
             <div class="hw-info">
-              <div class="hw-name">NVIDIA DGX H200</div>
-              <div class="hw-spec">8× H200 · 1.1 TB HBM3e · 640 GB total</div>
-            </div>
-            <span class="hw-badge order">On Order</span>
-          </div>
-          <div class="hw-card">
-            <div class="hw-icon blue"><i class="fas fa-network-wired"></i></div>
-            <div class="hw-info">
-              <div class="hw-name">InfiniBand NDR400</div>
-              <div class="hw-spec">400 Gb/s · Sub-µs latency · Scale-out fabric</div>
-            </div>
-            <span class="hw-badge avail">In Stock</span>
-          </div>
-          <div class="hw-card">
-            <div class="hw-icon purple"><i class="fas fa-brain"></i></div>
-            <div class="hw-info">
-              <div class="hw-name">AI Enterprise Suite</div>
-              <div class="hw-spec">Full-stack licences · Support · Deployment</div>
+              <div class="hw-name">Training &amp; Fine-Tuning Rigs</div>
+              <div class="hw-spec">Multi-GPU clusters · NVLink · InfiniBand fabric</div>
             </div>
             <span class="hw-badge avail">Available</span>
+          </div>
+          <div class="hw-card">
+            <div class="hw-icon blue"><i class="fas fa-industry"></i></div>
+            <div class="hw-info">
+              <div class="hw-name">OEM / ODM Manufacturing</div>
+              <div class="hw-spec">Design-to-spec builds · White-label · NDA-ready</div>
+            </div>
+            <span class="hw-badge avail">Available</span>
+          </div>
+          <div class="hw-card">
+            <div class="hw-icon purple"><i class="fas fa-chart-line"></i></div>
+            <div class="hw-info">
+              <div class="hw-name">Quant &amp; HPC Systems</div>
+              <div class="hw-spec">Ultra-low latency · Custom topology · Deterministic throughput</div>
+            </div>
+            <span class="hw-badge order">Configure</span>
           </div>
         </div>
       </div>
@@ -479,150 +532,150 @@
 <div class="trust-bar">
   <div class="container">
     <div class="trust-inner">
-      <div class="trust-item"><i class="fas fa-certificate"></i> NVIDIA Authorised</div>
-      <div class="trust-item"><i class="fas fa-handshake"></i> Dicker Data Partner</div>
-      <div class="trust-item"><i class="fas fa-flag"></i> Australian Owned</div>
-      <div class="trust-item"><i class="fas fa-flag"></i> 100% Australian Owned</div>
-      <div class="trust-item"><i class="fas fa-headset"></i> Dedicated Account Manager</div>
+      <div class="trust-item"><i class="fas fa-drafting-compass"></i> In-House Systems Engineering</div>
+      <div class="trust-item"><i class="fas fa-industry"></i> OEM &amp; ODM Capability</div>
+      <div class="trust-item"><i class="fas fa-flag"></i> Australian-Designed &amp; Built</div>
+      <div class="trust-item"><i class="fas fa-file-signature"></i> NDA-Ready Engagements</div>
+      <div class="trust-item"><i class="fas fa-redo-alt"></i> Repeat-Order &amp; Production Scale</div>
     </div>
   </div>
 </div>
 
-<!-- ══ PRODUCTS ══ -->
-<section class="section products" id="products">
+<!-- ══ SOLUTIONS ══ -->
+<section class="section solutions" id="solutions">
   <div class="container">
     <div class="text-center">
-      <div class="tag"><i class="fas fa-microchip"></i> Hardware Catalogue</div>
-      <h2 class="section-title">Enterprise AI Compute</h2>
+      <div class="tag"><i class="fas fa-cube"></i> Solutions</div>
+      <h2 class="section-title">Systems Built Around Your Workload</h2>
       <div class="divider"></div>
-      <p class="section-sub">Purpose-built hardware for training, inference, simulation and HPC workloads at any scale.</p>
+      <p class="section-sub">Each system is configured to the workload — not the other way around. We don't sell catalogue boxes. We engineer for your inference constraints, training budget, latency requirements, and physical environment.</p>
     </div>
 
-    <div class="product-grid">
+    <div class="solution-grid">
 
-      <!-- H100 -->
-      <div class="product-card">
-        <div class="product-head">
-          <div class="product-icon" style="background:rgba(13,115,119,.15);color:var(--teal-lt)"><i class="fas fa-microchip"></i></div>
-          <span class="product-cat">GPU Accelerator</span>
+      <!-- LLM Inference -->
+      <div class="solution-card">
+        <div class="solution-head">
+          <div class="solution-icon" style="background:rgba(13,115,119,.15);color:var(--teal-lt)"><i class="fas fa-brain"></i></div>
+          <span class="solution-cat">LLM Systems</span>
         </div>
-        <div class="product-body">
-          <div class="product-name">NVIDIA H100</div>
-          <div class="product-desc">The world's most powerful AI training GPU — transformer engine, NVLink 4, PCIe and SXM5 form factors.</div>
+        <div class="solution-body">
+          <div class="solution-name">LLM Inference Nodes</div>
+          <div class="solution-desc">Purpose-built for local large model serving. Tuned memory bandwidth, attention to thermal headroom, and driver stacks configured for your model family — Llama, Mistral, Falcon, or custom.</div>
           <div class="spec-list">
-            <div class="spec-row"><span class="key">Memory</span><span class="val">80 GB HBM3</span></div>
-            <div class="spec-row"><span class="key">Bandwidth</span><span class="val">3.35 TB/s</span></div>
-            <div class="spec-row"><span class="key">TF32 TFLOPS</span><span class="val">989</span></div>
-            <div class="spec-row"><span class="key">Form factor</span><span class="val">SXM5 / PCIe</span></div>
+            <div class="spec-row"><span class="key">Use case</span><span class="val">Local inference · No cloud</span></div>
+            <div class="spec-row"><span class="key">Typical GPU</span><span class="val">RTX 6000 Ada · A100 · H100</span></div>
+            <div class="spec-row"><span class="key">VRAM config</span><span class="val">48 GB – 640 GB total</span></div>
+            <div class="spec-row"><span class="key">From</span><span class="val">A$12,000 configured</span></div>
           </div>
         </div>
-        <div class="product-foot">
-          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-envelope"></i> Enquire</a>
+        <div class="solution-foot">
+          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-drafting-compass"></i> Configure Your System</a>
         </div>
       </div>
 
-      <!-- DGX H200 -->
-      <div class="product-card">
-        <div class="product-head">
-          <div class="product-icon" style="background:rgba(224,123,57,.12);color:var(--orange-lt)"><i class="fas fa-server"></i></div>
-          <span class="product-cat">DGX System</span>
+      <!-- Training Rigs -->
+      <div class="solution-card">
+        <div class="solution-head">
+          <div class="solution-icon" style="background:rgba(224,123,57,.12);color:var(--orange-lt)"><i class="fas fa-server"></i></div>
+          <span class="solution-cat">Training Infrastructure</span>
         </div>
-        <div class="product-body">
-          <div class="product-name">NVIDIA DGX H200</div>
-          <div class="product-desc">The definitive AI supercomputer in a box. Eight H200 GPUs connected by NVLink with 640 GB aggregate memory.</div>
+        <div class="solution-body">
+          <div class="solution-name">Training &amp; Fine-Tuning Clusters</div>
+          <div class="solution-desc">Multi-GPU systems for model pre-training and fine-tuning. NVLink-connected GPU pools, high-bandwidth NVMe storage tiers, and InfiniBand scale-out fabric for distributed workloads.</div>
           <div class="spec-list">
-            <div class="spec-row"><span class="key">GPUs</span><span class="val">8× H200 SXM</span></div>
-            <div class="spec-row"><span class="key">Total memory</span><span class="val">1.1 TB HBM3e</span></div>
-            <div class="spec-row"><span class="key">NVLink</span><span class="val">900 GB/s</span></div>
-            <div class="spec-row"><span class="key">Networking</span><span class="val">8× 400Gb InfiniBand</span></div>
+            <div class="spec-row"><span class="key">Use case</span><span class="val">Pre-training · Fine-tuning · RL</span></div>
+            <div class="spec-row"><span class="key">Scale</span><span class="val">4× GPU to multi-rack</span></div>
+            <div class="spec-row"><span class="key">Networking</span><span class="val">InfiniBand NDR · Ethernet</span></div>
+            <div class="spec-row"><span class="key">From</span><span class="val">A$45,000 configured</span></div>
           </div>
         </div>
-        <div class="product-foot">
-          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-envelope"></i> Enquire</a>
+        <div class="solution-foot">
+          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-drafting-compass"></i> Configure Your System</a>
         </div>
       </div>
 
-      <!-- RTX 6000 -->
-      <div class="product-card">
-        <div class="product-head">
-          <div class="product-icon" style="background:rgba(88,166,255,.1);color:#58a6ff"><i class="fas fa-desktop"></i></div>
-          <span class="product-cat">Workstation GPU</span>
+      <!-- OEM / ODM -->
+      <div class="solution-card">
+        <div class="solution-head">
+          <div class="solution-icon" style="background:rgba(88,166,255,.1);color:#58a6ff"><i class="fas fa-industry"></i></div>
+          <span class="solution-cat">OEM · ODM</span>
         </div>
-        <div class="product-body">
-          <div class="product-name">NVIDIA RTX 6000 Ada</div>
-          <div class="product-desc">Professional visualisation and inference GPU. ECC memory, AV1 encode, and workstation-class reliability.</div>
+        <div class="solution-body">
+          <div class="solution-name">OEM &amp; ODM Manufacturing</div>
+          <div class="solution-desc">For technology companies and ISVs needing hardware under their own brand. We handle mechanical design, component sourcing, assembly, validation, and production-run fulfilment — with full NDA protection.</div>
           <div class="spec-list">
-            <div class="spec-row"><span class="key">Memory</span><span class="val">48 GB GDDR6 ECC</span></div>
-            <div class="spec-row"><span class="key">CUDA Cores</span><span class="val">18,176</span></div>
-            <div class="spec-row"><span class="key">RT Cores</span><span class="val">3rd Gen</span></div>
-            <div class="spec-row"><span class="key">TDP</span><span class="val">300 W</span></div>
+            <div class="spec-row"><span class="key">MOQ</span><span class="val">Negotiable from 5 units</span></div>
+            <div class="spec-row"><span class="key">IP protection</span><span class="val">NDA + white-label options</span></div>
+            <div class="spec-row"><span class="key">Branding</span><span class="val">Custom chassis &amp; firmware</span></div>
+            <div class="spec-row"><span class="key">Compliance</span><span class="val">RCM · CE · FCC ready</span></div>
           </div>
         </div>
-        <div class="product-foot">
-          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-envelope"></i> Enquire</a>
+        <div class="solution-foot">
+          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-comments"></i> Talk to an Engineer</a>
         </div>
       </div>
 
-      <!-- BlueField -->
-      <div class="product-card">
-        <div class="product-head">
-          <div class="product-icon" style="background:rgba(160,100,255,.1);color:#b084ff"><i class="fas fa-network-wired"></i></div>
-          <span class="product-cat">Data Processing Unit</span>
+      <!-- Edge AI -->
+      <div class="solution-card">
+        <div class="solution-head">
+          <div class="solution-icon" style="background:rgba(160,100,255,.1);color:#b084ff"><i class="fas fa-satellite-dish"></i></div>
+          <span class="solution-cat">Edge &amp; Embedded</span>
         </div>
-        <div class="product-body">
-          <div class="product-name">NVIDIA BlueField-3</div>
-          <div class="product-desc">DPU for AI-powered cloud infrastructure. Offloads networking, storage and security from host CPUs.</div>
+        <div class="solution-body">
+          <div class="solution-name">Edge AI Appliances</div>
+          <div class="solution-desc">Ruggedised, compact compute for AI workloads that cannot go to the cloud. Designed for power-constrained environments, remote sites, or latency-sensitive inference at the point of decision.</div>
           <div class="spec-list">
-            <div class="spec-row"><span class="key">Bandwidth</span><span class="val">400 Gb/s</span></div>
-            <div class="spec-row"><span class="key">Cores</span><span class="val">16× Arm A78</span></div>
-            <div class="spec-row"><span class="key">DRAM</span><span class="val">32 GB LPDDR5</span></div>
-            <div class="spec-row"><span class="key">PCIe</span><span class="val">Gen 5</span></div>
+            <div class="spec-row"><span class="key">Form factor</span><span class="val">1U rack · desktop · embedded</span></div>
+            <div class="spec-row"><span class="key">Environments</span><span class="val">Industrial · Remote · Secure</span></div>
+            <div class="spec-row"><span class="key">Connectivity</span><span class="val">LTE · WiFi 6E · fibre</span></div>
+            <div class="spec-row"><span class="key">From</span><span class="val">A$5,500 configured</span></div>
           </div>
         </div>
-        <div class="product-foot">
-          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-envelope"></i> Enquire</a>
+        <div class="solution-foot">
+          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-drafting-compass"></i> Configure Your System</a>
         </div>
       </div>
 
-      <!-- AI Enterprise -->
-      <div class="product-card">
-        <div class="product-head">
-          <div class="product-icon" style="background:rgba(13,115,119,.15);color:var(--teal-lt)"><i class="fas fa-brain"></i></div>
-          <span class="product-cat">Software Suite</span>
+      <!-- Quant / HPC -->
+      <div class="solution-card">
+        <div class="solution-head">
+          <div class="solution-icon" style="background:rgba(13,115,119,.15);color:var(--teal-lt)"><i class="fas fa-chart-line"></i></div>
+          <span class="solution-cat">Quant &amp; HPC</span>
         </div>
-        <div class="product-body">
-          <div class="product-name">NVIDIA AI Enterprise</div>
-          <div class="product-desc">End-to-end AI software platform. RAPIDS, Triton, NeMo, TAO Toolkit and enterprise support included.</div>
+        <div class="solution-body">
+          <div class="solution-name">Low-Latency Compute Systems</div>
+          <div class="solution-desc">High-frequency trading, simulation, and quantitative research demand deterministic throughput and minimal jitter. We build systems tuned at the hardware layer — BIOS, NIC, OS kernel — not just the application.</div>
           <div class="spec-list">
-            <div class="spec-row"><span class="key">Frameworks</span><span class="val">PyTorch, TF, JAX</span></div>
-            <div class="spec-row"><span class="key">Inference</span><span class="val">Triton Server</span></div>
-            <div class="spec-row"><span class="key">MLOps</span><span class="val">Included</span></div>
-            <div class="spec-row"><span class="key">Support</span><span class="val">24/7 Enterprise</span></div>
+            <div class="spec-row"><span class="key">Use case</span><span class="val">HFT · Simulation · Backtesting</span></div>
+            <div class="spec-row"><span class="key">Network</span><span class="val">Solarflare · Mellanox RDMA</span></div>
+            <div class="spec-row"><span class="key">Tuning</span><span class="val">Kernel bypass · CPU pinning</span></div>
+            <div class="spec-row"><span class="key">From</span><span class="val">A$18,000 configured</span></div>
           </div>
         </div>
-        <div class="product-foot">
-          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-envelope"></i> Enquire</a>
+        <div class="solution-foot">
+          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-comments"></i> Talk to an Engineer</a>
         </div>
       </div>
 
-      <!-- PowerEdge -->
-      <div class="product-card">
-        <div class="product-head">
-          <div class="product-icon" style="background:rgba(224,123,57,.12);color:var(--orange-lt)"><i class="fas fa-hdd"></i></div>
-          <span class="product-cat">Server Platform</span>
+      <!-- Custom Cluster -->
+      <div class="solution-card">
+        <div class="solution-head">
+          <div class="solution-icon" style="background:rgba(224,123,57,.12);color:var(--orange-lt)"><i class="fas fa-network-wired"></i></div>
+          <span class="solution-cat">Custom Clusters</span>
         </div>
-        <div class="product-body">
-          <div class="product-name">Dell PowerEdge XE9680</div>
-          <div class="product-desc">8-way GPU server optimised for AI and HPC. Supports up to eight SXM5 GPUs with NVLink Switch.</div>
+        <div class="solution-body">
+          <div class="solution-name">Custom Cluster Design</div>
+          <div class="solution-desc">For organisations that have outgrown off-the-shelf solutions. We design multi-rack GPU clusters from scratch — GPU topology, InfiniBand fabric, storage architecture, power distribution, cooling, and remote management.</div>
           <div class="spec-list">
-            <div class="spec-row"><span class="key">GPU slots</span><span class="val">8× SXM / PCIe</span></div>
-            <div class="spec-row"><span class="key">CPU</span><span class="val">2× Xeon Scalable</span></div>
-            <div class="spec-row"><span class="key">Memory</span><span class="val">Up to 8 TB DDR5</span></div>
-            <div class="spec-row"><span class="key">Networking</span><span class="val">InfiniBand / Ethernet</span></div>
+            <div class="spec-row"><span class="key">Scale</span><span class="val">8 to 1,000+ GPUs</span></div>
+            <div class="spec-row"><span class="key">Fabric</span><span class="val">InfiniBand NDR400 · HDR</span></div>
+            <div class="spec-row"><span class="key">Storage</span><span class="val">Parallel NFS · Lustre · GPFS</span></div>
+            <div class="spec-row"><span class="key">Engagement</span><span class="val">Architecture to deployment</span></div>
           </div>
         </div>
-        <div class="product-foot">
-          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-envelope"></i> Enquire</a>
+        <div class="solution-foot">
+          <a href="#enquiry" class="btn btn-primary"><i class="fas fa-comments"></i> Talk to an Engineer</a>
         </div>
       </div>
 
@@ -630,46 +683,134 @@
   </div>
 </section>
 
-<!-- ══ FEATURES ══ -->
-<section class="section features" id="features">
+<!-- ══ PROCESS ══ -->
+<section class="section-sm process" id="process">
   <div class="container">
     <div class="text-center">
-      <div class="tag"><i class="fas fa-shield-alt"></i> Why Tensor Works</div>
-      <h2 class="section-title">Built for Serious Buyers</h2>
+      <div class="tag"><i class="fas fa-route"></i> How We Work</div>
+      <h2 class="section-title">From Brief to Running System</h2>
       <div class="divider"></div>
-      <p class="section-sub">We exist to make enterprise AI infrastructure accessible to Australian organisations that can't afford to wait.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <div class="step-title">Requirements Brief</div>
+        <div class="step-body">You describe the workload, constraints, and environment. We ask the right questions. No generic questionnaires.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <div class="step-title">System Design</div>
+        <div class="step-body">We produce a detailed architecture — component selection, thermal modelling, network topology — with a fixed-price quote.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <div class="step-title">Build &amp; Validation</div>
+        <div class="step-body">Assembly, burn-in, benchmark validation, and software stack configuration before anything ships.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <div class="step-title">Delivery &amp; Support</div>
+        <div class="step-body">On-site installation if required, documentation, and ongoing support structured to your operational needs.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CAPABILITIES ══ -->
+<section class="section capabilities" id="capabilities">
+  <div class="container">
+    <div class="text-center">
+      <div class="tag"><i class="fas fa-tools"></i> Technical Capability</div>
+      <h2 class="section-title">What Separates a Systems Builder from a Reseller</h2>
+      <div class="divider"></div>
+      <p class="section-sub">We are not a reseller with engineering language on the website. Every system that leaves our facility has been designed, configured, and validated by people who understand the workloads it will run.</p>
     </div>
 
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-handshake"></i></div>
-        <div class="feature-title">Dicker Data Partnership</div>
-        <div class="feature-body">Direct access to Australia's largest technology distributor, giving us priority allocation on high-demand GPU hardware.</div>
+    <div class="cap-grid">
+      <div class="cap-card">
+        <div class="cap-icon"><i class="fas fa-drafting-compass"></i></div>
+        <div class="cap-title">Workload-First Design</div>
+        <div class="cap-body">We start with your inference latency target, training throughput, or memory footprint — then select and configure hardware to meet it. Not the other way around.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-flag"></i></div>
-        <div class="feature-title">100% Australian Owned</div>
-        <div class="feature-body">Australian-owned and operated. Compute stays onshore. Designed to meet government security and data sovereignty requirements.</div>
+      <div class="cap-card">
+        <div class="cap-icon"><i class="fas fa-industry"></i></div>
+        <div class="cap-title">OEM &amp; ODM Manufacturing</div>
+        <div class="cap-body">Design-to-spec builds under your brand. We manage sourcing, mechanical design, assembly, validation, and production-run logistics with full IP protection.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-        <div class="feature-title">Fast Fulfilment</div>
-        <div class="feature-body">Established supply chain relationships mean shorter lead times. We track global allocation and keep you informed throughout.</div>
+      <div class="cap-card">
+        <div class="cap-icon"><i class="fas fa-memory"></i></div>
+        <div class="cap-title">LLM Hardware Optimisation</div>
+        <div class="cap-body">GPU memory bandwidth, KV cache sizing, tensor parallelism topology, quantisation trade-offs — we spec systems for specific model architectures and serving frameworks.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-users-cog"></i></div>
-        <div class="feature-title">Dedicated Account Management</div>
-        <div class="feature-body">A named account manager for every engagement. No call centres — direct access to someone who knows your project.</div>
+      <div class="cap-card">
+        <div class="cap-icon"><i class="fas fa-network-wired"></i></div>
+        <div class="cap-title">Cluster Network Architecture</div>
+        <div class="cap-body">InfiniBand NDR and HDR fabric design, RDMA configuration, rail-optimised topologies, and switch layout for GPU clusters that actually scale.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
-        <div class="feature-title">Full-Stack Delivery</div>
-        <div class="feature-body">Hardware, software licences, networking fabric, and deployment support in a single engagement. One invoice, one relationship.</div>
+      <div class="cap-card">
+        <div class="cap-icon"><i class="fas fa-flag"></i></div>
+        <div class="cap-title">Australian Sovereignty</div>
+        <div class="cap-body">Compute designed, assembled, and supported onshore. Relevant to government, defence, and any organisation with data-handling obligations that preclude offshore cloud.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-file-contract"></i></div>
-        <div class="feature-title">Government Panel Ready</div>
-        <div class="feature-body">Experienced with procurement frameworks used by federal and state government. Familiar with GITC, whole-of-government panels, and ICT procurement.</div>
+      <div class="cap-card">
+        <div class="cap-icon"><i class="fas fa-redo-alt"></i></div>
+        <div class="cap-title">Repeat-Order Capability</div>
+        <div class="cap-body">Structured for production runs. Bill of materials lock-in, component reservation, and delivery scheduling for organisations that need consistent hardware over time.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INDUSTRIES ══ -->
+<section class="section-sm industries" id="industries">
+  <div class="container">
+    <div class="text-center">
+      <div class="tag"><i class="fas fa-building"></i> Industries Served</div>
+      <h2 class="section-title">Built for Organisations That Know What They Need</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="industry-grid">
+      <div class="industry-card">
+        <div class="industry-icon"><i class="fas fa-rocket"></i></div>
+        <div class="industry-content">
+          <div class="industry-name">AI Startups</div>
+          <div class="industry-desc">Scaling from prototype to production without paying cloud margins. Custom inference nodes and training rigs sized to your current round, not your Series C.</div>
+        </div>
+      </div>
+      <div class="industry-card">
+        <div class="industry-icon"><i class="fas fa-flask"></i></div>
+        <div class="industry-content">
+          <div class="industry-name">Research Institutions</div>
+          <div class="industry-desc">University and independent research teams needing cluster configurations that procurement departments don't stock. Grant-compatible quoting and staged delivery.</div>
+        </div>
+      </div>
+      <div class="industry-card">
+        <div class="industry-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="industry-content">
+          <div class="industry-name">Quantitative &amp; Trading Firms</div>
+          <div class="industry-desc">Low-latency compute for HFT, simulation, and backtesting. Systems tuned below the OS layer for deterministic performance where microseconds matter.</div>
+        </div>
+      </div>
+      <div class="industry-card">
+        <div class="industry-icon"><i class="fas fa-laptop-code"></i></div>
+        <div class="industry-content">
+          <div class="industry-name">AI &amp; Technology Agencies</div>
+          <div class="industry-desc">Agencies running AI workloads on behalf of clients who need on-premise inference without the cloud exposure. Managed hardware that fits your client delivery model.</div>
+        </div>
+      </div>
+      <div class="industry-card">
+        <div class="industry-icon"><i class="fas fa-building"></i></div>
+        <div class="industry-content">
+          <div class="industry-name">Enterprise Buyers</div>
+          <div class="industry-desc">Organisations with specific rack space, power, and compliance constraints. We design around your environment, not ours. NDA-first engagements, fixed-price delivery.</div>
+        </div>
+      </div>
+      <div class="industry-card">
+        <div class="industry-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="industry-content">
+          <div class="industry-name">Government &amp; Defence</div>
+          <div class="industry-desc">Sovereign AI compute with full supply chain visibility. Experienced with GITC, whole-of-government frameworks, and security requirements that rule out offshore infrastructure.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -681,21 +822,22 @@
     <div class="enquiry-inner">
 
       <div class="enquiry-info">
-        <div class="tag"><i class="fas fa-envelope"></i> Contact</div>
-        <h2 class="section-title">Talk to the Team</h2>
+        <div class="tag"><i class="fas fa-drafting-compass"></i> Request a Quote</div>
+        <h2 class="section-title">Tell Us About Your Workload</h2>
         <div class="divider"></div>
         <p class="section-sub">
-          Tell us about your project and we'll come back with availability, lead times and indicative pricing — usually within one business day.
+          Describe what you're running, at what scale, and any constraints. We'll come back with a system architecture and fixed-price quote — usually within one business day.
         </p>
         <br>
-        <div class="contact-detail"><i class="fas fa-envelope"></i> sam@vantyx.com.au</div>
+        <div class="contact-detail"><i class="fas fa-envelope"></i> <span><strong>sam@tensorworks.com.au</strong></span></div>
         <div class="contact-detail"><i class="fas fa-map-marker-alt"></i> Melbourne, Victoria, Australia</div>
         <div class="contact-detail"><i class="fas fa-clock"></i> Response within 1 business day</div>
+        <div class="contact-detail"><i class="fas fa-file-signature"></i> NDA available on request before briefing</div>
       </div>
 
       <div class="form-card">
         <div class="success-msg" id="successMsg">
-          <i class="fas fa-check-circle"></i> Thanks — your enquiry has been sent. We'll be in touch shortly.
+          <i class="fas fa-check-circle"></i> Received — we'll review your requirements and respond within one business day.
         </div>
 
         <form id="enquiryForm" novalidate>
@@ -707,56 +849,52 @@
             </div>
             <div class="form-group">
               <label for="email">Work Email *</label>
-              <input type="email" id="email" name="email" placeholder="jane@org.gov.au" required />
+              <input type="email" id="email" name="email" placeholder="jane@company.com.au" required />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="company">Organisation *</label>
-              <input type="text" id="company" name="company" placeholder="Department / Company" required />
+              <input type="text" id="company" name="company" placeholder="Company / Institution" required />
             </div>
             <div class="form-group">
-              <label for="sector">Sector</label>
+              <label for="sector">Organisation Type</label>
               <select id="sector" name="sector">
-                <option value="">Select sector…</option>
-                <option>Developer / Engineer</option>
-                <option>Enthusiast / Home Lab</option>
-                <option>Startup / Scale-up</option>
-                <option>Research / University</option>
+                <option value="">Select…</option>
+                <option>AI Startup</option>
+                <option>Research Institution</option>
+                <option>Quantitative / Trading Firm</option>
+                <option>Technology Agency</option>
+                <option>Enterprise</option>
                 <option>Government — Federal</option>
                 <option>Government — State</option>
                 <option>Defence</option>
-                <option>Enterprise</option>
-                <option>Mining &amp; Resources</option>
-                <option>Finance &amp; Insurance</option>
-                <option>Healthcare</option>
-                <option>Education</option>
-                <option>Creative / Media</option>
+                <option>ISV / Software Company</option>
                 <option>Other</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label for="hardware">Hardware Interest</label>
-            <select id="hardware" name="hardware">
-              <option value="">Select category…</option>
-              <option>GPU Accelerators (H100, H200, RTX)</option>
-              <option>DGX Systems</option>
-              <option>Inference &amp; Deployment</option>
-              <option>Networking (InfiniBand, BlueField)</option>
-              <option>Full AI Stack (hardware + software)</option>
-              <option>Consulting / Architecture</option>
-              <option>Other / Not sure yet</option>
+            <label for="solution">Solution Interest</label>
+            <select id="solution" name="solution">
+              <option value="">Select a solution area…</option>
+              <option>LLM Inference System</option>
+              <option>Training / Fine-Tuning Cluster</option>
+              <option>OEM / ODM Partnership</option>
+              <option>Edge AI Appliance</option>
+              <option>Low-Latency / Quant Compute</option>
+              <option>Custom Cluster Design</option>
+              <option>General Technical Enquiry</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="requirements">Project Requirements *</label>
-            <textarea id="requirements" name="requirements" placeholder="Describe your use case, workload, timeline and any quantity or budget context…" required></textarea>
+            <label for="requirements">Workload &amp; Requirements *</label>
+            <textarea id="requirements" name="requirements" placeholder="Describe the workload (model size, inference throughput, training regime), physical environment, timeline, and any budget context. The more specific you are, the more useful our first response will be." required></textarea>
           </div>
           <button type="submit" class="form-submit" id="submitBtn">
-            <i class="fas fa-paper-plane"></i> Send Enquiry
+            <i class="fas fa-drafting-compass"></i> Submit Requirements
           </button>
-          <p class="form-notice">Your information is kept confidential and never shared with third parties.</p>
+          <p class="form-notice">Your information is kept confidential. NDA available before any detailed technical briefing.</p>
         </form>
       </div>
 
@@ -782,7 +920,6 @@
 </script>
 
 <script>
-  // Form submission via Web3Forms
   document.getElementById('enquiryForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
@@ -817,10 +954,10 @@
         throw new Error(json.message || 'server error');
       }
     } catch {
-      alert('Something went wrong. Please email sam@vantyx.com.au directly.');
+      alert('Something went wrong. Please email sam@tensorworks.com.au directly.');
     } finally {
       btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Enquiry';
+      btn.innerHTML = '<i class="fas fa-drafting-compass"></i> Submit Requirements';
     }
   });
 </script>
