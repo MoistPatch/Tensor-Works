@@ -1,1 +1,17 @@
-{ "agents": [] }
+{
+  "agents": [
+    {
+      "agentId": "run-1778980266223",
+      "type": "parallel-orchestrator",
+      "task": "full-pipeline",
+      "parentRunId": null,
+      "status": "running",
+      "killSignal": false,
+      "spawnedAt": "2026-05-17T01:11:06.519Z",
+      "lastHeartbeat": "2026-05-17T01:11:06.519Z",
+      "completedAt": null,
+      "result": null,
+      "error": null
+    }
+  ]
+}
