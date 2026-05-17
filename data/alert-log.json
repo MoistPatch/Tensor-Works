@@ -1,0 +1,80 @@
+{
+  "alerts": [
+    {
+      "id": 1778980266736,
+      "type": "monitor",
+      "title": "System health check failed",
+      "message": "intelligence-report returned errors",
+      "urgency": "high",
+      "data": {
+        "checks": [
+          {
+            "name": "brain",
+            "url": "https://tensorworks.online/api/brain",
+            "status": "ok",
+            "httpStatus": 200,
+            "responseTimeMs": 341,
+            "checkedAt": "2026-05-17T01:11:04.765Z",
+            "error": null
+          },
+          {
+            "name": "analytics",
+            "url": "https://tensorworks.online/api/analytics",
+            "status": "ok",
+            "httpStatus": 200,
+            "responseTimeMs": 340,
+            "checkedAt": "2026-05-17T01:11:04.765Z",
+            "error": null
+          },
+          {
+            "name": "competitors",
+            "url": "https://tensorworks.online/api/competitors",
+            "status": "ok",
+            "httpStatus": 200,
+            "responseTimeMs": 339,
+            "checkedAt": "2026-05-17T01:11:04.765Z",
+            "error": null
+          },
+          {
+            "name": "data-validator",
+            "url": "https://tensorworks.online/api/data-validator",
+            "status": "ok",
+            "httpStatus": 200,
+            "responseTimeMs": 624,
+            "checkedAt": "2026-05-17T01:11:04.765Z",
+            "error": null
+          },
+          {
+            "name": "intelligence-report",
+            "url": "https://tensorworks.online/api/intelligence",
+            "status": "down",
+            "httpStatus": 405,
+            "responseTimeMs": 65,
+            "checkedAt": "2026-05-17T01:11:04.765Z",
+            "error": null
+          },
+          {
+            "name": "quotes",
+            "url": "https://tensorworks.online/api/quote",
+            "status": "ok",
+            "httpStatus": 200,
+            "responseTimeMs": 334,
+            "checkedAt": "2026-05-17T01:11:04.765Z",
+            "error": null
+          },
+          {
+            "name": "monitor",
+            "url": "https://tensorworks.online/api/monitor",
+            "status": "ok",
+            "httpStatus": 200,
+            "responseTimeMs": 338,
+            "checkedAt": "2026-05-17T01:11:04.765Z",
+            "error": null
+          }
+        ]
+      },
+      "sentAt": "2026-05-17T01:11:06.736Z",
+      "channels": []
+    }
+  ]
+}
