@@ -11,16 +11,18 @@
     "confidenceTrend": "Confidence scores are very low (0.05-0.10), indicating insufficient data quality or grounding signals",
     "groundingImprovement": "Grounding score doubled between runs (0.15 to 0.3), showing improving data quality",
     "recommendationConsistency": "Price recommendations consistently low (1 per run) while product rankings stable at 8",
-    "bundleVariability": "Bundle suggestions fluctuate (3-4), showing moderate exploration of combinations",
+    "bundleVariability": "Bundle suggestions oscillate between 3-4 per run",
     "sessionVolume": "Very low traffic (4 sessions/day) limiting statistical significance of all recommendations",
     "pricingInsights": {
       "dataReliability": "low",
       "recommendationVolume": "low",
-      "note": "Insufficient transaction data to generate confident pricing strategies",
+      "note": "Single price recommendation per run suggests narrow optimization scope or limited data signals",
       "actionable": false,
       "avgRecommendationsPerRun": 1,
       "confidence": "low",
-      "strategy": "Conservative - only high-confidence price changes are suggested"
+      "strategy": "Conservative - only high-confidence price changes are suggested",
+      "averageRecommendations": 1,
+      "stability": "consistent but minimal"
     },
     "productInsights": {
       "rankingStability": "high - consistent 8 product rankings across runs",
@@ -29,7 +31,12 @@
       "bundleOpportunities": "3-4 bundles identified but with low confidence backing",
       "rankedProducts": 8,
       "consistency": "stable",
-      "trafficData": "insufficient - only 4 sessions in trends"
+      "trafficData": "insufficient - only 4 sessions in trends",
+      "averageRanked": 7.4,
+      "averageBundles": 3.6,
+      "topProduct": null,
+      "sessionVolume": 28,
+      "note": "No product view data captured despite 28 sessions; tracking gap suspected"
     },
     "thingsToAvoid": [
       "Acting on price recommendations until confidence score exceeds 0.5",
@@ -42,11 +49,21 @@
       "Over-relying on bundle suggestions until grounding score stabilizes above 0.5",
       "Drawing conclusions from limited session data (only 4 daily sessions)",
       "Ignoring the low calculated confidence baseline of 0.3",
-      "Expanding product ranking scope before improving data grounding"
+      "Expanding product ranking scope before improving data grounding",
+      "Trusting recommendations with grounding score below 0.20",
+      "Generating bundle suggestions without sufficient product view data",
+      "Relying on confidence scores under 0.10 for automated decisions",
+      "Ignoring the empty productViews/pageViews tracking issue",
+      "Assuming calculatedConfidence of 0.3 reflects true model certainty",
+      "Reducing product ranking count below 8 without justification"
     ],
-    "lowConfidence": "Confidence scores are consistently low (0.05-0.10), indicating insufficient data or weak grounding signals",
+    "lowConfidence": "Confidence scores consistently below 0.10, indicating weak grounding data quality",
     "stableRankings": "Product ranking count is stable at 8 across runs, suggesting consistent catalog evaluation",
-    "limitedPricing": "Only 1 price recommendation per run, indicating conservative pricing adjustment strategy"
+    "limitedPricing": "Only 1 price recommendation per run, indicating conservative pricing adjustment strategy",
+    "lowGrounding": "Grounding score trending downward from 0.30 to 0.15, suggesting insufficient real-world signal",
+    "stableProductRanking": "Product ranking count stable at 8 items, dropping to 5 in latest run",
+    "consistentPricing": "Only 1 price recommendation generated per run consistently",
+    "fixedCalculatedConfidence": "Calculated confidence locked at 0.3, indicating possible floor/cap in algorithm"
   },
   "history": {
     "priceChanges": [],
@@ -180,9 +197,9 @@
   "meta": {
     "totalRunCount": 2,
     "lastOrchestrationAt": "2026-05-17T05:47:04.859Z",
-    "dataQualityScore": 0,
-    "learningConfidence": 0,
+    "dataQualityScore": 0.2,
+    "learningConfidence": 0.36000000000000004,
     "notes": [],
-    "lastMemoryManagerAt": "2026-05-17T01:11:49.253Z"
+    "lastMemoryManagerAt": "2026-05-17T05:47:15.188Z"
   }
 }
