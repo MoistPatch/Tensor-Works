@@ -5,12 +5,14 @@
       "type": "parallel-orchestrator",
       "task": "full-pipeline",
       "parentRunId": null,
-      "status": "running",
+      "status": "completed",
       "killSignal": false,
       "spawnedAt": "2026-05-17T01:11:06.519Z",
       "lastHeartbeat": "2026-05-17T01:11:06.519Z",
-      "completedAt": null,
-      "result": null,
+      "completedAt": "2026-05-17T01:12:14.305Z",
+      "result": {
+        "tasks": 13
+      },
       "error": null
     },
     {
@@ -32,7 +34,7 @@
           },
           {
             "description": "Mellanox InfiniBand NDR400 Switch is the only SKU with cost data (AUD 3,500 ex GST), providing a clear margin baseline for competitive pricing modelling.",
-            "action": "Establish a target sell price band (e.g., 3,950–4,500 AUD ex GST) to maintain the AUD 500 minimum margin while remaining competitive; flag for human review once competitor data is ingested."
+            "action": "Establish a target sell price band (e.g., 3,950â4,500 AUD ex GST) to maintain the AUD 500 minimum margin while remaining competitive; flag for human review once competitor data is ingested."
           },
           {
             "description": "Extremely low session volume (4 sessions) indicates insufficient demand-side signal to validate competitive positioning.",
