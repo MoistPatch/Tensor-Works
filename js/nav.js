@@ -1,9 +1,68 @@
 (function () {
   'use strict';
 
+  /* ── AI News Ticker ───────────────────────────────────────────── */
+  function injectTicker() {
+    // Styles
+    var s = document.createElement('style');
+    s.textContent = [
+      '.tw-ticker{display:flex;align-items:center;height:36px;background:#070c0e;border-bottom:1px solid #1a2830;overflow:hidden;position:relative;z-index:201;font-family:Inter,sans-serif}',
+      '.tw-ticker-label{flex-shrink:0;display:flex;align-items:center;gap:7px;padding:0 16px;font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#14a8ae;border-right:1px solid #1a2830;height:100%;white-space:nowrap;background:#070c0e}',
+      '.tw-ticker-label .tw-dot{width:6px;height:6px;border-radius:50%;background:#14a8ae;animation:tw-pulse 2s infinite}',
+      '@keyframes tw-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.3)}}',
+      '.tw-ticker-wrap{flex:1;overflow:hidden;position:relative;mask-image:linear-gradient(to right,transparent 0,black 40px,black calc(100% - 40px),transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0,black 40px,black calc(100% - 40px),transparent 100%)}',
+      '.tw-ticker-track{display:flex;gap:0;white-space:nowrap;animation:tw-scroll 80s linear infinite;will-change:transform}',
+      '.tw-ticker-track:hover{animation-play-state:paused}',
+      '@keyframes tw-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}',
+      '.tw-ticker-item{display:inline-flex;align-items:center;gap:10px;padding:0 32px;font-size:12px;color:#8fa8b2;cursor:pointer;transition:color .2s;text-decoration:none}',
+      '.tw-ticker-item:hover{color:#fff}',
+      '.tw-ticker-item .tw-src{font-size:10px;font-weight:700;color:#0D7377;text-transform:uppercase;letter-spacing:.8px}',
+      '.tw-ticker-sep{color:#1a2830;font-size:16px;flex-shrink:0}',
+    ].join('');
+    document.head.appendChild(s);
+
+    // Element
+    var bar = document.createElement('div');
+    bar.className = 'tw-ticker';
+    bar.id = 'tw-ticker';
+    bar.innerHTML =
+      '<div class="tw-ticker-label"><span class="tw-dot"></span>AI News</div>' +
+      '<div class="tw-ticker-wrap"><div class="tw-ticker-track" id="tw-track">Loading…</div></div>';
+
+    var header = document.getElementById('site-header');
+    if (header && header.parentNode) header.parentNode.insertBefore(bar, header);
+
+    // Fetch and render
+    fetch('/api/ai-news')
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var articles = data.articles || [];
+        if (!articles.length) { bar.style.display = 'none'; return; }
+        // Duplicate for seamless loop
+        var all = articles.concat(articles);
+        var html = all.map(function(a, i){
+          var src = a.source ? '<span class="tw-src">' + esc(a.source) + '</span>' : '';
+          var sep = i < all.length - 1 ? '<span class="tw-sep">·</span>' : '';
+          return (
+            '<a class="tw-ticker-item" href="' + esc(a.url || '#') + '" target="_blank" rel="noopener noreferrer">' +
+              src + esc(a.title) +
+            '</a>' + sep
+          );
+        }).join('');
+        document.getElementById('tw-track').innerHTML = html;
+      })
+      .catch(function(){ bar.style.display = 'none'; });
+
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+  }
+
   function injectNav(activePage) {
     var header = document.getElementById('site-header');
     if (!header) return;
+
+    injectTicker();
 
     var links = [
       { href: '/', label: 'Home', key: 'home' },
@@ -27,7 +86,7 @@
               '<i class="fas fa-shopping-cart" aria-hidden="true"></i>' +
               '<span class="cart-count" data-count="0">0</span>' +
             '</button>' +
-            '<a href="/products.html" class="btn btn-primary">Shop Now</a>' +
+            '<a href="/#enquiry" class="btn btn-primary">Request a Quote</a>' +
             '<button class="hamburger" aria-label="Toggle navigation" onclick="document.getElementById(\'nav\').classList.toggle(\'open\')">' +
               '<i class="fas fa-bars" aria-hidden="true"></i>' +
             '</button>' +
@@ -48,24 +107,25 @@
               '<div class="logo-mark">TW</div>' +
               'Tensor<span>Works</span>' +
             '</a>' +
-            '<p>Enterprise AI hardware supply and consulting for Australian government, research and enterprise organisations.</p>' +
+            '<p>Custom AI compute systems — LLM inference, training clusters, OEM/ODM manufacturing, and end-to-end hardware solutions for Australian organisations.</p>' +
           '</div>' +
           '<div class="footer-col">' +
-            '<h4>Hardware</h4>' +
-            '<a href="/products.html">H100 GPU</a>' +
-            '<a href="/products.html">DGX H200</a>' +
-            '<a href="/products.html">RTX 6000 Ada</a>' +
-            '<a href="/products.html">BlueField-3 DPU</a>' +
-            '<a href="/products.html">AI Enterprise</a>' +
-            '<a href="/products.html">PowerEdge XE9680</a>' +
+            '<h4>Solutions</h4>' +
+            '<a href="/#solutions">LLM Inference Systems</a>' +
+            '<a href="/#solutions">Training Clusters</a>' +
+            '<a href="/#solutions">OEM / ODM Builds</a>' +
+            '<a href="/#solutions">Edge AI Appliances</a>' +
+            '<a href="/#solutions">Quant &amp; HPC</a>' +
+            '<a href="/#solutions">Custom Clusters</a>' +
           '</div>' +
           '<div class="footer-col">' +
             '<h4>Company</h4>' +
-            '<a href="/#features">Why Tensor Works</a>' +
-            '<a href="/#enquiry">Contact</a>' +
+            '<a href="/#capabilities">Capabilities</a>' +
+            '<a href="/#industries">Industries</a>' +
+            '<a href="/#enquiry">Request a Quote</a>' +
             '<a href="/privacy.html">Privacy Policy</a>' +
             '<a href="/terms.html">Terms of Service</a>' +
-            '<a href="mailto:sam@vantyx.com.au">sam@vantyx.com.au</a>' +
+            '<a href="mailto:sam@tensorworks.com.au">sam@tensorworks.com.au</a>' +
           '</div>' +
         '</div>' +
         '<div class="footer-bottom">' +
@@ -73,7 +133,7 @@
           '<div style="display:flex;gap:16px">' +
             '<a href="/privacy.html">Privacy</a>' +
             '<a href="/terms.html">Terms</a>' +
-            '<a href="mailto:sam@vantyx.com.au">sam@vantyx.com.au</a>' +
+            '<a href="mailto:sam@tensorworks.com.au">sam@tensorworks.com.au</a>' +
           '</div>' +
         '</div>' +
       '</div>';
