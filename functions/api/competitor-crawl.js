@@ -50,33 +50,36 @@ async function claudeExtract(html, anthropicKey) {
     method: 'POST',
     headers: { 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-opus-4-7',
-      max_tokens: 2048,
-      system: 'You are a product data extractor. Extract all products from this HTML. Return ONLY valid JSON array: [{name, price, currency, url, inStock}] where inStock is true if clearly in stock, false if clearly out of stock, null if unknown.',
-      messages: [{ role: 'user', content: html.slice(0, 15000) }],
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 4096,
+      system: 'You are a product data extractor for an AI hardware business. Extract every GPU, accelerator, workstation card, or AI compute product from this HTML. Include consumer, prosumer, and professional cards (RTX, Quadro, A-series, L-series, H-series, etc.). Return ONLY a valid JSON array with no markdown: [{name, price, currency, url, inStock}]. price should be a number (AUD). inStock is true/false/null. If no products found, return [].',
+      messages: [{ role: 'user', content: html.slice(0, 30000) }],
     }),
   });
   if (!r.ok) throw new Error('Claude extract failed: ' + r.status);
   const j = await r.json();
-  const text = j.content?.[0]?.text || '[]';
-  try { return JSON.parse(text); } catch (_) { return []; }
+  const text = (j.content?.[0]?.text || '[]').trim();
+  const jsonStr = text.startsWith('[') ? text : (text.match(/\[[\s\S]*\]/)?.[0] || '[]');
+  try { return JSON.parse(jsonStr); } catch (_) { return []; }
 }
 
 async function claudeMatch(extracted, catalogue, anthropicKey) {
+  if (!extracted.length) return [];
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-opus-4-7',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 2048,
-      system: 'Match competitor products to our catalogue. Return ONLY valid JSON array: [{handle: ourProductHandle, competitorName, competitorPrice, matchConfidence}] Only include confident matches (>0.6).',
-      messages: [{ role: 'user', content: JSON.stringify({ extracted, catalogue }) }],
+      system: 'Match competitor GPU/AI hardware products to our catalogue by model name. Be generous — match on model number (e.g. "RTX 6000 Ada" matches "NVIDIA RTX 6000 Ada"). Return ONLY a valid JSON array with no markdown: [{handle: ourProductHandle, competitorName, competitorPrice, matchConfidence}]. matchConfidence 0-1. Include matches above 0.5. If no matches, return [].',
+      messages: [{ role: 'user', content: JSON.stringify({ extracted: extracted.slice(0, 50), catalogue }) }],
     }),
   });
   if (!r.ok) throw new Error('Claude match failed: ' + r.status);
   const j = await r.json();
-  const text = j.content?.[0]?.text || '[]';
-  try { return JSON.parse(text); } catch (_) { return []; }
+  const text = (j.content?.[0]?.text || '[]').trim();
+  const jsonStr = text.startsWith('[') ? text : (text.match(/\[[\s\S]*\]/)?.[0] || '[]');
+  try { return JSON.parse(jsonStr); } catch (_) { return []; }
 }
 
 export async function onRequest(context) {
@@ -132,7 +135,7 @@ export async function onRequest(context) {
 
       for (const match of matches) {
         const { handle, competitorName, competitorPrice, matchConfidence } = match;
-        if (!handle || matchConfidence <= 0.6) continue;
+        if (!handle || matchConfidence < 0.5) continue;
         if (!productsMap[handle]) {
           const ourProduct = catalogue.find(p => p.handle === handle);
           productsMap[handle] = { handle, ourPrice: ourProduct?.priceIncGst ?? null, competitors: [] };
