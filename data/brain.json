@@ -7,7 +7,32 @@
     "products": {},
     "competitors": {},
     "campaigns": {},
-    "masterDirective": null
+    "masterDirective": null,
+    "confidenceTrend": "Confidence scores are very low (0.05-0.10), indicating insufficient data quality or grounding signals",
+    "groundingImprovement": "Grounding score doubled from 0.15 to 0.30 between runs, suggesting data signals are stabilizing",
+    "recommendationConsistency": "Price recommendations consistently low (1 per run) while product rankings stable at 8",
+    "bundleVariability": "Bundle suggestions fluctuate (3-4), indicating uncertainty in cross-sell patterns",
+    "sessionVolume": "Very low traffic (4 sessions/day) limiting statistical significance of all recommendations",
+    "pricingInsights": {
+      "dataReliability": "low",
+      "recommendationVolume": "minimal - only 1 price recommendation per run",
+      "note": "Insufficient transaction data to generate confident pricing strategies",
+      "actionable": false
+    },
+    "productInsights": {
+      "rankingStability": "high - consistent 8 product rankings across runs",
+      "topProductIdentified": false,
+      "viewTrackingGap": "No product view data captured in daily trends",
+      "bundleOpportunities": "3-4 bundles identified but with low confidence backing"
+    },
+    "thingsToAvoid": [
+      "Acting on price recommendations until confidence score exceeds 0.5",
+      "Making major bundle changes based on current low-confidence suggestions",
+      "Drawing weekly conclusions without sufficient weekly data accumulation",
+      "Trusting recommendations while session volume remains below statistical threshold",
+      "Ignoring the empty productViews and pageViews tracking gap",
+      "Over-relying on single-day trend snapshots for strategic decisions"
+    ]
   },
   "history": {
     "priceChanges": [],
@@ -77,6 +102,7 @@
     "lastOrchestrationAt": "2026-05-17T01:10:48.848Z",
     "dataQualityScore": 0,
     "learningConfidence": 0,
-    "notes": []
+    "notes": [],
+    "lastMemoryManagerAt": "2026-05-17T01:11:00.095Z"
   }
 }
