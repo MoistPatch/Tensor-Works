@@ -320,14 +320,52 @@
       </div>
 
       <div class="card" style="margin-bottom:24px">
-        <div class="card-title">Quick Actions</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
-          <button class="btn btn-primary btn-sm" onclick="runIntelligence()"><i class="fas fa-brain"></i> Run Intelligence</button>
-          <button class="btn btn-outline btn-sm" onclick="runOrchestrate()"><i class="fas fa-cogs"></i> Orchestrate Now</button>
-          <button class="btn btn-outline btn-sm" onclick="runDataValidator()"><i class="fas fa-check-circle"></i> Validate Data</button>
-          <button class="btn btn-outline btn-sm" onclick="runSimulations(null)"><i class="fas fa-flask"></i> Run Simulations</button>
-          <button class="btn btn-outline btn-sm" onclick="snapshotBrain()"><i class="fas fa-camera"></i> Snapshot Brain</button>
+        <div class="card-title">Supplier &amp; Inventory</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px">
+          <button class="btn btn-primary btn-sm" onclick="openCsvImportModal()"><i class="fas fa-file-csv"></i> Import CSV</button>
+          <button class="btn btn-outline btn-sm" onclick="triggerDickerSync()"><i class="fas fa-sync-alt"></i> Sync Dicker Data</button>
+          <button class="btn btn-outline btn-sm" onclick="switchTab('products');setTimeout(addProduct,200)"><i class="fas fa-plus"></i> Add Product</button>
+          <button class="btn btn-outline btn-sm" onclick="switchTab('products')"><i class="fas fa-boxes"></i> View Inventory</button>
           <span id="dash-action-status" style="font-size:13px;color:var(--txt3);margin-left:8px"></span>
+        </div>
+        <div style="border-top:1px solid var(--bdr);padding-top:10px;display:flex;flex-wrap:wrap;gap:8px">
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" onclick="runIntelligence()"><i class="fas fa-brain"></i> Intelligence</button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" onclick="runOrchestrate()"><i class="fas fa-cogs"></i> Orchestrate</button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" onclick="runDataValidator()"><i class="fas fa-check-circle"></i> Validate</button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" onclick="snapshotBrain()"><i class="fas fa-camera"></i> Snapshot</button>
+        </div>
+      </div>
+
+      <!-- CSV Import Modal -->
+      <div id="csv-import-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center">
+        <div style="background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:28px;width:min(600px,92vw);max-height:90vh;overflow-y:auto">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div style="font-size:16px;font-weight:700;color:var(--white)"><i class="fas fa-file-csv" style="color:var(--teal-lt);margin-right:8px"></i>Import Supplier Products</div>
+            <button onclick="closeCsvImportModal()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:18px">&times;</button>
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:6px">Format</label>
+            <select id="csv-import-format" style="background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:7px 10px;border-radius:4px;font-size:13px;width:100%">
+              <option value="csv">CSV (name, sku, price, category, description)</option>
+              <option value="dicker">Dicker Data format (partNo, description, price, rrp)</option>
+              <option value="json">JSON array</option>
+            </select>
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:6px">Paste data or enter URL</label>
+            <textarea id="csv-import-data" rows="10" placeholder="Paste CSV/JSON here, or enter a URL on the first line starting with http..." style="width:100%;background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:10px;border-radius:4px;font-size:12px;font-family:monospace;resize:vertical;box-sizing:border-box"></textarea>
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt2);cursor:pointer">
+              <input type="checkbox" id="csv-import-review" checked>
+              Add to review queue (manual approval before publishing)
+            </label>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:flex-end">
+            <button class="btn btn-outline btn-sm" onclick="closeCsvImportModal()">Cancel</button>
+            <button class="btn btn-primary btn-sm" onclick="runCsvImport()" id="csv-import-btn"><i class="fas fa-upload"></i> Import</button>
+          </div>
+          <div id="csv-import-result" style="margin-top:14px"></div>
         </div>
       </div>
 
@@ -551,12 +589,55 @@
       <div class="panel-header">
         <div>
           <div class="panel-title">AI Intelligence</div>
-          <div class="panel-subtitle">Claude-generated pricing recommendations and market insights</div>
+          <div class="panel-subtitle">Claude-generated recommendations and market insights</div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="runIntelligence()"><i class="fas fa-brain"></i> Run Analysis</button>
       </div>
       <div id="intelligence-content">
-        <div class="panel-empty"><i class="fas fa-brain" style="font-size:32px;display:block;margin-bottom:12px"></i>Run an analysis to see price recommendations and market insights</div>
+        <div class="panel-empty"><i class="fas fa-brain" style="font-size:32px;display:block;margin-bottom:12px"></i>Run an analysis to see recommendations and market insights</div>
+      </div>
+
+      <!-- Learning Feed -->
+      <div class="section-label" style="margin-top:24px">
+        Feed Data for Learning
+        <span style="font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--txt3);margin-left:6px">Injected as context into every intelligence run</span>
+      </div>
+      <div class="two-col" style="margin-bottom:0">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px">Add Knowledge</div>
+          <div style="margin-bottom:10px">
+            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:5px">Category</label>
+            <select id="learn-category" style="background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:7px 10px;border-radius:4px;font-size:13px;width:100%">
+              <option>Market Intelligence</option>
+              <option>Supplier Pricing</option>
+              <option>Customer Feedback</option>
+              <option>Competitor Intel</option>
+              <option>Industry News</option>
+              <option>Custom</option>
+            </select>
+          </div>
+          <div style="margin-bottom:10px">
+            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:5px">Title (optional)</label>
+            <input id="learn-title" type="text" placeholder="e.g. H100 pricing update May 2026" style="width:100%;background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:7px 10px;border-radius:4px;font-size:13px;box-sizing:border-box">
+          </div>
+          <div style="margin-bottom:12px">
+            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:5px">Data / Notes</label>
+            <textarea id="learn-content" rows="6" placeholder="Paste any relevant data — supplier quotes, market observations, customer feedback, price lists, industry trends, competitor behaviour..." style="width:100%;background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:9px 10px;border-radius:4px;font-size:13px;resize:vertical;box-sizing:border-box"></textarea>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn btn-primary btn-sm" onclick="addLearningNote()"><i class="fas fa-plus"></i> Save to Learning Store</button>
+            <span id="learn-status" style="font-size:12px;color:var(--txt3)"></span>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <div class="card-title">Stored Notes (<span id="learn-count">0</span>)</div>
+            <button class="btn btn-outline btn-sm" style="font-size:11px;padding:3px 8px" onclick="loadLearningNotes()"><i class="fas fa-sync-alt"></i></button>
+          </div>
+          <div id="learn-notes-list" style="max-height:300px;overflow-y:auto">
+            <div class="panel-empty">No learning notes yet</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1284,6 +1365,7 @@
     if (name === 'dashboard') loadDashboard();
     else if (name === 'competitors') loadCompetitors();
     else if (name === 'analytics') { if (!window._analyticsCache) loadAnalytics(); else loadAnalytics(); }
+    else if (name === 'intelligence') loadLearningNotes();
     else if (name === 'campaigns') loadCampaigns();
     else if (name === 'brain') loadBrain();
     else if (name === 'quotes') loadQuotes();
@@ -1720,6 +1802,141 @@
       var s7 = document.getElementById('stat-s7');
       if (s7) s7.textContent = '!';
     }
+  };
+
+  // ── CSV Import ────────────────────────────────────────────────────
+  window.openCsvImportModal = function() {
+    var m = document.getElementById('csv-import-modal');
+    m.style.display = 'flex';
+    document.getElementById('csv-import-result').innerHTML = '';
+    document.getElementById('csv-import-data').value = '';
+  };
+  window.closeCsvImportModal = function() {
+    document.getElementById('csv-import-modal').style.display = 'none';
+  };
+  window.runCsvImport = async function() {
+    var btn = document.getElementById('csv-import-btn');
+    var result = document.getElementById('csv-import-result');
+    var raw = document.getElementById('csv-import-data').value.trim();
+    var format = document.getElementById('csv-import-format').value;
+    var review = document.getElementById('csv-import-review').checked;
+    if (!raw) { result.innerHTML = '<div style="color:#f85149">Paste some data first.</div>'; return; }
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing…';
+    result.innerHTML = '';
+    try {
+      var products = [];
+      if (raw.startsWith('http')) {
+        // URL — fetch and re-parse
+        var fetchRes = await fetch('/api/dicker-catalog?url=' + encodeURIComponent(raw));
+        var fetchData = await fetchRes.json();
+        products = fetchData.products || fetchData || [];
+      } else if (format === 'json') {
+        products = JSON.parse(raw);
+      } else {
+        // CSV parsing
+        var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+        var headers = lines[0].split(',').map(function(h){ return h.trim().toLowerCase().replace(/"/g,''); });
+        products = lines.slice(1).map(function(line) {
+          var cols = line.match(/(".*?"|[^,]+)/g) || [];
+          var obj = {};
+          headers.forEach(function(h, i) { obj[h] = (cols[i]||'').replace(/^"|"$/g,'').trim(); });
+          // Normalise field names
+          return {
+            name: obj.name || obj.description || obj.title || obj.product || '',
+            sku: obj.sku || obj.partno || obj['part no'] || obj['part number'] || '',
+            priceIncGst: parseFloat(obj.price || obj.priceinc || obj.rrp || 0) || 0,
+            category: obj.category || 'General',
+            description: obj.description || obj.name || '',
+            handle: (obj.sku || obj.name || '').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),
+          };
+        }).filter(function(p){ return p.name; });
+      }
+      if (!products.length) { result.innerHTML = '<div style="color:#f85149">No products found. Check format.</div>'; return; }
+      // Send to import queue or direct import
+      var r = await fetch('/api/dicker-import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add', products: products }),
+      });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      result.innerHTML = '<div style="color:var(--teal-lt)"><i class="fas fa-check-circle"></i> ' + products.length + ' product(s) added to import queue. <button class="btn btn-outline btn-sm" style="font-size:11px;padding:2px 8px;margin-left:8px" onclick="switchTab(\'products\');closeCsvImportModal()">Review Queue</button></div>';
+      document.getElementById('dash-action-status').textContent = products.length + ' products queued';
+    } catch(e) {
+      result.innerHTML = '<div style="color:#f85149">Error: ' + escHtml(e.message) + '</div>';
+    } finally {
+      btn.disabled = false; btn.innerHTML = '<i class="fas fa-upload"></i> Import';
+    }
+  };
+
+  window.triggerDickerSync = async function() {
+    var status = document.getElementById('dash-action-status');
+    status.textContent = 'Syncing Dicker Data…';
+    try {
+      var r = await fetch('/api/dicker-sync', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Sync-Secret': '' }, body: '{}' });
+      var d = await r.json();
+      status.textContent = d.error ? '✗ ' + d.error : '✓ Dicker sync complete';
+    } catch(e) {
+      status.textContent = '✗ ' + e.message;
+    }
+  };
+
+  // ── Learning Notes ─────────────────────────────────────────────────
+  window.loadLearningNotes = async function() {
+    try {
+      var r = await fetch('/api/learning');
+      var d = await r.json();
+      var notes = d.notes || [];
+      document.getElementById('learn-count').textContent = notes.length;
+      var list = document.getElementById('learn-notes-list');
+      if (!notes.length) { list.innerHTML = '<div class="panel-empty">No learning notes yet</div>'; return; }
+      list.innerHTML = notes.map(function(n) {
+        return '<div style="border-bottom:1px solid var(--bdr);padding:10px 0;last-child:border-none">' +
+          '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">' +
+            '<div>' +
+              '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--teal-lt)">' + escHtml(n.category) + '</span>' +
+              (n.title ? '<div style="font-size:13px;font-weight:600;color:var(--white);margin-top:2px">' + escHtml(n.title) + '</div>' : '') +
+              '<div style="font-size:12px;color:var(--txt2);margin-top:4px;white-space:pre-wrap;max-height:60px;overflow:hidden">' + escHtml(n.content.slice(0,200)) + (n.content.length>200?'…':'') + '</div>' +
+              '<div style="font-size:11px;color:var(--txt3);margin-top:4px">' + fmtDate(n.addedAt) + '</div>' +
+            '</div>' +
+            '<button onclick="deleteLearningNote(' + n.id + ')" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:13px;flex-shrink:0" title="Delete"><i class="fas fa-trash-alt"></i></button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    } catch(e) {
+      document.getElementById('learn-notes-list').innerHTML = '<div style="color:#f85149;padding:8px">Error: ' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  window.addLearningNote = async function() {
+    var status = document.getElementById('learn-status');
+    var content = document.getElementById('learn-content').value.trim();
+    var title = document.getElementById('learn-title').value.trim();
+    var category = document.getElementById('learn-category').value;
+    if (!content) { status.textContent = 'Add some content first.'; return; }
+    status.textContent = 'Saving…';
+    try {
+      var r = await fetch('/api/learning', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add', title, content, category }),
+      });
+      var d = await r.json();
+      if (d.error) throw new Error(d.error);
+      document.getElementById('learn-content').value = '';
+      document.getElementById('learn-title').value = '';
+      status.textContent = '✓ Saved';
+      setTimeout(function(){ status.textContent = ''; }, 3000);
+      loadLearningNotes();
+    } catch(e) {
+      status.textContent = '✗ ' + e.message;
+    }
+  };
+
+  window.deleteLearningNote = async function(id) {
+    if (!confirm('Delete this note?')) return;
+    await fetch('/api/learning', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', id }) });
+    loadLearningNotes();
   };
 
   // ── Cloudflare Analytics ──────────────────────────────────────────

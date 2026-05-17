@@ -68,6 +68,8 @@ export async function onRequest(context) {
     loadJSON('data/trends.json', token, { daily: [] }),
   ]);
 
+  const { data: learningNotes } = await loadJSON('data/learning-notes.json', token, { notes: [] });
+
   let calculatedConfidence = 0.3;
 
   const sessions = analytics?.sessions ?? analytics?.totalSessions ?? 0;
@@ -95,6 +97,7 @@ export async function onRequest(context) {
     brainConstraints: brain?.constraints || {},
     brainSkills: brain?.skills || {},
     trends: { daily: dailyTrends.slice(-30) },
+    learningNotes: (learningNotes?.notes || []).slice(-20),
   }).slice(0, 12000);
 
   const userPrompt = `Analyse the following Tensor Works business data and return a JSON intelligence report.\n\nData:\n${dataPayload}\n\nReturn only this JSON structure:\n{\n  "priceRecommendations": [{"handle":"","currentPrice":0,"recommendedPrice":0,"changePercent":0,"rationale":"","confidence":0}],\n  "productRanking": [{"handle":"","currentRank":0,"recommendedRank":0,"rationale":""}],\n  "bundleSuggestions": [{"products":[],"bundleName":"","discount":0,"rationale":""}],\n  "marketInsights": "",\n  "confidenceScore": 0.0,\n  "dataQualityNote": ""\n}`;
