@@ -86,7 +86,16 @@ export async function onRequest(context) {
   const { request, env } = context;
 
   if (request.method === 'OPTIONS') {
-    return new Response(null, { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } });
+    return new Response(null, { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, Authorization' } });
+  }
+
+  // Auth check — if CRAWL_SECRET is set, require a matching Bearer token
+  if (env.CRAWL_SECRET) {
+    const authHeader = request.headers.get('Authorization') || '';
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+    if (token !== env.CRAWL_SECRET) {
+      return jsonResponse({ error: 'Unauthorized' }, 401);
+    }
   }
 
   if (request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405);

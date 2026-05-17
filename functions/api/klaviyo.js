@@ -111,5 +111,113 @@ export async function onRequest(context) {
     }
   }
 
-  return jsonResponse({ error: 'Unknown action. Use: track-event | sync-profile' }, 400);
+  // ── action: create-list ───────────────────────────────────────────────────
+  if (action === 'create-list') {
+    if (!env.KLAVIYO_API_KEY) {
+      return jsonResponse({ skipped: true, reason: 'KLAVIYO_API_KEY not configured' });
+    }
+
+    const { name } = body;
+    if (!name) return jsonResponse({ error: 'name required' }, 400);
+
+    try {
+      const r = await fetch('https://a.klaviyo.com/api/lists/', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Klaviyo-API-Key ${env.KLAVIYO_API_KEY}`,
+          'revision': '2023-10-15',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: { type: 'list', attributes: { name } },
+        }),
+      });
+
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        return jsonResponse({ created: false, error: err.errors?.[0]?.detail || 'Klaviyo API error: ' + r.status });
+      }
+
+      const result = await r.json();
+      const listId = result?.data?.id || null;
+      const listName = result?.data?.attributes?.name || name;
+      return jsonResponse({ created: true, listId, listName });
+    } catch (e) {
+      return jsonResponse({ created: false, error: e.message });
+    }
+  }
+
+  // ── action: subscribe-profile ─────────────────────────────────────────────
+  if (action === 'subscribe-profile') {
+    if (!env.KLAVIYO_API_KEY) {
+      return jsonResponse({ skipped: true, reason: 'KLAVIYO_API_KEY not configured' });
+    }
+
+    const { listId, email, firstName, lastName, company, properties = {} } = body;
+    if (!listId || !email) return jsonResponse({ error: 'listId and email required' }, 400);
+
+    const profileAttributes = { email, ...properties };
+    if (firstName != null) profileAttributes.first_name = firstName;
+    if (lastName != null) profileAttributes.last_name = lastName;
+    if (company != null) profileAttributes.organization = company;
+
+    try {
+      const r = await fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Klaviyo-API-Key ${env.KLAVIYO_API_KEY}`,
+          'revision': '2023-10-15',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: {
+            type: 'profile-subscription-bulk-create-job',
+            attributes: {
+              profiles: { data: [{ type: 'profile', attributes: profileAttributes }] },
+              list_id: listId,
+            },
+          },
+        }),
+      });
+
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        return jsonResponse({ subscribed: false, error: err.errors?.[0]?.detail || 'Klaviyo API error: ' + r.status });
+      }
+
+      return jsonResponse({ subscribed: true });
+    } catch (e) {
+      return jsonResponse({ subscribed: false, error: e.message });
+    }
+  }
+
+  // ── action: get-lists ─────────────────────────────────────────────────────
+  if (action === 'get-lists') {
+    if (!env.KLAVIYO_API_KEY) {
+      return jsonResponse({ skipped: true, reason: 'KLAVIYO_API_KEY not configured' });
+    }
+
+    try {
+      const r = await fetch('https://a.klaviyo.com/api/lists/?fields[list]=name,created,updated', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Klaviyo-API-Key ${env.KLAVIYO_API_KEY}`,
+          'revision': '2023-10-15',
+        },
+      });
+
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        return jsonResponse({ lists: [], error: err.errors?.[0]?.detail || 'Klaviyo API error: ' + r.status });
+      }
+
+      const result = await r.json();
+      const lists = (result?.data || []).map(l => ({ id: l.id, name: l.attributes?.name, created: l.attributes?.created }));
+      return jsonResponse({ lists });
+    } catch (e) {
+      return jsonResponse({ lists: [], error: e.message });
+    }
+  }
+
+  return jsonResponse({ error: 'Unknown action. Use: track-event | sync-profile | create-list | subscribe-profile | get-lists' }, 400);
 }

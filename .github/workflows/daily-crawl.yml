@@ -1,0 +1,26 @@
+name: Daily Competitor Crawl
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger competitor crawl
+        run: |
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRAWL_SECRET }}" \
+            -H "Content-Type: application/json" \
+            https://tensorworks.online/api/competitor-crawl)
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "HTTP status: $HTTP_CODE"
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "Crawl failed with status $HTTP_CODE"
+            echo "Response body: $BODY"
+            exit 1
+          fi
+          echo "Crawl succeeded: $BODY"

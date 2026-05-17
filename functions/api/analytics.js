@@ -78,9 +78,11 @@ export async function onRequest(context) {
 
   // ── GET: return summary stats ─────────────────────────────────────────────
   if (request.method === 'GET') {
-    const [{ data }, { data: funnelData }] = await Promise.all([
+    const [{ data }, { data: funnelData }, { data: quotesData }, { data: pricesData }] = await Promise.all([
       loadJSON('data/analytics.json', token, { sessions: [] }),
       loadJSON('data/funnel.json', token, { events: [] }),
+      loadJSON('data/quotes.json', token, { quotes: [] }),
+      loadJSON('data/competitor-prices.json', token, { lastCrawled: null, products: [] }),
     ]);
     const sessions = data?.sessions || [];
     const funnelEvents = funnelData?.events || [];
@@ -107,6 +109,41 @@ export async function onRequest(context) {
 
     const { funnelCounts, conversionRates, topConvertingProducts } = computeFunnelStats(funnelEvents, cutoff30);
 
+    // ── Business metrics ──────────────────────────────────────────────────
+    const quotes = quotesData?.quotes || [];
+    const byStatus = { draft: 0, sent: 0, viewed: 0, accepted: 0, rejected: 0 };
+    let totalValue = 0, valueCount = 0;
+    let totalResponseHours = 0, responseCount = 0;
+    let totalAcceptanceDays = 0, acceptanceCount = 0;
+
+    for (const q of quotes) {
+      const st = (q.status || 'draft').toLowerCase();
+      if (st in byStatus) byStatus[st]++;
+      if (q.totalAUD != null) { totalValue += q.totalAUD; valueCount++; }
+      if (q.sentAt && q.createdAt) {
+        const diffH = (new Date(q.sentAt).getTime() - new Date(q.createdAt).getTime()) / 3600000;
+        if (diffH >= 0) { totalResponseHours += diffH; responseCount++; }
+      }
+      if (q.respondedAt && q.sentAt && st === 'accepted') {
+        const diffD = (new Date(q.respondedAt).getTime() - new Date(q.sentAt).getTime()) / 86400000;
+        if (diffD >= 0) { totalAcceptanceDays += diffD; acceptanceCount++; }
+      }
+    }
+
+    const total = quotes.length;
+    const acceptanceRate = total > 0 ? Math.round((byStatus.accepted / total) * 1000) / 10 : 0;
+    const avgValueAUD = valueCount > 0 ? Math.round(totalValue / valueCount) : 0;
+    const avgResponseHours = responseCount > 0 ? Math.round((totalResponseHours / responseCount) * 10) / 10 : 0;
+    const avgAcceptanceDays = acceptanceCount > 0 ? Math.round((totalAcceptanceDays / acceptanceCount) * 10) / 10 : 0;
+
+    const businessMetrics = {
+      quotes: { total, byStatus, acceptanceRate, avgValueAUD, avgResponseHours, avgAcceptanceDays },
+      competitorData: {
+        productsTracked: (pricesData?.products || []).length,
+        lastCrawled: pricesData?.lastCrawled || null,
+      },
+    };
+
     return jsonResponse({
       sessions7d: recent7.length,
       sessions30d: recent30.length,
@@ -119,6 +156,7 @@ export async function onRequest(context) {
       funnelCounts,
       conversionRates,
       topConvertingProducts,
+      businessMetrics,
     });
   }
 

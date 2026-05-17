@@ -23,6 +23,24 @@
       "name": "PCByte",
       "addedAt": "2026-05-17T00:00:00.000Z",
       "lastCrawledAt": null
+    },
+    {
+      "url": "https://www.insight.com/en_AU/search.html?q=nvidia+gpu+accelerator",
+      "name": "Insight Australia",
+      "addedAt": "2026-05-17T00:00:00.000Z",
+      "lastCrawledAt": null
+    },
+    {
+      "url": "https://www.cdw.com.au/content/cdwau/en/search/?q=nvidia+H100",
+      "name": "CDW Australia",
+      "addedAt": "2026-05-17T00:00:00.000Z",
+      "lastCrawledAt": null
+    },
+    {
+      "url": "https://www.newegg.com/p/pl?d=nvidia+h100+a100&N=4131&sto=4&cm_sp=shop-_-ai",
+      "name": "Newegg (US reference pricing)",
+      "addedAt": "2026-05-17T00:00:00.000Z",
+      "lastCrawledAt": null
     }
   ]
 }
