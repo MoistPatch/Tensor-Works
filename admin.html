@@ -261,6 +261,55 @@
     /* Two-col layout for panels */
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } .brain-grid { grid-template-columns: 1fr; } }
+
+    /* Pricing Intelligence tab */
+    .pi-product-item { padding:8px 10px; border-radius:var(--rsm); cursor:pointer; font-size:13px; color:var(--txt2); border:1px solid transparent; margin-bottom:4px; transition:var(--tr); }
+    .pi-product-item:hover { background:var(--bg3); color:var(--white); }
+    .pi-product-item.selected { background:rgba(13,115,119,.2); border-color:var(--teal); color:var(--teal-lt); }
+    .pi-product-item .pi-product-price { font-size:11px; color:var(--txt3); margin-top:2px; }
+    .pi-spec-chip { background:var(--bg4); border:1px solid var(--bdr2); border-radius:var(--rsm); padding:4px 8px; font-size:11px; color:var(--txt2); }
+    .pi-spec-chip strong { color:var(--white); }
+    .comp-row { display:grid; grid-template-columns:1fr 100px 80px 70px; gap:8px; padding:7px 0; border-bottom:1px solid var(--bdr); font-size:12px; align-items:center; }
+    .comp-row:last-child { border-bottom:none; }
+    .comp-row-header { color:var(--txt3); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.6px; }
+    .comp-badge { display:inline-block; padding:2px 7px; border-radius:10px; font-size:10px; font-weight:700; text-transform:uppercase; }
+    .comp-badge.in-stock { background:rgba(22,163,74,.2); color:#4ade80; }
+    .comp-badge.out-stock { background:rgba(220,38,38,.15); color:#f87171; }
+    .comp-badge.unknown { background:var(--bg4); color:var(--txt3); }
+    .pi-pos-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:700; text-transform:uppercase; }
+    .pi-pos-badge.underpriced { background:rgba(22,163,74,.2); color:#4ade80; }
+    .pi-pos-badge.aligned { background:rgba(13,115,119,.2); color:var(--teal-lt); }
+    .pi-pos-badge.premium { background:rgba(245,158,11,.2); color:#fbbf24; }
+    .pi-conf-badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:8px; font-size:10px; font-weight:700; text-transform:uppercase; }
+    .pi-conf-badge.high { background:rgba(22,163,74,.2); color:#4ade80; }
+    .pi-conf-badge.medium { background:rgba(245,158,11,.15); color:#fbbf24; }
+    .pi-conf-badge.low { background:rgba(220,38,38,.15); color:#f87171; }
+    .pi-price-big { font-size:32px; font-weight:900; color:var(--teal-lt); }
+    .pi-price-change { font-size:13px; font-weight:700; }
+    .pi-price-change.up { color:#4ade80; }
+    .pi-price-change.down { color:#f87171; }
+    .pi-price-change.flat { color:var(--txt3); }
+    .pi-comp-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:10px 0; }
+    .pi-comp-stat { background:var(--bg4); border-radius:var(--rsm); padding:8px 10px; text-align:center; }
+    .pi-comp-stat-label { font-size:10px; color:var(--txt3); text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
+    .pi-comp-stat-value { font-size:14px; font-weight:700; color:var(--white); }
+    .pi-key-factor { font-size:12px; color:var(--txt2); padding:4px 0; border-bottom:1px solid var(--bdr); }
+    .pi-key-factor:last-child { border-bottom:none; }
+    .pi-warning { background:rgba(245,158,11,.1); border-left:3px solid #fbbf24; padding:6px 10px; border-radius:0 var(--rsm) var(--rsm) 0; font-size:12px; color:#fbbf24; margin-bottom:4px; }
+    .pi-insight-item { font-size:12px; color:var(--txt2); padding:4px 0; border-bottom:1px solid var(--bdr); }
+    .pi-insight-item:last-child { border-bottom:none; }
+    .pi-thinking-panel { background:#0a0f12; border:1px solid var(--bdr2); border-radius:var(--rsm); padding:12px; font-family:monospace; font-size:11px; color:#7ec8e3; max-height:250px; overflow-y:auto; margin-top:8px; white-space:pre-wrap; }
+    .pi-apply-btn { background:rgba(13,115,119,.3); border:1px solid var(--teal); color:var(--teal-lt); padding:8px 16px; border-radius:var(--rsm); font-size:13px; font-weight:700; cursor:pointer; width:100%; margin-top:10px; transition:var(--tr); }
+    .pi-apply-btn:hover { background:rgba(13,115,119,.5); }
+    .pi-apply-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .pi-audit-row { display:grid; grid-template-columns:1fr 90px 90px 70px 80px; gap:8px; padding:6px 0; border-bottom:1px solid var(--bdr); font-size:12px; align-items:center; }
+    .pi-audit-row:last-child { border-bottom:none; }
+    .pi-trend-row { display:flex; gap:10px; align-items:center; padding:5px 0; border-bottom:1px solid var(--bdr); font-size:12px; }
+    .pi-trend-row:last-child { border-bottom:none; }
+    .pi-trend-badge { padding:2px 7px; border-radius:8px; font-size:10px; font-weight:700; }
+    .pi-trend-badge.rising { background:rgba(220,38,38,.15); color:#f87171; }
+    .pi-trend-badge.falling { background:rgba(22,163,74,.2); color:#4ade80; }
+    .pi-trend-badge.stable { background:var(--bg4); color:var(--txt3); }
   </style>
 </head>
 <body>
@@ -298,6 +347,7 @@
   <button class="tab-btn" onclick="switchTab('monitor')" id="tabnav-monitor"><i class="fas fa-heartbeat"></i> Monitor</button>
   <button class="tab-btn" onclick="switchTab('agents')" id="tabnav-agents"><i class="fas fa-project-diagram"></i> Agents</button>
   <button class="tab-btn" onclick="switchTab('synthesis')" id="tabnav-synthesis"><i class="fas fa-atom"></i> Synthesis</button>
+  <button class="tab-btn" onclick="switchTab('pricing')" id="tabnav-pricing"><i class="fas fa-dollar-sign"></i> Pricing Intel</button>
 </nav>
 
 <div class="admin-body">
@@ -904,6 +954,100 @@
     </div>
   </div>
 
+  <!-- ── Pricing Intelligence Tab ──────────────────────────────────── -->
+  <div class="tab-panel" id="tab-pricing">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Pricing Intelligence</div>
+          <div class="panel-subtitle">OEM/ODM 8-step competitor analysis — closed-loop AI-powered market pricing</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" onclick="loadPricingAudit()"><i class="fas fa-history"></i> Audit Log</button>
+          <button class="btn btn-primary btn-sm" onclick="runPricingIntelligence()"><i class="fas fa-brain"></i> Analyse Selected</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:280px 1fr 340px;gap:16px;height:calc(100vh - 160px);overflow:hidden">
+
+        <!-- LEFT: SKU Selector + Business Rules -->
+        <div style="overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px"><i class="fas fa-search" style="color:var(--teal-lt)"></i> Select System</div>
+            <input type="text" id="pi-search" placeholder="Search systems..." oninput="filterPricingProducts(this.value)" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:7px 10px;color:var(--white);font-size:13px;margin-bottom:8px">
+            <div id="pi-product-list" style="max-height:300px;overflow-y:auto"></div>
+            <div id="pi-selected-stats" style="margin-top:10px;display:none">
+              <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">System Specs</div>
+              <div id="pi-spec-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px"></div>
+            </div>
+          </div>
+
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px"><i class="fas fa-cogs" style="color:var(--teal-lt)"></i> Business Rules</div>
+            <div class="form-group" style="margin-bottom:8px">
+              <label style="font-size:11px;color:var(--txt3)">Pricing Mode</label>
+              <select id="pi-pricing-mode" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 8px;color:var(--white);font-size:12px">
+                <option value="premium">Premium</option>
+                <option value="competitive">Competitive</option>
+                <option value="penetration">Penetration</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:8px">
+              <label style="font-size:11px;color:var(--txt3)">Min Margin %</label>
+              <input type="number" id="pi-min-margin" value="20" min="0" max="100" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 8px;color:var(--white);font-size:12px">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div class="form-group">
+                <label style="font-size:11px;color:var(--txt3)">Max Daily Δ%</label>
+                <input type="number" id="pi-max-daily" value="10" min="1" max="100" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 8px;color:var(--white);font-size:12px">
+              </div>
+              <div class="form-group">
+                <label style="font-size:11px;color:var(--txt3)">Max Weekly Δ%</label>
+                <input type="number" id="pi-max-weekly" value="25" min="1" max="100" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 8px;color:var(--white);font-size:12px">
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" style="width:100%" onclick="savePricingRules()"><i class="fas fa-save"></i> Save Rules</button>
+            <div id="pi-rules-status" style="font-size:11px;color:var(--txt3);margin-top:6px;text-align:center"></div>
+          </div>
+
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px"><i class="fas fa-spider" style="color:var(--teal-lt)"></i> Competitor Scrape</div>
+            <div id="pi-apify-status" style="font-size:12px;color:var(--txt3);margin-bottom:8px">Apify status loading...</div>
+            <button class="btn btn-outline btn-sm" style="width:100%;margin-bottom:6px" onclick="scrapeCompetitorIntel()"><i class="fas fa-sync-alt"></i> Scrape Competitors</button>
+            <button class="btn btn-outline btn-sm" style="width:100%" onclick="loadPricingAudit()"><i class="fas fa-history"></i> View Audit Log</button>
+          </div>
+        </div>
+
+        <!-- CENTER: Competitor Landscape -->
+        <div style="overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px"><i class="fas fa-chart-bar" style="color:var(--teal-lt)"></i> Competitor Landscape <span id="pi-comp-count" style="font-weight:400;color:var(--txt3)"></span></div>
+            <div id="pi-competitor-landscape"><div class="panel-empty">Select a system to see competitor pricing</div></div>
+          </div>
+
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px"><i class="fas fa-chart-line" style="color:var(--teal-lt)"></i> Price Trend History</div>
+            <div id="pi-trend-history"><div class="panel-empty">No trend data available</div></div>
+          </div>
+
+          <div class="card" style="padding:14px" id="pi-audit-card" style="display:none">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px"><i class="fas fa-history" style="color:var(--teal-lt)"></i> Recent Price Changes</div>
+            <div id="pi-audit-list"><div class="panel-empty">No price changes recorded</div></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Recommendation Engine -->
+        <div style="overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div class="card" style="padding:14px" id="pi-rec-card">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px"><i class="fas fa-robot" style="color:var(--teal-lt)"></i> AI Recommendation</div>
+            <div id="pi-recommendation"><div class="panel-empty" style="padding:20px;text-align:center"><i class="fas fa-brain" style="font-size:28px;display:block;margin-bottom:10px;color:var(--txt3)"></i>Select a system and click Analyse</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>
 </div><!-- /tab-content-products -->
 
@@ -1181,6 +1325,7 @@
     else if (name === 'synthesis') loadSynthesis();
     else if (name === 'simulations') loadSimHistory();
     else if (name === 'datahealth') loadDataHealth();
+    else if (name === 'pricing') loadPricingIntelligence();
   };
 
   /* ══════════════════════════════════════════════════════════════════
@@ -2764,6 +2909,469 @@
       await fetch('/api/gym', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'remove-formula', id }) });
       await loadGym();
     } catch(e) {}
+  };
+
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRICING INTELLIGENCE TAB
+  ══════════════════════════════════════════════════════════════════ */
+
+  var _pricingState = {
+    selectedProduct: null,
+    competitorData: null,
+    lastRecommendation: null,
+  };
+
+  var _pricingRules = {
+    pricing_mode: 'premium',
+    minimum_margin_percent: 20,
+    max_daily_price_change_percent: 10,
+    max_weekly_price_change_percent: 25,
+  };
+
+  async function loadPricingRules() {
+    try {
+      var r = await fetch('/api/pricing-rules');
+      if (r.ok) {
+        var d = await r.json();
+        var rules = d.rules || {};
+        // Merge OEM/ODM fields from stored rules
+        if (rules.pricing_mode) _pricingRules.pricing_mode = rules.pricing_mode;
+        if (rules.minimum_margin_percent) _pricingRules.minimum_margin_percent = rules.minimum_margin_percent;
+        if (rules.max_daily_price_change_percent) _pricingRules.max_daily_price_change_percent = rules.max_daily_price_change_percent;
+        if (rules.max_weekly_price_change_percent) _pricingRules.max_weekly_price_change_percent = rules.max_weekly_price_change_percent;
+      }
+    } catch(e) {}
+    // Sync UI
+    var pm = document.getElementById('pi-pricing-mode');
+    var mm = document.getElementById('pi-min-margin');
+    var md = document.getElementById('pi-max-daily');
+    var mw = document.getElementById('pi-max-weekly');
+    if (pm) pm.value = _pricingRules.pricing_mode;
+    if (mm) mm.value = _pricingRules.minimum_margin_percent;
+    if (md) md.value = _pricingRules.max_daily_price_change_percent;
+    if (mw) mw.value = _pricingRules.max_weekly_price_change_percent;
+  }
+
+  window.savePricingRules = async function() {
+    var pm = document.getElementById('pi-pricing-mode');
+    var mm = document.getElementById('pi-min-margin');
+    var md = document.getElementById('pi-max-daily');
+    var mw = document.getElementById('pi-max-weekly');
+    var statusEl = document.getElementById('pi-rules-status');
+    _pricingRules = {
+      pricing_mode: pm ? pm.value : 'premium',
+      minimum_margin_percent: mm ? Number(mm.value) : 20,
+      max_daily_price_change_percent: md ? Number(md.value) : 10,
+      max_weekly_price_change_percent: mw ? Number(mw.value) : 25,
+    };
+    if (statusEl) statusEl.textContent = 'Saving...';
+    try {
+      // Load full existing rules to merge
+      var gr = await fetch('/api/pricing-rules');
+      var existing = gr.ok ? ((await gr.json()).rules || {}) : {};
+      var merged = Object.assign({}, existing, _pricingRules);
+      await fetch('/api/pricing-rules', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rules: merged }),
+      });
+      if (statusEl) { statusEl.textContent = 'Saved.'; setTimeout(function(){ statusEl.textContent=''; }, 2000); }
+    } catch(e) {
+      if (statusEl) statusEl.textContent = 'Save failed: ' + e.message;
+    }
+  };
+
+  window.loadPricingIntelligence = async function() {
+    await loadPricingRules();
+    renderPricingProductList(state.products || []);
+    await loadCompetitorIntelSummary();
+    await loadPricingAudit();
+  };
+
+  function renderPricingProductList(products) {
+    var el = document.getElementById('pi-product-list');
+    if (!el) return;
+    if (!products.length) { el.innerHTML = '<div class="panel-empty">No products loaded</div>'; return; }
+    el.innerHTML = products.map(function(p) {
+      var price = p.priceIncGst || p.price || 0;
+      var sel = _pricingState.selectedProduct && _pricingState.selectedProduct.handle === p.handle;
+      return '<div class="pi-product-item' + (sel ? ' selected' : '') + '" onclick="selectPricingProduct(' + JSON.stringify(JSON.stringify(p)).replace(/"/g, '&quot;') + ')">' +
+        '<div>' + escHtml(p.title || p.handle || '') + '</div>' +
+        '<div class="pi-product-price">A$' + Number(price).toLocaleString('en-AU') + (p.handle ? ' · ' + escHtml(p.handle) : '') + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  window.filterPricingProducts = function(query) {
+    var products = state.products || [];
+    if (!query) { renderPricingProductList(products); return; }
+    var q = query.toLowerCase();
+    renderPricingProductList(products.filter(function(p) {
+      return (p.title||'').toLowerCase().includes(q) || (p.handle||'').toLowerCase().includes(q);
+    }));
+  };
+
+  window.selectPricingProduct = async function(pJson) {
+    var p = JSON.parse(pJson);
+    _pricingState.selectedProduct = p;
+    _pricingState.competitorData = null;
+    renderPricingProductList(state.products || []);
+
+    // Show system specs
+    var statsEl = document.getElementById('pi-selected-stats');
+    var specEl = document.getElementById('pi-spec-grid');
+    if (statsEl) statsEl.style.display = 'block';
+    if (specEl) {
+      var specs = [
+        ['System Type', p.system_type || p.category || '—'],
+        ['GPU Class', p.gpu_class || '—'],
+        ['GPU Count', p.gpu_count || '—'],
+        ['CPU Tier', p.cpu_tier || '—'],
+        ['RAM Tier', p.ram_tier || '—'],
+        ['Lifecycle', p.lifecycle_stage || 'active'],
+        ['Stock', p.stock || 0],
+        ['Cost ex-GST', p.costExGst ? 'A$' + Number(p.costExGst).toLocaleString('en-AU') : '—'],
+      ];
+      specEl.innerHTML = specs.map(function(s) {
+        return '<div class="pi-spec-chip"><div style="font-size:10px;color:var(--txt3)">' + escHtml(s[0]) + '</div><strong>' + escHtml(String(s[1])) + '</strong></div>';
+      }).join('');
+    }
+
+    // Load competitor intelligence for this SKU
+    var sku = p.handle || p.sku;
+    try {
+      var r = await fetch('/api/competitor-intelligence?sku=' + encodeURIComponent(sku));
+      if (r.ok) {
+        var d = await r.json();
+        _pricingState.competitorData = d;
+        renderCompetitorLandscape(d);
+        renderPriceTrends(d.priceTrend || []);
+      }
+    } catch(e) {
+      document.getElementById('pi-competitor-landscape').innerHTML = '<div class="panel-empty">Failed to load competitor data</div>';
+    }
+  };
+
+  async function loadCompetitorIntelSummary() {
+    var statusEl = document.getElementById('pi-apify-status');
+    try {
+      var r = await fetch('/api/competitor-intelligence');
+      if (r.ok) {
+        var d = await r.json();
+        var total = (d.skus || []).reduce(function(a, s) { return a + (s.competitorCount||0); }, 0);
+        var lastRun = d.lastRun ? new Date(d.lastRun).toLocaleString('en-AU', {dateStyle:'short',timeStyle:'short'}) : 'Never';
+        if (statusEl) statusEl.innerHTML =
+          '<span style="color:' + (d.apifyConfigured ? 'var(--teal-lt)' : '#fbbf24') + '">' +
+          (d.apifyConfigured ? '<i class="fas fa-check-circle"></i> Apify ready' : '<i class="fas fa-exclamation-triangle"></i> APIFY_API_KEY not set') +
+          '</span><br><span style="font-size:11px">Last run: ' + escHtml(lastRun) + ' · ' + total + ' competitors tracked</span>';
+      }
+    } catch(e) {
+      if (statusEl) statusEl.textContent = 'Status check failed';
+    }
+  }
+
+  function renderCompetitorLandscape(data) {
+    var el = document.getElementById('pi-competitor-landscape');
+    var countEl = document.getElementById('pi-comp-count');
+    if (!el) return;
+    var competitors = data.competitors || [];
+    if (countEl) countEl.textContent = '(' + competitors.length + ' sources)';
+    if (!competitors.length) {
+      el.innerHTML = '<div class="panel-empty">No competitor data for this SKU. Run Scrape Competitors.</div>';
+      return;
+    }
+    var rows = competitors.map(function(c) {
+      var stockClass = c.stockStatus === 'in_stock' ? 'in-stock' : c.stockStatus === 'out_of_stock' ? 'out-stock' : 'unknown';
+      var stockLabel = c.stockStatus === 'in_stock' ? 'In Stock' : c.stockStatus === 'out_of_stock' ? 'Out of Stock' : 'Unknown';
+      return '<div class="comp-row">' +
+        '<div><div style="font-weight:600;color:var(--white)">' + escHtml(c.competitor||'') + '</div>' +
+          '<div style="font-size:11px;color:var(--txt3)">' + escHtml((c.productName||'').slice(0,60)) + '</div></div>' +
+        '<div style="font-weight:700;color:var(--teal-lt)">' + (c.price ? 'A$' + Number(c.price).toLocaleString('en-AU') : '—') + '</div>' +
+        '<div><span class="comp-badge ' + stockClass + '">' + stockLabel + '</span></div>' +
+        '<div style="font-size:11px;color:var(--txt3)">' + (c.lastUpdated ? new Date(c.lastUpdated).toLocaleDateString('en-AU') : '—') + '</div>' +
+      '</div>';
+    }).join('');
+    el.innerHTML = '<div class="comp-row comp-row-header"><div>Competitor / Product</div><div>Price</div><div>Stock</div><div>Updated</div></div>' + rows;
+  }
+
+  function renderPriceTrends(trends) {
+    var el = document.getElementById('pi-trend-history');
+    if (!el) return;
+    if (!trends || !trends.length) { el.innerHTML = '<div class="panel-empty">No price changes recorded yet</div>'; return; }
+    el.innerHTML = trends.slice(0, 20).map(function(t) {
+      return '<div class="pi-trend-row">' +
+        '<span style="color:var(--txt2);flex:1">' + escHtml(t.competitor||'') + '</span>' +
+        '<span style="color:var(--txt3)">A$' + Number(t.oldPrice).toLocaleString('en-AU') + '</span>' +
+        '<span style="color:var(--txt3);padding:0 4px">→</span>' +
+        '<span style="color:var(--white);font-weight:700">A$' + Number(t.newPrice).toLocaleString('en-AU') + '</span>' +
+        '<span class="pi-trend-badge ' + (t.trend||'stable') + '">' + (t.trend||'stable') + '</span>' +
+        '<span style="color:var(--txt3);font-size:11px;margin-left:8px">' + (t.changedAt ? new Date(t.changedAt).toLocaleDateString('en-AU') : '') + '</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  window.loadPricingAudit = async function() {
+    var el = document.getElementById('pi-audit-list');
+    var card = document.getElementById('pi-audit-card');
+    if (card) card.style.display = 'block';
+    if (!el) return;
+    try {
+      var r = await fetch('/api/apply-price');
+      if (!r.ok) { el.innerHTML = '<div class="panel-empty">Could not load audit log</div>'; return; }
+      var d = await r.json();
+      var entries = d.auditLog || [];
+      if (!entries.length) { el.innerHTML = '<div class="panel-empty">No price changes recorded</div>'; return; }
+      el.innerHTML = '<div class="pi-audit-row" style="color:var(--txt3);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px"><div>Product</div><div>Old Price</div><div>New Price</div><div>Change</div><div>Date</div></div>' +
+        entries.slice(0, 30).map(function(e) {
+          var dir = e.newPrice > e.oldPrice ? 'up' : e.newPrice < e.oldPrice ? 'down' : 'flat';
+          var sign = dir === 'up' ? '+' : '';
+          return '<div class="pi-audit-row">' +
+            '<div style="color:var(--txt2)">' + escHtml(e.productTitle || e.sku || '') + '</div>' +
+            '<div style="color:var(--txt3)">A$' + Number(e.oldPrice).toLocaleString('en-AU') + '</div>' +
+            '<div style="font-weight:700;color:var(--white)">A$' + Number(e.newPrice).toLocaleString('en-AU') + '</div>' +
+            '<div class="pi-price-change ' + dir + '">' + sign + e.changePct + '%</div>' +
+            '<div style="color:var(--txt3);font-size:11px">' + (e.changedAt ? new Date(e.changedAt).toLocaleDateString('en-AU') : '') + '</div>' +
+          '</div>';
+        }).join('');
+    } catch(e) {
+      if (el) el.innerHTML = '<div class="panel-empty">Error loading audit: ' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  window.scrapeCompetitorIntel = async function() {
+    var p = _pricingState.selectedProduct;
+    if (!p) { alert('Select a system first'); return; }
+    var sku = p.handle || p.sku;
+    var statusEl = document.getElementById('pi-apify-status');
+    if (statusEl) statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scraping...';
+
+    // Get competitor sites for this SKU from sites config
+    try {
+      var sitesR = await fetch('/api/competitors');
+      var sites = [];
+      if (sitesR.ok) {
+        var sd = await sitesR.json();
+        sites = (sd.sites || []).slice(0, 5).map(function(s) {
+          return { competitor: s.name || s.url, url: s.url };
+        });
+      }
+
+      if (!sites.length) {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#fbbf24"><i class="fas fa-exclamation-triangle"></i> No competitor sites configured</span>';
+        return;
+      }
+
+      var r = await fetch('/api/competitor-intelligence', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'run', sku, urls: sites }),
+      });
+      var d = await r.json();
+      if (d.error) throw new Error(d.error);
+      if (statusEl) statusEl.innerHTML = '<span style="color:var(--teal-lt)"><i class="fas fa-check"></i> Scraped ' + d.count + ' results</span>';
+
+      // Reload competitor data
+      var cr = await fetch('/api/competitor-intelligence?sku=' + encodeURIComponent(sku));
+      if (cr.ok) {
+        var cd = await cr.json();
+        _pricingState.competitorData = cd;
+        renderCompetitorLandscape(cd);
+        renderPriceTrends(cd.priceTrend || []);
+      }
+    } catch(e) {
+      if (statusEl) statusEl.innerHTML = '<span style="color:#f87171"><i class="fas fa-times"></i> ' + escHtml(e.message) + '</span>';
+    }
+  };
+
+  window.runPricingIntelligence = async function() {
+    var p = _pricingState.selectedProduct;
+    if (!p) { alert('Select a system to analyse'); return; }
+
+    var recEl = document.getElementById('pi-recommendation');
+    if (recEl) recEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--txt3)"><i class="fas fa-brain fa-spin" style="font-size:24px;display:block;margin-bottom:10px"></i>Running 8-step OEM/ODM analysis...</div>';
+
+    var payload = {
+      system: {
+        system_name: p.title || p.handle,
+        gpu_class: p.gpu_class || null,
+        gpu_count: p.gpu_count || null,
+        cpu_tier: p.cpu_tier || null,
+        ram_tier: p.ram_tier || null,
+        power_supply_spec: p.power_supply_spec || null,
+        cooling_type: p.cooling_type || null,
+        system_type: p.system_type || p.category || null,
+        current_price: Number(p.priceIncGst || p.price || 0),
+        cost: p.costExGst ? Number(p.costExGst) * 1.1 : null,
+        inventory_level: p.stock || 0,
+        lifecycle_stage: p.lifecycle_stage || 'active',
+        sku: p.handle,
+      },
+      competitors: (_pricingState.competitorData && _pricingState.competitorData.competitors) || [],
+      businessRules: _pricingRules,
+    };
+
+    try {
+      var r = await fetch('/api/pricing-recommendation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      _pricingState.lastRecommendation = data;
+      renderPricingRecommendation(data, p);
+    } catch(e) {
+      if (recEl) recEl.innerHTML = '<div class="panel-empty" style="color:#f87171"><i class="fas fa-times-circle"></i> Analysis failed: ' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  function renderPricingRecommendation(data, product) {
+    var el = document.getElementById('pi-recommendation');
+    if (!el) return;
+
+    var posClass = data.market_position === 'underpriced' ? 'underpriced' : data.market_position === 'premium' ? 'premium' : 'aligned';
+    var confClass = data.confidence === 'high' ? 'high' : data.confidence === 'low' ? 'low' : 'medium';
+
+    var priceChange = data.price_change_percent || 0;
+    var changeClass = priceChange > 0 ? 'up' : priceChange < 0 ? 'down' : 'flat';
+    var changeSign = priceChange > 0 ? '+' : '';
+
+    var cs = data.competitor_summary || {};
+
+    var html = '<div style="margin-bottom:14px">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">' +
+        '<span class="pi-pos-badge ' + posClass + '"><i class="fas fa-' + (posClass==='premium'?'crown':posClass==='underpriced'?'arrow-up':'check') + '"></i> ' + (data.market_position||'—') + '</span>' +
+        '<span class="pi-conf-badge ' + confClass + '">' + (data.confidence||'—') + ' confidence</span>' +
+        (data.pricing_mode ? '<span style="font-size:11px;color:var(--txt3)">· ' + escHtml(data.pricing_mode) + ' mode</span>' : '') +
+      '</div>' +
+      '<div style="text-align:center;padding:12px 0">' +
+        '<div style="font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Recommended Price</div>' +
+        '<div class="pi-price-big">A$' + Number(data.recommended_price||0).toLocaleString('en-AU') + '</div>' +
+        '<div style="margin-top:4px">' +
+          '<span style="font-size:12px;color:var(--txt3)">Current: A$' + Number(data.current_price||0).toLocaleString('en-AU') + '</span>' +
+          (priceChange !== 0 ? ' <span class="pi-price-change ' + changeClass + '">' + changeSign + priceChange + '%</span>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+    // Competitor summary grid
+    if (cs.lowest_price || cs.average_price || cs.highest_price) {
+      html += '<div class="pi-comp-grid">' +
+        '<div class="pi-comp-stat"><div class="pi-comp-stat-label">Lowest</div><div class="pi-comp-stat-value">' + (cs.lowest_price ? 'A$' + Number(cs.lowest_price).toLocaleString('en-AU') : '—') + '</div></div>' +
+        '<div class="pi-comp-stat"><div class="pi-comp-stat-label">Average</div><div class="pi-comp-stat-value">' + (cs.average_price ? 'A$' + Number(cs.average_price).toLocaleString('en-AU') : '—') + '</div></div>' +
+        '<div class="pi-comp-stat"><div class="pi-comp-stat-label">Highest</div><div class="pi-comp-stat-value">' + (cs.highest_price ? 'A$' + Number(cs.highest_price).toLocaleString('en-AU') : '—') + '</div></div>' +
+        '<div class="pi-comp-stat"><div class="pi-comp-stat-label">Pressure</div><div class="pi-comp-stat-value" style="text-transform:capitalize">' + escHtml(cs.stock_pressure||'—') + '</div></div>' +
+      '</div>';
+    }
+
+    // Reason
+    if (data.reason) {
+      html += '<div style="margin:10px 0;padding:10px;background:var(--bg4);border-radius:var(--rsm);font-size:12px;color:var(--txt2)">' + escHtml(data.reason) + '</div>';
+    }
+
+    // Key factors
+    if (data.key_factors && data.key_factors.length) {
+      html += '<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Key Factors</div>' +
+        data.key_factors.map(function(f) { return '<div class="pi-key-factor"><i class="fas fa-dot-circle" style="color:var(--teal-lt);margin-right:6px;font-size:10px"></i>' + escHtml(f) + '</div>'; }).join('') +
+      '</div>';
+    }
+
+    // Warnings
+    if (data.warnings && data.warnings.length) {
+      html += '<div style="margin-bottom:10px">' +
+        data.warnings.map(function(w) { return '<div class="pi-warning"><i class="fas fa-exclamation-triangle" style="margin-right:6px"></i>' + escHtml(w) + '</div>'; }).join('') +
+      '</div>';
+    }
+
+    // Apply Price button (only if high/medium confidence)
+    if (data.confidence !== 'low' && data.recommended_price && data.recommended_price !== data.current_price) {
+      html += '<button class="pi-apply-btn" onclick="applyRecommendedPrice(' + data.recommended_price + ', ' + JSON.stringify(JSON.stringify(data.reason || 'AI pricing recommendation')).replace(/"/g, '&quot;') + ')">' +
+        '<i class="fas fa-check-circle"></i> Apply A$' + Number(data.recommended_price).toLocaleString('en-AU') + ' (' + changeSign + priceChange + '%)' +
+      '</button>';
+    }
+
+    // Strategic Insights
+    var insights = data.insights;
+    if (insights) {
+      html += '<div style="margin-top:16px"><div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px"><i class="fas fa-lightbulb" style="color:var(--teal-lt)"></i> Strategic Insights</div>';
+
+      if (insights.market_structure_insights && insights.market_structure_insights.length) {
+        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Market Structure</div>' +
+          insights.market_structure_insights.map(function(i) { return '<div class="pi-insight-item">' + escHtml(i) + '</div>'; }).join('') + '</div>';
+      }
+      if (insights.competitor_movements && insights.competitor_movements.length) {
+        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Competitor Movements</div>' +
+          insights.competitor_movements.map(function(i) { return '<div class="pi-insight-item">' + escHtml(i) + '</div>'; }).join('') + '</div>';
+      }
+      if (insights.emerging_trends && insights.emerging_trends.length) {
+        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Emerging Trends</div>' +
+          insights.emerging_trends.map(function(i) { return '<div class="pi-insight-item">' + escHtml(i) + '</div>'; }).join('') + '</div>';
+      }
+      if (insights.margin_risks && insights.margin_risks.length) {
+        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Margin Risks</div>' +
+          insights.margin_risks.map(function(i) { return '<div class="pi-warning" style="margin-bottom:3px"><i class="fas fa-exclamation-triangle" style="margin-right:6px"></i>' + escHtml(i) + '</div>'; }).join('') + '</div>';
+      }
+      html += '</div>';
+    }
+
+    // Claude thinking toggle
+    if (data.thinking) {
+      var thinkId = 'pi-thinking-' + Date.now();
+      html += '<div style="margin-top:12px">' +
+        '<button class="btn btn-outline btn-sm" onclick="document.getElementById('' + thinkId + '').style.display=document.getElementById('' + thinkId + '').style.display==='none'?'block':'none'">' +
+          '<i class="fas fa-brain"></i> Show Claude's Reasoning' +
+        '</button>' +
+        '<div id="' + thinkId + '" class="pi-thinking-panel" style="display:none">' + escHtml(data.thinking) + '</div>' +
+      '</div>';
+    }
+
+    el.innerHTML = html;
+  }
+
+  window.applyRecommendedPrice = async function(newPrice, reasonJson) {
+    var p = _pricingState.selectedProduct;
+    if (!p) return;
+    var reason = '';
+    try { reason = JSON.parse(reasonJson); } catch(e) { reason = reasonJson; }
+    var sku = p.handle || p.sku;
+    var oldPrice = Number(p.priceIncGst || p.price || 0);
+    var changePct = oldPrice > 0 ? Math.abs((newPrice - oldPrice) / oldPrice) : 0;
+
+    if (!confirm('Apply price change to ' + (p.title||sku) + '?
+
+Old: A$' + oldPrice.toLocaleString('en-AU') + '
+New: A$' + Number(newPrice).toLocaleString('en-AU') + '
+
+' + (changePct > 0.1 ? '⚠ This change exceeds 10%. Force approval required.' : ''))) return;
+
+    try {
+      var r = await fetch('/api/apply-price', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sku, newPrice, reason: String(reason).slice(0, 200), force: changePct > 0.1 }),
+      });
+      var d = await r.json();
+      if (d.requiresApproval) {
+        if (confirm(d.error + '\n\nForce apply?')) {
+          var r2 = await fetch('/api/apply-price', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sku, newPrice, reason: String(reason).slice(0, 200), force: true }),
+          });
+          d = await r2.json();
+        } else return;
+      }
+      if (d.error) throw new Error(d.error);
+      // Update local product price
+      p.priceIncGst = newPrice;
+      var idx = (state.products||[]).findIndex(function(x){ return x.handle === p.handle; });
+      if (idx >= 0) state.products[idx].priceIncGst = newPrice;
+      alert('Price applied successfully. Audit ID: ' + d.auditId);
+      await loadPricingAudit();
+    } catch(e) {
+      alert('Apply failed: ' + e.message);
+    }
   };
 
   /* ── Init ─────────────────────────────────────────────────────── */
