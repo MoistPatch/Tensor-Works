@@ -129,7 +129,7 @@
             '<a href="/#enquiry">Request a Quote</a>' +
             '<a href="/privacy.html">Privacy Policy</a>' +
             '<a href="/terms.html">Terms of Service</a>' +
-            '<a href="mailto:sam@tensorworks.com.au">sam@tensorworks.com.au</a>' +
+            '<a href="mailto:sales@tensorworks.online">sales@tensorworks.online</a>' +
           '</div>' +
         '</div>' +
         '<div class="footer-bottom">' +
@@ -137,7 +137,7 @@
           '<div style="display:flex;gap:16px">' +
             '<a href="/privacy.html">Privacy</a>' +
             '<a href="/terms.html">Terms</a>' +
-            '<a href="mailto:sam@tensorworks.com.au">sam@tensorworks.com.au</a>' +
+            '<a href="mailto:sales@tensorworks.online">sales@tensorworks.online</a>' +
           '</div>' +
         '</div>' +
       '</div>';
