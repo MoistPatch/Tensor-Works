@@ -18,12 +18,30 @@
       "type": "competitor-agent",
       "task": "multi-agent-intel",
       "parentRunId": "run-1778980266223",
-      "status": "running",
+      "status": "completed",
       "killSignal": false,
       "spawnedAt": "2026-05-17T01:11:20.004Z",
       "lastHeartbeat": "2026-05-17T01:11:20.004Z",
-      "completedAt": null,
-      "result": null,
+      "completedAt": "2026-05-17T01:11:33.310Z",
+      "result": {
+        "threats": [],
+        "opportunities": [
+          {
+            "description": "No competitor pricing data was provided in this analysis cycle, limiting visibility into market positioning for high-value SKUs such as NVIDIA H100/H200 SXM5, DGX H200, and Dell PowerEdge XE9680.",
+            "action": "Initiate competitor price scraping or manual benchmarking against key AU/APAC resellers (e.g., Leader Computers, Scorptec B2B, CDW, Insight, PNY partners) for the listed catalog before next analysis cycle."
+          },
+          {
+            "description": "Mellanox InfiniBand NDR400 Switch is the only SKU with cost data (AUD 3,500 ex GST), providing a clear margin baseline for competitive pricing modelling.",
+            "action": "Establish a target sell price band (e.g., 3,950–4,500 AUD ex GST) to maintain the AUD 500 minimum margin while remaining competitive; flag for human review once competitor data is ingested."
+          },
+          {
+            "description": "Extremely low session volume (4 sessions) indicates insufficient demand-side signal to validate competitive positioning.",
+            "action": "Defer aggressive repricing actions until traffic data normalises; focus on SEO/PPC and outbound B2B campaigns for flagship GPU and DGX lines."
+          }
+        ],
+        "competitivePosition": "neutral",
+        "summary": "Insufficient competitor and traffic data to identify concrete pricing threats this cycle. Catalog is well-aligned with high-demand enterprise AI categories (Hopper-class GPUs, DGX, DPU, InfiniBand), but competitive intelligence inputs and session volume must be enriched before automated repricing can be confidently applied under the current 0.75 confidence threshold."
+      },
       "error": null
     }
   ]
