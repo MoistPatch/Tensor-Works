@@ -3,11 +3,12 @@
  * GET  ?sku=X          → cached data for SKU (or all SKU summaries)
  * POST action=run      → trigger Apify for specific SKU + URLs
  * POST action=run-all  → run Apify across all competitor-sites.json
+ * POST action=update   → manual cache update (no Apify)
  */
 
 const OWNER = 'MoistPatch', REPO = 'Tensor-Works';
 const CACHE_FILE = 'data/competitor-intelligence.json';
-const CACHE_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours
+const CACHE_TTL_MS = 4 * 60 * 60 * 1000;
 
 async function ghGet(path, token) {
   const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
@@ -36,13 +37,11 @@ function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
 }
 
-// Generic Apify page function — works on most e-commerce product/search pages
 const SCRAPER_PAGE_FUNCTION = `async function pageFunction(context) {
   const $ = context.$;
   const url = context.request.url;
   const name = $('h1').first().text().trim() || $('[itemprop="name"]').first().text().trim();
 
-  // Price extraction — try structured data first, then common selectors
   let price = null;
   const priceAttr = $('[itemprop="price"]').first().attr('content');
   if (priceAttr) {
@@ -56,16 +55,12 @@ const SCRAPER_PAGE_FUNCTION = `async function pageFunction(context) {
     }
   }
 
-  // Stock status
   const stockEls = $('[class*="stock"], [class*="availability"], [class*="inventory"], [class*="Status"]');
   const stockText = stockEls.first().text().toLowerCase();
   const inStock = /in[\\s-]?stock|add to cart|available/.test(stockText) ? true
                 : /out[\\s-]?of[\\s-]?stock|unavailable|sold out/.test(stockText) ? false : null;
 
-  // Bundle detection
   const bundleHints = $('[class*="bundle"], [class*="Bundle"], [class*="kit"]').length > 0;
-
-  // Promotion/campaign detection
   const promoText = $('[class*="promo"], [class*="sale"], [class*="campaign"], [class*="discount"], .badge, .tag').first().text().trim();
 
   return { url, name, price, currency: 'AUD', inStock, bundleHints, promoText: promoText.slice(0, 100) };
@@ -240,7 +235,6 @@ export async function onRequest(context) {
     }
   }
 
-  // Manual cache update (no Apify — just store provided data)
   if (action === 'update') {
     const { sku, competitors } = body;
     if (!sku || !Array.isArray(competitors)) return jsonResponse({ error: 'sku and competitors[] required' }, 400);

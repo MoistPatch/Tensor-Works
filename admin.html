@@ -262,44 +262,54 @@
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } .brain-grid { grid-template-columns: 1fr; } }
 
-    /* ── Pricing Intelligence Tab ── */
-    .pricing-layout { display: grid; grid-template-columns: 240px 1fr 300px; gap: 0; height: 100%; overflow: hidden; }
-    .pricing-sidebar { border-right: 1px solid var(--bdr); display: flex; flex-direction: column; overflow: hidden; }
-    .pricing-center { border-right: 1px solid var(--bdr); display: flex; flex-direction: column; overflow: hidden; }
-    .pricing-right { display: flex; flex-direction: column; overflow: hidden; }
-    .pricing-sidebar-inner, .pricing-center-inner, .pricing-right-inner { flex: 1; overflow-y: auto; padding: 16px; }
-    .pricing-sidebar-header, .pricing-center-header, .pricing-right-header { padding: 12px 16px; border-bottom: 1px solid var(--bdr); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--txt3); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-    .sku-search { width: 100%; margin-bottom: 10px; }
-    .sku-item { padding: 8px 10px; border-radius: var(--rsm); cursor: pointer; font-size: 13px; color: var(--txt2); border: 1px solid transparent; margin-bottom: 2px; transition: var(--tr); }
-    .sku-item:hover { background: var(--bg3); color: var(--txt); }
-    .sku-item.active { background: rgba(13,115,119,.15); border-color: var(--teal-dk); color: var(--teal-lt); }
-    .sku-stat-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--bdr); font-size: 12px; }
-    .sku-stat-row:last-child { border-bottom: none; }
-    .sku-stat-label { color: var(--txt3); }
-    .sku-stat-value { color: var(--white); font-weight: 600; }
-    .comp-row { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--rsm); margin-bottom: 4px; background: var(--bg3); font-size: 12px; }
-    .comp-name { font-weight: 600; color: var(--txt); }
-    .comp-price { font-weight: 700; color: var(--white); }
-    .comp-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
-    .comp-badge.under { background: rgba(248,81,73,.15); color: var(--red); }
-    .comp-badge.parity { background: rgba(20,168,174,.15); color: var(--teal-lt); }
-    .comp-badge.premium { background: rgba(61,220,132,.15); color: var(--green); }
-    .rec-price-display { font-size: 36px; font-weight: 900; color: var(--teal-lt); }
-    .rec-margin-display { font-size: 13px; color: var(--txt3); margin-top: 2px; }
-    .strategy-card { padding: 12px; border-radius: var(--r); border: 1px solid var(--bdr2); margin-bottom: 8px; cursor: pointer; transition: var(--tr); }
-    .strategy-card:hover { border-color: var(--teal-dk); }
-    .strategy-card.selected { border-color: var(--teal-lt); background: rgba(13,115,119,.1); }
-    .strategy-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-    .strategy-price { font-size: 15px; font-weight: 800; color: var(--teal-lt); }
-    .strategy-margin { font-size: 11px; color: var(--txt3); }
-    .strategy-impact { font-size: 12px; color: var(--txt2); margin-top: 4px; }
-    .strategy-risk { font-size: 11px; color: var(--orange); margin-top: 2px; }
-    .price-matrix-svg { width: 100%; height: 200px; }
-    .thinking-panel { background: #0a0f12; border: 1px solid var(--bdr2); border-radius: var(--rsm); padding: 12px; margin-top: 8px; font-size: 11px; font-family: monospace; color: #7ec8e3; line-height: 1.6; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
-    .audit-row { display: grid; grid-template-columns: 1fr 80px 80px 80px auto; gap: 8px; align-items: center; padding: 6px 10px; border-bottom: 1px solid var(--bdr); font-size: 12px; }
-    .audit-row:last-child { border-bottom: none; }
-    .price-change-up { color: var(--red); }
-    .price-change-down { color: var(--green); }
+    /* Pricing Intelligence tab */
+    .pi-product-item { padding:8px 10px; border-radius:var(--rsm); cursor:pointer; font-size:13px; color:var(--txt2); border:1px solid transparent; margin-bottom:4px; transition:var(--tr); }
+    .pi-product-item:hover { background:var(--bg3); color:var(--white); }
+    .pi-product-item.selected { background:rgba(13,115,119,.2); border-color:var(--teal); color:var(--teal-lt); }
+    .pi-product-item .pi-product-price { font-size:11px; color:var(--txt3); margin-top:2px; }
+    .pi-spec-chip { background:var(--bg4); border:1px solid var(--bdr2); border-radius:var(--rsm); padding:4px 8px; font-size:11px; color:var(--txt2); }
+    .pi-spec-chip strong { color:var(--white); }
+    .comp-row { display:grid; grid-template-columns:1fr 100px 80px 70px; gap:8px; padding:7px 0; border-bottom:1px solid var(--bdr); font-size:12px; align-items:center; }
+    .comp-row:last-child { border-bottom:none; }
+    .comp-row-header { color:var(--txt3); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.6px; }
+    .comp-badge { display:inline-block; padding:2px 7px; border-radius:10px; font-size:10px; font-weight:700; text-transform:uppercase; }
+    .comp-badge.in-stock { background:rgba(22,163,74,.2); color:#4ade80; }
+    .comp-badge.out-stock { background:rgba(220,38,38,.15); color:#f87171; }
+    .comp-badge.unknown { background:var(--bg4); color:var(--txt3); }
+    .pi-pos-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:700; text-transform:uppercase; }
+    .pi-pos-badge.underpriced { background:rgba(22,163,74,.2); color:#4ade80; }
+    .pi-pos-badge.aligned { background:rgba(13,115,119,.2); color:var(--teal-lt); }
+    .pi-pos-badge.premium { background:rgba(245,158,11,.2); color:#fbbf24; }
+    .pi-conf-badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:8px; font-size:10px; font-weight:700; text-transform:uppercase; }
+    .pi-conf-badge.high { background:rgba(22,163,74,.2); color:#4ade80; }
+    .pi-conf-badge.medium { background:rgba(245,158,11,.15); color:#fbbf24; }
+    .pi-conf-badge.low { background:rgba(220,38,38,.15); color:#f87171; }
+    .pi-price-big { font-size:32px; font-weight:900; color:var(--teal-lt); }
+    .pi-price-change { font-size:13px; font-weight:700; }
+    .pi-price-change.up { color:#4ade80; }
+    .pi-price-change.down { color:#f87171; }
+    .pi-price-change.flat { color:var(--txt3); }
+    .pi-comp-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:10px 0; }
+    .pi-comp-stat { background:var(--bg4); border-radius:var(--rsm); padding:8px 10px; text-align:center; }
+    .pi-comp-stat-label { font-size:10px; color:var(--txt3); text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
+    .pi-comp-stat-value { font-size:14px; font-weight:700; color:var(--white); }
+    .pi-key-factor { font-size:12px; color:var(--txt2); padding:4px 0; border-bottom:1px solid var(--bdr); }
+    .pi-key-factor:last-child { border-bottom:none; }
+    .pi-warning { background:rgba(245,158,11,.1); border-left:3px solid #fbbf24; padding:6px 10px; border-radius:0 var(--rsm) var(--rsm) 0; font-size:12px; color:#fbbf24; margin-bottom:4px; }
+    .pi-insight-item { font-size:12px; color:var(--txt2); padding:4px 0; border-bottom:1px solid var(--bdr); }
+    .pi-insight-item:last-child { border-bottom:none; }
+    .pi-thinking-panel { background:#0a0f12; border:1px solid var(--bdr2); border-radius:var(--rsm); padding:12px; font-family:monospace; font-size:11px; color:#7ec8e3; max-height:250px; overflow-y:auto; margin-top:8px; white-space:pre-wrap; }
+    .pi-apply-btn { background:rgba(13,115,119,.3); border:1px solid var(--teal); color:var(--teal-lt); padding:8px 16px; border-radius:var(--rsm); font-size:13px; font-weight:700; cursor:pointer; width:100%; margin-top:10px; transition:var(--tr); }
+    .pi-apply-btn:hover { background:rgba(13,115,119,.5); }
+    .pi-apply-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .pi-audit-row { display:grid; grid-template-columns:1fr 90px 90px 70px 80px; gap:8px; padding:6px 0; border-bottom:1px solid var(--bdr); font-size:12px; align-items:center; }
+    .pi-audit-row:last-child { border-bottom:none; }
+    .pi-trend-row { display:flex; gap:10px; align-items:center; padding:5px 0; border-bottom:1px solid var(--bdr); font-size:12px; }
+    .pi-trend-row:last-child { border-bottom:none; }
+    .pi-trend-badge { padding:2px 7px; border-radius:8px; font-size:10px; font-weight:700; }
+    .pi-trend-badge.rising { background:rgba(220,38,38,.15); color:#f87171; }
+    .pi-trend-badge.falling { background:rgba(22,163,74,.2); color:#4ade80; }
+    .pi-trend-badge.stable { background:var(--bg4); color:var(--txt3); }
   </style>
 </head>
 <body>
@@ -326,8 +336,18 @@
   <button class="tab-btn active" onclick="switchTab('dashboard')" id="tabnav-dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
   <button class="tab-btn" onclick="switchTab('products')" id="tabnav-products"><i class="fas fa-box"></i> Products</button>
   <button class="tab-btn" onclick="switchTab('competitors')" id="tabnav-competitors"><i class="fas fa-crosshairs"></i> Competitors</button>
+  <button class="tab-btn" onclick="switchTab('analytics')" id="tabnav-analytics"><i class="fas fa-chart-bar"></i> Analytics</button>
+  <button class="tab-btn" onclick="switchTab('intelligence')" id="tabnav-intelligence"><i class="fas fa-brain"></i> Intelligence</button>
+  <button class="tab-btn" onclick="switchTab('simulations')" id="tabnav-simulations"><i class="fas fa-flask"></i> Simulations</button>
+  <button class="tab-btn" onclick="switchTab('campaigns')" id="tabnav-campaigns"><i class="fas fa-bullhorn"></i> Campaigns</button>
+  <button class="tab-btn" onclick="switchTab('brain')" id="tabnav-brain"><i class="fas fa-robot"></i> Brain</button>
+  <button class="tab-btn" onclick="switchTab('datahealth')" id="tabnav-datahealth"><i class="fas fa-shield-alt"></i> Data Health</button>
+  <button class="tab-btn" onclick="switchTab('quotes')" id="tabnav-quotes"><i class="fas fa-file-invoice-dollar"></i> Quotes</button>
+  <button class="tab-btn" onclick="switchTab('reporting')" id="tabnav-reporting"><i class="fas fa-chart-pie"></i> Reporting</button>
   <button class="tab-btn" onclick="switchTab('monitor')" id="tabnav-monitor"><i class="fas fa-heartbeat"></i> Monitor</button>
-  <button class="tab-btn" onclick="switchTab('pricing')" id="tabnav-pricing"><i class="fas fa-tags"></i> Pricing</button>
+  <button class="tab-btn" onclick="switchTab('agents')" id="tabnav-agents"><i class="fas fa-project-diagram"></i> Agents</button>
+  <button class="tab-btn" onclick="switchTab('synthesis')" id="tabnav-synthesis"><i class="fas fa-atom"></i> Synthesis</button>
+  <button class="tab-btn" onclick="switchTab('pricing')" id="tabnav-pricing"><i class="fas fa-dollar-sign"></i> Pricing Intel</button>
 </nav>
 
 <div class="admin-body">
@@ -336,80 +356,39 @@
   <div class="tab-panel active" id="tab-dashboard">
     <div class="panel-scroll">
       <div class="panel-header">
-        <div><div class="panel-title">Pricing Intelligence</div><div class="panel-subtitle" id="dash-last-refreshed">Loading...</div></div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-outline btn-sm" onclick="loadDashboard()"><i class="fas fa-sync-alt"></i> Refresh</button>
-          <button class="btn btn-primary btn-sm" onclick="switchTab('pricing')"><i class="fas fa-tags"></i> Pricing Engine</button>
-        </div>
+        <div><div class="panel-title">Command Centre</div><div class="panel-subtitle" id="dash-last-refreshed">Loading...</div></div>
+        <button class="btn btn-outline btn-sm" onclick="loadDashboard()"><i class="fas fa-sync-alt"></i> Refresh</button>
       </div>
 
       <div class="stat-grid">
+        <div class="stat-card"><div class="stat-card-label">Sessions (7d)</div><div class="stat-card-value" id="dash-s7">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Sessions (30d)</div><div class="stat-card-value" id="dash-s30">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Data Quality</div><div class="stat-card-value" id="dash-quality">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Brain Confidence</div><div class="stat-card-value" id="dash-confidence">—</div></div>
         <div class="stat-card"><div class="stat-card-label">Products Listed</div><div class="stat-card-value" id="dash-products">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Competitors Tracked</div><div class="stat-card-value" id="dash-competitors">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Last Scrape</div><div class="stat-card-value" id="dash-last-scrape" style="font-size:13px">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Price Changes (30d)</div><div class="stat-card-value" id="dash-price-changes">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Avg Margin</div><div class="stat-card-value" id="dash-avg-margin">—</div></div>
         <div class="stat-card"><div class="stat-card-label">Last AI Run</div><div class="stat-card-value" id="dash-last-run" style="font-size:13px">—</div></div>
       </div>
 
       <div class="card" style="margin-bottom:24px">
-        <div class="card-title">Supplier &amp; Inventory</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px">
-          <button class="btn btn-primary btn-sm" onclick="openCsvImportModal()"><i class="fas fa-file-csv"></i> Import CSV</button>
-          <button class="btn btn-outline btn-sm" onclick="triggerDickerSync()"><i class="fas fa-sync-alt"></i> Sync Dicker Data</button>
-          <button class="btn btn-outline btn-sm" onclick="switchTab('products');setTimeout(addProduct,200)"><i class="fas fa-plus"></i> Add Product</button>
-          <button class="btn btn-outline btn-sm" onclick="switchTab('products')"><i class="fas fa-boxes"></i> View Inventory</button>
+        <div class="card-title">Quick Actions</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn btn-primary btn-sm" onclick="runIntelligence()"><i class="fas fa-brain"></i> Run Intelligence</button>
+          <button class="btn btn-outline btn-sm" onclick="runOrchestrate()"><i class="fas fa-cogs"></i> Orchestrate Now</button>
+          <button class="btn btn-outline btn-sm" onclick="runDataValidator()"><i class="fas fa-check-circle"></i> Validate Data</button>
+          <button class="btn btn-outline btn-sm" onclick="runSimulations(null)"><i class="fas fa-flask"></i> Run Simulations</button>
+          <button class="btn btn-outline btn-sm" onclick="snapshotBrain()"><i class="fas fa-camera"></i> Snapshot Brain</button>
           <span id="dash-action-status" style="font-size:13px;color:var(--txt3);margin-left:8px"></span>
-        </div>
-        <div style="border-top:1px solid var(--bdr);padding-top:10px;display:flex;flex-wrap:wrap;gap:8px">
-          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" onclick="runIntelligence()"><i class="fas fa-brain"></i> Intelligence</button>
-          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" onclick="runOrchestrate()"><i class="fas fa-cogs"></i> Orchestrate</button>
-          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" onclick="runDataValidator()"><i class="fas fa-check-circle"></i> Validate</button>
-          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px" onclick="snapshotBrain()"><i class="fas fa-camera"></i> Snapshot</button>
-        </div>
-      </div>
-
-      <!-- CSV Import Modal -->
-      <div id="csv-import-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center">
-        <div style="background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:28px;width:min(600px,92vw);max-height:90vh;overflow-y:auto">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-            <div style="font-size:16px;font-weight:700;color:var(--white)"><i class="fas fa-file-csv" style="color:var(--teal-lt);margin-right:8px"></i>Import Supplier Products</div>
-            <button onclick="closeCsvImportModal()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:18px">&times;</button>
-          </div>
-          <div style="margin-bottom:14px">
-            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:6px">Format</label>
-            <select id="csv-import-format" style="background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:7px 10px;border-radius:4px;font-size:13px;width:100%">
-              <option value="csv">CSV (name, sku, price, category, description)</option>
-              <option value="dicker">Dicker Data format (partNo, description, price, rrp)</option>
-              <option value="json">JSON array</option>
-            </select>
-          </div>
-          <div style="margin-bottom:14px">
-            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:6px">Paste data or enter URL</label>
-            <textarea id="csv-import-data" rows="10" placeholder="Paste CSV/JSON here, or enter a URL on the first line starting with http..." style="width:100%;background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:10px;border-radius:4px;font-size:12px;font-family:monospace;resize:vertical;box-sizing:border-box"></textarea>
-          </div>
-          <div style="margin-bottom:14px">
-            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt2);cursor:pointer">
-              <input type="checkbox" id="csv-import-review" checked>
-              Add to review queue (manual approval before publishing)
-            </label>
-          </div>
-          <div style="display:flex;gap:10px;justify-content:flex-end">
-            <button class="btn btn-outline btn-sm" onclick="closeCsvImportModal()">Cancel</button>
-            <button class="btn btn-primary btn-sm" onclick="runCsvImport()" id="csv-import-btn"><i class="fas fa-upload"></i> Import</button>
-          </div>
-          <div id="csv-import-result" style="margin-top:14px"></div>
         </div>
       </div>
 
       <div class="two-col">
         <div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-title">Products by Price</div>
+            <div class="card-title">Top Products (7d)</div>
             <div class="bar-list" id="dash-top-products"><div class="panel-empty" style="padding:16px">No data yet</div></div>
           </div>
           <div class="card">
-            <div class="card-title">Recent Price Changes</div>
+            <div class="card-title">Recent Anomalies</div>
             <div id="dash-anomalies"><div class="panel-empty" style="padding:12px">No anomalies detected</div></div>
           </div>
         </div>
@@ -419,11 +398,11 @@
             <div id="dash-system-status"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
           </div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-title">Competitor Undercuts</div>
+            <div class="card-title">Competitor Alerts</div>
             <div id="dash-comp-alerts"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
           </div>
           <div class="card">
-            <div class="card-title">Action Required</div>
+            <div class="card-title">Pending Recommendations</div>
             <div id="dash-pending-recs"><div class="panel-empty" style="padding:12px">Run Intelligence to see recommendations</div></div>
           </div>
         </div>
@@ -489,20 +468,279 @@
   </div>
 
   <!-- ── Analytics tab ───────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-analytics">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Site Analytics</div>
+          <div class="panel-subtitle">Session data and product engagement over time</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="loadAnalytics()"><i class="fas fa-sync-alt"></i> Refresh</button>
+      </div>
+      <div class="stat-grid" id="analytics-stats">
+        <div class="stat-card"><div class="stat-card-label">Sessions (7d)</div><div class="stat-card-value" id="stat-s7">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Sessions (30d)</div><div class="stat-card-value" id="stat-s30">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Total Recorded</div><div class="stat-card-value" id="stat-total">—</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Top Products (7d views)</div>
+          <div class="bar-list" id="analytics-top-products"><div class="panel-empty">No data yet</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Top Pages (7d views)</div>
+          <div class="bar-list" id="analytics-top-pages"><div class="panel-empty">No data yet</div></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px">
+        <div class="card-title">Recent Sessions</div>
+        <table class="data-table" id="analytics-recent">
+          <thead><tr><th>Time</th><th>Page</th><th>Duration</th><th>Products Viewed</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Intelligence tab ────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-intelligence">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">AI Intelligence</div>
+          <div class="panel-subtitle">Claude-generated pricing recommendations and market insights</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="runIntelligence()"><i class="fas fa-brain"></i> Run Analysis</button>
+      </div>
+      <div id="intelligence-content">
+        <div class="panel-empty"><i class="fas fa-brain" style="font-size:32px;display:block;margin-bottom:12px"></i>Run an analysis to see price recommendations and market insights</div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Simulations tab ─────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-simulations">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Scenario Simulations</div>
+          <div class="panel-subtitle">Model business scenarios and forecast impact</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline btn-sm" onclick="runSimulations(currentScenarios)"><i class="fas fa-play"></i> Run Selected</button>
+          <button class="btn btn-primary btn-sm" onclick="runSimulations(null)"><i class="fas fa-layer-group"></i> Run All</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Select Scenarios</div>
+        <div id="scenario-checkboxes" style="display:flex;flex-wrap:wrap;gap:10px">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="price-increase-10pct"> Price Increase 10%</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="price-decrease-5pct"> Price Decrease 5%</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="top-product-stockout"> Top Product Stockout</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="competitor-undercut-20pct"> Competitor Undercuts 20%</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="demand-surge-gpu"> GPU Demand Surge 3x</label>
+        </div>
+      </div>
+      <div id="sim-results"><div class="panel-empty">Run simulations to see scenario forecasts</div></div>
+      <div style="margin-top:24px">
+        <div class="section-label">Past Runs</div>
+        <div id="sim-history"><div class="panel-empty" style="padding:16px">No previous runs</div></div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Campaigns tab ───────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-campaigns">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Campaign Strategist</div>
+          <div class="panel-subtitle">AI-generated marketing campaign briefs</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="generateCampaigns()"><i class="fas fa-magic"></i> Generate Campaigns</button>
+      </div>
+      <div id="campaigns-content"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading campaigns...</div></div>
+    </div>
+  </div>
 
   <!-- ── Brain tab ───────────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-brain">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Agent Brain</div>
+          <div class="panel-subtitle">Central knowledge store, learned skills, and decision history</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="loadBrain()"><i class="fas fa-sync-alt"></i> Refresh</button>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-card-label">Total Runs</div><div class="stat-card-value" id="brain-runs">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Data Quality</div><div class="stat-card-value" id="brain-quality">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Learning Confidence</div><div class="stat-card-value" id="brain-confidence">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Last Orchestration</div><div class="stat-card-value" id="brain-last" style="font-size:14px">—</div></div>
+      </div>
+
+      <div class="brain-grid">
+        <div>
+          <div class="section-label">Safety Constraints <button class="btn btn-sm btn-outline" onclick="editConstraints()" style="padding:3px 10px;font-size:11px">Edit</button></div>
+          <div class="card" id="brain-constraints"><div class="panel-loading"><div class="spinner spinner-sm"></div></div></div>
+        </div>
+        <div>
+          <div class="section-label">Learned Skills</div>
+          <div class="card" id="brain-skills" style="max-height:260px;overflow-y:auto"><div class="panel-loading"><div class="spinner spinner-sm"></div></div></div>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:8px">Decision Log <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;color:var(--txt3)" id="decision-log-count"></span></div>
+      <div class="card" id="brain-decision-log" style="max-height:300px;overflow-y:auto;margin-bottom:24px"><div class="panel-loading"><div class="spinner spinner-sm"></div></div></div>
+
+      <div class="section-label">Notes <button class="btn btn-sm btn-outline" onclick="addBrainNote()" style="padding:3px 10px;font-size:11px"><i class="fas fa-plus"></i> Add</button></div>
+      <div class="card" id="brain-notes" style="max-height:200px;overflow-y:auto;margin-bottom:24px"></div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-sync-alt" style="color:var(--teal-lt)"></i> Monthly System Update</div>
+        <p style="font-size:13px;color:var(--txt2);margin-bottom:14px">Runs a 3-phase comprehensive update: synthesises all accumulated data into a master directive, validates against constraints, then implements into the brain.</p>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn btn-primary" onclick="runSystemUpdate()"><i class="fas fa-rocket"></i> Run System Update</button>
+          <span id="system-update-status" style="font-size:13px;color:var(--txt3)"></span>
+        </div>
+        <div id="system-update-history" style="margin-top:16px"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Data Health tab ─────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-datahealth">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Data Health &amp; Safety</div>
+          <div class="panel-subtitle">Data quality monitoring, quarantine queue, and brain rollback</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="runDataValidator()"><i class="fas fa-check-circle"></i> Run Validation</button>
+      </div>
+
+      <div class="two-col" style="margin-bottom:24px">
+        <div>
+          <div class="section-label">Overall Health Score</div>
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+              <div id="health-score-ring" style="font-size:36px;font-weight:800;color:var(--white)">—</div>
+              <div>
+                <div id="health-verdict" style="font-size:14px;font-weight:700;color:var(--txt2)">Not yet checked</div>
+                <div id="health-checked" style="font-size:12px;color:var(--txt3);margin-top:2px"></div>
+              </div>
+            </div>
+            <div id="health-source-bars"><div class="panel-empty" style="padding:8px">Run validation to see source health</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-label">Hallucination Guard</div>
+          <div class="card">
+            <p style="font-size:13px;color:var(--txt2);margin-bottom:14px">Run a grounding check on the latest intelligence report to verify Claude's output is grounded in actual data.</p>
+            <button class="btn btn-outline btn-sm" onclick="runGroundingCheck()"><i class="fas fa-search"></i> Check Latest Report</button>
+            <div id="grounding-result" style="margin-top:14px"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:24px">
+        <div class="section-label">Quarantine Queue <button class="btn btn-sm btn-outline" onclick="clearAllQuarantine()" style="padding:3px 10px;font-size:11px">Clear All</button></div>
+        <div id="quarantine-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading quarantine...</div></div>
+      </div>
+
+      <div>
+        <div class="section-label">Brain Snapshots (Rollback) <button class="btn btn-sm btn-outline" onclick="snapshotBrain()" style="padding:3px 10px;font-size:11px"><i class="fas fa-camera"></i> Snapshot Now</button></div>
+        <div id="snapshot-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading snapshots...</div></div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Quotes tab ──────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-quotes">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">Quote Pipeline</div><div class="panel-subtitle">B2B quote and RFQ management</div></div>
+        <button class="btn btn-primary btn-sm" onclick="showCreateQuote()"><i class="fas fa-plus"></i> New Quote</button>
+      </div>
+
+      <div class="stat-grid" style="margin-bottom:24px" id="quote-stats">
+        <div class="stat-card"><div class="stat-card-label">Total Quotes</div><div class="stat-card-value" id="q-total">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Pending</div><div class="stat-card-value" id="q-sent">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Accepted</div><div class="stat-card-value" id="q-accepted" style="color:var(--green)">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Pipeline Value</div><div class="stat-card-value" id="q-value" style="font-size:16px">—</div></div>
+      </div>
+
+      <div id="quote-create-form" style="display:none" class="card" style="margin-bottom:24px">
+        <div class="card-title">New Quote</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="form-group"><label>Customer Name *</label><input type="text" id="q-name" placeholder="Jane Smith" /></div>
+          <div class="form-group"><label>Email *</label><input type="text" id="q-email" placeholder="jane@company.com" /></div>
+          <div class="form-group"><label>Company</label><input type="text" id="q-company" placeholder="Acme Corp" /></div>
+          <div class="form-group"><label>Phone</label><input type="text" id="q-phone" placeholder="+61 4..." /></div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px"><label>Customer Message</label><textarea id="q-msg" rows="2" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);color:var(--white);padding:8px;border-radius:var(--rsm);font-size:13px;font-family:inherit"></textarea></div>
+        <div class="form-group" style="margin-bottom:12px"><label>Internal Notes</label><textarea id="q-notes" rows="2" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);color:var(--white);padding:8px;border-radius:var(--rsm);font-size:13px;font-family:inherit"></textarea></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="createQuote()"><i class="fas fa-save"></i> Create Draft</button>
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('quote-create-form').style.display='none'">Cancel</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="quote-filter-bar">
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('all')" id="qf-all">All</button>
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('draft')" id="qf-draft">Draft</button>
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('sent')" id="qf-sent">Sent</button>
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('accepted')" id="qf-accepted">Accepted</button>
+        <button class="btn btn-sm btn-outline" onclick="loadQuotes('rejected')" id="qf-rejected">Rejected</button>
+      </div>
+
+      <div id="quotes-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading quotes...</div></div>
+    </div>
+  </div>
 
   <!-- ── Reporting tab ────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-reporting">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">Revenue &amp; Margin Reporting</div><div class="panel-subtitle" id="report-generated-at">Loading...</div></div>
+        <button class="btn btn-primary btn-sm" onclick="generateReport()"><i class="fas fa-sync-alt"></i> Generate Report</button>
+      </div>
+
+      <div class="two-col" style="margin-bottom:24px">
+        <div>
+          <div class="section-label">Quote Pipeline</div>
+          <div class="card" id="report-pipeline"><div class="panel-empty">Run report to see pipeline</div></div>
+        </div>
+        <div>
+          <div class="section-label">Lead → Quote Conversion</div>
+          <div class="card" id="report-conversion"><div class="panel-empty">Run report to see conversion</div></div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-bottom:24px">
+        <div>
+          <div class="section-label">Revenue by Product</div>
+          <div class="card" style="padding:0;overflow:hidden" id="report-revenue"><div class="panel-empty" style="padding:16px">No order data yet</div></div>
+        </div>
+        <div>
+          <div class="section-label">Margin by Product</div>
+          <div class="card" style="padding:0;overflow:hidden" id="report-margin"><div class="panel-empty" style="padding:16px">No cost data yet</div></div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-bottom:24px">
+        <div>
+          <div class="section-label">Funnel (30d)</div>
+          <div class="card" id="report-funnel"><div class="panel-empty">Run report to see funnel</div></div>
+        </div>
+        <div>
+          <div class="section-label">Top Customers by Quote Value</div>
+          <div class="card" style="padding:0;overflow:hidden" id="report-customers"><div class="panel-empty" style="padding:16px">No accepted quotes yet</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Monitor tab ──────────────────────────────────────────────── -->
   <div class="tab-panel" id="tab-monitor">
@@ -528,83 +766,509 @@
   </div>
 
   <!-- ── Agents tab ───────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-agents">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">Agent Control</div><div class="panel-subtitle">Live agent registry — spawn, monitor, and kill AI agents</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" onclick="runParallelOrchestrate()"><i class="fas fa-rocket"></i> Run Parallel Pipeline</button>
+          <button class="btn btn-warning btn-sm" onclick="killAllAgents()"><i class="fas fa-skull"></i> Kill All</button>
+          <button class="btn btn-outline btn-sm" onclick="loadAgents()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" style="margin-bottom:24px">
+        <div class="stat-card"><div class="stat-card-label">Running</div><div class="stat-card-value" id="ag-running" style="color:var(--teal-lt)">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Completed</div><div class="stat-card-value" id="ag-completed" style="color:var(--green)">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Failed</div><div class="stat-card-value" id="ag-failed" style="color:var(--red)">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Killed</div><div class="stat-card-value" id="ag-killed" style="color:var(--orange)">—</div></div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-outline" onclick="loadAgents('all')">All</button>
+        <button class="btn btn-sm btn-outline" onclick="loadAgents('running')">Running</button>
+        <button class="btn btn-sm btn-outline" onclick="loadAgents('completed')">Completed</button>
+        <button class="btn btn-sm btn-outline" onclick="loadAgents('failed')">Failed</button>
+      </div>
+
+      <div id="agents-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading agents...</div></div>
+
+      <div class="section-label" style="margin-top:24px">Task Queue</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <div class="stat-card" style="flex:1"><div class="stat-card-label">Pending</div><div class="stat-card-value" id="tq-pending">—</div></div>
+        <div class="stat-card" style="flex:1"><div class="stat-card-label">Claimed</div><div class="stat-card-value" id="tq-claimed">—</div></div>
+        <div class="stat-card" style="flex:1"><div class="stat-card-label">Completed</div><div class="stat-card-value" id="tq-completed">—</div></div>
+        <div class="stat-card" style="flex:1"><div class="stat-card-label">Dead</div><div class="stat-card-value" id="tq-dead" style="color:var(--red)">—</div></div>
+      </div>
+      <div id="task-queue-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading queue...</div></div>
+
+      <div class="section-label" style="margin-top:24px">Multi-Agent Intelligence Reports</div>
+      <div id="multi-agent-reports"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
+    </div>
+  </div>
 
   <!-- ── Synthesis tab ────────────────────────────────────────────── -->
-
-</div>
-
-  <!-- ── Pricing Intelligence tab ────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-pricing">
-    <div class="pricing-layout">
-
-      <!-- Left: SKU selector + quick stats -->
-      <div class="pricing-sidebar">
-        <div class="pricing-sidebar-header">
-          <span>Products</span>
-          <button class="btn btn-outline btn-sm" onclick="loadPricingIntelligence()" style="padding:2px 8px;font-size:11px"><i class="fas fa-sync-alt"></i></button>
+  <div class="tab-panel" id="tab-synthesis">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div><div class="panel-title">Convergence Algorithm</div><div class="panel-subtitle">Multi-disciplinary synthesis — physics, psychology, biology, mathematics, history, consumer behaviour, marketing</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" onclick="runSynthesis()"><i class="fas fa-atom"></i> Run Synthesis</button>
+          <button class="btn btn-outline btn-sm" onclick="runEvolver()"><i class="fas fa-dna"></i> Evolve Strategies</button>
+          <button class="btn btn-outline btn-sm" onclick="runTemporalSim()"><i class="fas fa-clock"></i> Simulate 12 Weeks</button>
         </div>
-        <div class="pricing-sidebar-inner">
-          <input type="text" class="sku-search" id="pricing-sku-search" placeholder="Search products..." oninput="filterPricingSkus(this.value)" />
-          <div id="pricing-sku-list"><div class="panel-empty" style="font-size:12px">Loading products...</div></div>
+      </div>
 
-          <div style="margin-top:16px" id="pricing-sku-stats" style="display:none">
-            <div class="section-label" style="margin-bottom:8px">Quick Stats</div>
-            <div id="pricing-stats-content"></div>
+      <!-- Convergence Score -->
+      <div class="card" style="margin-bottom:24px" id="synthesis-convergence-card">
+        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+          <div style="text-align:center">
+            <div style="font-size:48px;font-weight:900;color:var(--teal-lt)" id="synth-score">—</div>
+            <div style="font-size:12px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px">Convergence Score</div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px" id="synth-focus">Run synthesis to see insights</div>
+            <div style="font-size:13px;color:var(--txt2)" id="synth-summary"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Discipline Scores -->
+      <div class="section-label">Discipline Scores</div>
+      <div class="stat-grid" style="margin-bottom:24px" id="synth-disciplines">
+        <div class="stat-card"><div class="stat-card-label">Physics</div><div class="stat-card-value" id="sd-physics">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Psychology</div><div class="stat-card-value" id="sd-psychology">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Biology</div><div class="stat-card-value" id="sd-biology">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Mathematics</div><div class="stat-card-value" id="sd-mathematics">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">History</div><div class="stat-card-value" id="sd-history">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Consumer Behaviour</div><div class="stat-card-value" id="sd-consumerBehaviour">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Marketing</div><div class="stat-card-value" id="sd-marketing">—</div></div>
+      </div>
+
+      <div class="two-col" style="margin-bottom:24px">
+        <div>
+          <div class="section-label">Top Opportunities</div>
+          <div id="synth-opportunities"><div class="panel-empty">Run synthesis to see opportunities</div></div>
+        </div>
+        <div>
+          <div class="section-label">Critical Risks</div>
+          <div id="synth-risks"><div class="panel-empty">Run synthesis to see risks</div></div>
+        </div>
+      </div>
+
+      <!-- Strategy Evolution -->
+      <div class="section-label">Strategy Evolution <span id="evol-generation" style="color:var(--txt3);font-size:12px;font-weight:400;margin-left:8px"></span></div>
+      <div class="card" style="margin-bottom:24px" id="evol-elites">
+        <div class="panel-empty">Evolve strategies to see elite performers</div>
+      </div>
+
+      <!-- Temporal Simulation -->
+      <div class="section-label">Temporal Simulation Results</div>
+      <div id="temporal-results"><div class="panel-empty">Run a simulation to see how strategies perform over 12 weeks</div></div>
+
+      <!-- Simulation Gym -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:8px">
+        <div class="section-label" style="margin:0">Simulation Gym</div>
+        <button class="btn btn-outline btn-sm" onclick="loadGym()"><i class="fas fa-sync-alt"></i> Refresh</button>
+      </div>
+      <div class="card" style="margin-bottom:16px" id="gym-params-card">
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Core Parameters</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px">
+          <div class="form-group">
+            <label>Price Elasticity</label>
+            <input type="number" id="gym-elasticity" step="0.01" placeholder="-1.5" />
+          </div>
+          <div class="form-group">
+            <label>Charm Pricing Lift</label>
+            <input type="number" id="gym-charm" step="0.01" placeholder="0.08" />
+          </div>
+          <div class="form-group">
+            <label>Base Lead Rate</label>
+            <input type="number" id="gym-leadrate" step="0.001" placeholder="0.015" />
+          </div>
+          <div class="form-group">
+            <label>Lead → Quote Rate</label>
+            <input type="number" id="gym-leadquote" step="0.01" placeholder="0.40" />
+          </div>
+          <div class="form-group">
+            <label>Quote Acceptance Rate</label>
+            <input type="number" id="gym-acceptance" step="0.01" placeholder="0.30" />
+          </div>
+          <div class="form-group">
+            <label>Market Growth Rate</label>
+            <input type="number" id="gym-growth" step="0.001" placeholder="0.02" />
+          </div>
+          <div class="form-group">
+            <label>Event Probability</label>
+            <input type="number" id="gym-eventprob" step="0.01" placeholder="0.10" />
+          </div>
+          <div class="form-group">
+            <label>Seasonal Amplitude</label>
+            <input type="number" id="gym-seasonal" step="0.01" placeholder="0.25" />
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
+          <div class="form-group" style="flex:1;min-width:160px;margin:0">
+            <label>Confidence Threshold (%)</label>
+            <input type="number" id="gym-confidence" step="1" min="50" max="100" placeholder="95" />
+          </div>
+          <button class="btn btn-primary btn-sm" style="margin-top:auto" onclick="saveGymParams()"><i class="fas fa-save"></i> Save Parameters</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Add Custom Formula</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="gym-fname" placeholder="e.g. Power-law demand elasticity" />
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select id="gym-ftype">
+              <option value="price-elasticity">Price Elasticity</option>
+              <option value="lead-rate">Lead Rate</option>
+              <option value="conversion-rate">Conversion Rate</option>
+              <option value="seasonal">Seasonal</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Description</label>
+          <input type="text" id="gym-fdesc" placeholder="What does this formula do and why?" />
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Parameters (JSON)</label>
+          <textarea id="gym-fparams" rows="3" placeholder='{"elasticity": -1.8, "threshold": 500}'></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Source / Reference</label>
+          <input type="text" id="gym-fsource" placeholder="e.g. Journal of B2B Marketing, 2024" />
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addGymFormula()"><i class="fas fa-plus"></i> Add Formula</button>
+      </div>
+
+      <div class="section-label">Active Formulas</div>
+      <div id="gym-formulas"><div class="panel-empty">No custom formulas added yet</div></div>
+    </div>
+  </div>
+
+  <!-- ── Pricing Intelligence Tab ──────────────────────────────────── -->
+  <div class="tab-panel" id="tab-pricing">
+    <div class="panel-scroll">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Pricing Intelligence</div>
+          <div class="panel-subtitle">OEM/ODM 8-step competitor analysis — closed-loop AI-powered market pricing</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" onclick="loadPricingAudit()"><i class="fas fa-history"></i> Audit Log</button>
+          <button class="btn btn-primary btn-sm" onclick="runPricingIntelligence()"><i class="fas fa-brain"></i> Analyse Selected</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:280px 1fr 340px;gap:16px;height:calc(100vh - 160px);overflow:hidden">
+
+        <!-- LEFT: SKU Selector + Business Rules -->
+        <div style="overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px"><i class="fas fa-search" style="color:var(--teal-lt)"></i> Select System</div>
+            <input type="text" id="pi-search" placeholder="Search systems..." oninput="filterPricingProducts(this.value)" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:7px 10px;color:var(--white);font-size:13px;margin-bottom:8px">
+            <div id="pi-product-list" style="max-height:300px;overflow-y:auto"></div>
+            <div id="pi-selected-stats" style="margin-top:10px;display:none">
+              <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">System Specs</div>
+              <div id="pi-spec-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px"></div>
+            </div>
           </div>
 
-          <div style="margin-top:16px">
-            <div class="section-label" style="margin-bottom:8px">Apify Scraper</div>
-            <div id="pricing-apify-status" style="font-size:11px;color:var(--txt3);margin-bottom:8px">Not configured</div>
-            <button class="btn btn-outline btn-sm" style="width:100%;margin-bottom:6px" onclick="runApifyScrape()" id="pricing-run-apify-btn"><i class="fas fa-spider"></i> Run Apify Scrape</button>
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px"><i class="fas fa-cogs" style="color:var(--teal-lt)"></i> Business Rules</div>
+            <div class="form-group" style="margin-bottom:8px">
+              <label style="font-size:11px;color:var(--txt3)">Pricing Mode</label>
+              <select id="pi-pricing-mode" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 8px;color:var(--white);font-size:12px">
+                <option value="premium">Premium</option>
+                <option value="competitive">Competitive</option>
+                <option value="penetration">Penetration</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:8px">
+              <label style="font-size:11px;color:var(--txt3)">Min Margin %</label>
+              <input type="number" id="pi-min-margin" value="20" min="0" max="100" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 8px;color:var(--white);font-size:12px">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div class="form-group">
+                <label style="font-size:11px;color:var(--txt3)">Max Daily Δ%</label>
+                <input type="number" id="pi-max-daily" value="10" min="1" max="100" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 8px;color:var(--white);font-size:12px">
+              </div>
+              <div class="form-group">
+                <label style="font-size:11px;color:var(--txt3)">Max Weekly Δ%</label>
+                <input type="number" id="pi-max-weekly" value="25" min="1" max="100" style="width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 8px;color:var(--white);font-size:12px">
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" style="width:100%" onclick="savePricingRules()"><i class="fas fa-save"></i> Save Rules</button>
+            <div id="pi-rules-status" style="font-size:11px;color:var(--txt3);margin-top:6px;text-align:center"></div>
+          </div>
+
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px"><i class="fas fa-spider" style="color:var(--teal-lt)"></i> Competitor Scrape</div>
+            <div id="pi-apify-status" style="font-size:12px;color:var(--txt3);margin-bottom:8px">Apify status loading...</div>
+            <button class="btn btn-outline btn-sm" style="width:100%;margin-bottom:6px" onclick="scrapeCompetitorIntel()"><i class="fas fa-sync-alt"></i> Scrape Competitors</button>
             <button class="btn btn-outline btn-sm" style="width:100%" onclick="loadPricingAudit()"><i class="fas fa-history"></i> View Audit Log</button>
           </div>
         </div>
-      </div>
 
-      <!-- Center: Competitor landscape -->
-      <div class="pricing-center">
-        <div class="pricing-center-header">
-          <span id="pricing-center-title">Competitor Landscape</span>
-          <div style="display:flex;gap:6px">
-            <button class="btn btn-outline btn-sm" onclick="refreshCompetitorData()" style="padding:2px 8px;font-size:11px"><i class="fas fa-sync-alt"></i> Refresh</button>
+        <!-- CENTER: Competitor Landscape -->
+        <div style="overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px"><i class="fas fa-chart-bar" style="color:var(--teal-lt)"></i> Competitor Landscape <span id="pi-comp-count" style="font-weight:400;color:var(--txt3)"></span></div>
+            <div id="pi-competitor-landscape"><div class="panel-empty">Select a system to see competitor pricing</div></div>
+          </div>
+
+          <div class="card" style="padding:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px"><i class="fas fa-chart-line" style="color:var(--teal-lt)"></i> Price Trend History</div>
+            <div id="pi-trend-history"><div class="panel-empty">No trend data available</div></div>
+          </div>
+
+          <div class="card" style="padding:14px" id="pi-audit-card" style="display:none">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px"><i class="fas fa-history" style="color:var(--teal-lt)"></i> Recent Price Changes</div>
+            <div id="pi-audit-list"><div class="panel-empty">No price changes recorded</div></div>
           </div>
         </div>
-        <div class="pricing-center-inner">
-          <div id="pricing-center-content">
-            <div class="panel-empty">Select a product to view competitor landscape</div>
+
+        <!-- RIGHT: Recommendation Engine -->
+        <div style="overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div class="card" style="padding:14px" id="pi-rec-card">
+            <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px"><i class="fas fa-robot" style="color:var(--teal-lt)"></i> AI Recommendation</div>
+            <div id="pi-recommendation"><div class="panel-empty" style="padding:20px;text-align:center"><i class="fas fa-brain" style="font-size:28px;display:block;margin-bottom:10px;color:var(--txt3)"></i>Select a system and click Analyse</div></div>
           </div>
         </div>
-      </div>
 
-      <!-- Right: Recommendation engine -->
-      <div class="pricing-right">
-        <div class="pricing-right-header">
-          <span>Recommendation Engine</span>
-          <button class="btn btn-primary btn-sm" onclick="getPricingRecommendation()" id="pricing-rec-btn" disabled style="padding:2px 8px;font-size:11px"><i class="fas fa-brain"></i> Analyse</button>
-        </div>
-        <div class="pricing-right-inner">
-          <div id="pricing-rec-content">
-            <div class="panel-empty" style="font-size:12px">Select a product and click Analyse</div>
-          </div>
-        </div>
       </div>
-
     </div>
   </div>
 
 </div>
+</div><!-- /tab-content-products -->
 
 <!-- Competitors Tab -->
+<div id="tab-content-competitors" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div class="tab-section-title"><i class="fas fa-globe"></i> Competitor Intelligence</div>
+    <button class="btn btn-primary btn-sm" onclick="crawlAllCompetitors()"><i class="fas fa-sync-alt"></i> Crawl All</button>
+  </div>
+
+  <div class="comp-add-form">
+    <div class="comp-add-form-title"><i class="fas fa-plus-circle"></i> Add Competitor Site</div>
+    <div class="comp-add-grid">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="comp-name" placeholder="e.g. Dicker Data" />
+      </div>
+      <div class="form-group">
+        <label>Website URL</label>
+        <input type="text" id="comp-url" placeholder="https://www.example.com.au" />
+      </div>
+      <div class="form-group">
+        <label>Catalogue URL</label>
+        <input type="text" id="comp-catalogue-url" placeholder="https://www.example.com.au/products" />
+      </div>
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button class="btn btn-primary" onclick="addCompetitor()"><i class="fas fa-plus"></i> Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-list"></i> Monitored Sites</div>
+    <div class="comp-list" id="comp-list">
+      <div class="empty-panel"><i class="fas fa-globe"></i><p>Loading competitor sites...</p></div>
+    </div>
+  </div>
+
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-table"></i> Price Comparison</div>
+    <div class="price-table-wrap" id="price-table-wrap">
+      <div class="empty-panel"><i class="fas fa-chart-bar"></i><p>No price data yet. Add competitors and run a crawl.</p></div>
+    </div>
+  </div>
+</div>
 
 <!-- Analytics Tab -->
+<div id="tab-content-analytics" style="display:none" class="tab-panel">
+  <div class="tab-section-title"><i class="fas fa-chart-line"></i> Site Analytics</div>
+  <div class="stats-cards" id="analytics-stats">
+    <div class="stat-card"><div class="stat-card-label">Sessions (7d)</div><div class="stat-card-value teal" id="stat-7d">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Sessions (30d)</div><div class="stat-card-value" id="stat-30d">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Total Sessions</div><div class="stat-card-value" id="stat-total">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Unique Products Viewed</div><div class="stat-card-value teal" id="stat-products">—</div></div>
+  </div>
+  <div class="two-col-grid">
+    <div class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-fire"></i> Top Products</div>
+      <div class="bar-list" id="top-products-list"><div class="empty-panel" style="padding:16px"><p>No product view data yet.</p></div></div>
+    </div>
+    <div class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-file-alt"></i> Top Pages</div>
+      <div class="bar-list" id="top-pages-list"><div class="empty-panel" style="padding:16px"><p>No page view data yet.</p></div></div>
+    </div>
+  </div>
+  <div class="tab-section" style="margin-top:24px">
+    <div class="tab-section-title"><i class="fas fa-history"></i> Recent Sessions</div>
+    <div class="session-list" id="session-list"><div class="empty-panel"><p>No sessions recorded yet.</p></div></div>
+  </div>
+</div>
 
 <!-- Intelligence Tab -->
+<div id="tab-content-intelligence" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div>
+      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-brain"></i> Business Intelligence</div>
+      <div class="intel-timestamp" id="intel-timestamp">No report generated yet</div>
+    </div>
+    <button class="btn btn-primary" onclick="runIntelligence()" id="intel-run-btn"><i class="fas fa-play"></i> Run Analysis</button>
+  </div>
+
+  <div id="intel-alerts-section" style="display:none" class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-exclamation-triangle"></i> Alerts</div>
+    <div class="alert-list" id="intel-alerts"></div>
+  </div>
+
+  <div class="two-col-grid" style="margin-bottom:24px">
+    <div id="intel-trends-section" style="display:none" class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-chart-line"></i> Trends</div>
+      <div class="trend-chips" id="intel-trends"></div>
+    </div>
+    <div id="intel-insights-section" style="display:none" class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-lightbulb"></i> Insights</div>
+      <div class="insight-list" id="intel-insights"></div>
+    </div>
+  </div>
+
+  <div id="intel-recs-section" style="display:none" class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-dollar-sign"></i> Price Recommendations</div>
+    <div class="rec-table-wrap">
+      <table class="rec-table">
+        <thead><tr><th>Product</th><th>Current Price</th><th>Recommended</th><th>Reasoning</th><th></th></tr></thead>
+        <tbody id="intel-recs"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="intel-ranking-section" style="display:none" class="tab-section">
+    <div class="tab-section-title" style="justify-content:space-between">
+      <span><i class="fas fa-sort-amount-down"></i> Product Ranking</span>
+      <button class="btn btn-outline btn-sm" onclick="applyProductRanking()" id="apply-ranking-btn"><i class="fas fa-check"></i> Apply Ranking</button>
+    </div>
+    <div class="ranking-list" id="intel-ranking"></div>
+  </div>
+
+  <div id="intel-bundles-section" style="display:none" class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-boxes"></i> Bundle Suggestions</div>
+    <div class="bundle-cards" id="intel-bundles"></div>
+  </div>
+</div>
 
 <!-- Simulations Tab -->
+<div id="tab-content-simulations" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div>
+      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-flask"></i> Simulation Engine</div>
+      <div class="intel-timestamp" id="sim-timestamp">Run simulations to model what-if scenarios</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" onclick="runSimulation('single')" id="sim-single-btn"><i class="fas fa-play"></i> Run Selected</button>
+      <button class="btn btn-primary" onclick="runSimulation('all')" id="sim-all-btn"><i class="fas fa-play-circle"></i> Run All</button>
+    </div>
+  </div>
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-list-ul"></i> Scenarios</div>
+    <div class="sim-scenario-list">
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Price Sensitivity" checked> <span>Price Sensitivity</span> <span class="sim-desc">Impact of reducing GPU prices 10%</span></label>
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Bundle Impact"> <span>Bundle Impact</span> <span class="sim-desc">Conversion lift from bundling top products at 8% discount</span></label>
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Competitor Response"> <span>Competitor Response</span> <span class="sim-desc">Our response strategy if competitor drops prices 20%</span></label>
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Demand Forecast"> <span>Demand Forecast</span> <span class="sim-desc">30-day demand forecast by product category</span></label>
+      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Stock Prioritisation"> <span>Stock Prioritisation</span> <span class="sim-desc">Which products to prioritise for restocking</span></label>
+    </div>
+  </div>
+  <div class="tab-section" id="sim-results-section" style="display:none">
+    <div class="tab-section-title"><i class="fas fa-chart-bar"></i> Results</div>
+    <div id="sim-results"></div>
+  </div>
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-history"></i> Previous Simulations</div>
+    <div id="sim-history"><div class="empty-panel"><p>No simulations run yet.</p></div></div>
+  </div>
+</div>
 
 <!-- Campaigns Tab -->
+<div id="tab-content-campaigns" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div>
+      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-bullhorn"></i> Campaign Strategist</div>
+      <div class="intel-timestamp" id="camp-timestamp">AI-generated marketing campaign strategies</div>
+    </div>
+    <button class="btn btn-primary" onclick="runCampaigns()" id="camp-run-btn"><i class="fas fa-magic"></i> Generate Campaigns</button>
+  </div>
+  <div id="camp-insight-bar" style="display:none" class="insight-item" style="margin-bottom:20px"><i class="fas fa-lightbulb"></i> <span id="camp-insight"></span></div>
+  <div id="camp-list"><div class="empty-panel"><i class="fas fa-bullhorn"></i><p>No campaigns generated yet. Click Generate Campaigns.</p></div></div>
+</div>
 
 <!-- Brain Tab -->
+<div id="tab-content-brain" style="display:none" class="tab-panel">
+  <div class="intel-header">
+    <div>
+      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-database"></i> Knowledge Base (Brain)</div>
+      <div class="intel-timestamp" id="brain-timestamp">Central intelligence store — all agents read and write here</div>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="loadBrain()"><i class="fas fa-sync-alt"></i> Refresh</button>
+  </div>
+  <div class="stats-cards" style="margin-bottom:24px">
+    <div class="stat-card"><div class="stat-card-label">Total Runs</div><div class="stat-card-value teal" id="brain-runs">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Data Quality</div><div class="stat-card-value" id="brain-quality">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Learning Confidence</div><div class="stat-card-value teal" id="brain-confidence">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Last Updated</div><div class="stat-card-value" id="brain-updated" style="font-size:13px">—</div></div>
+  </div>
+  <div class="two-col-grid" style="margin-bottom:24px">
+    <div class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-shield-alt"></i> Safety Constraints</div>
+      <div id="brain-constraints"><div class="empty-panel" style="padding:16px"><p>Loading...</p></div></div>
+      <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="editConstraints()"><i class="fas fa-edit"></i> Edit Constraints</button>
+    </div>
+    <div class="panel-box">
+      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-graduation-cap"></i> Learned Skills</div>
+      <div id="brain-skills"><div class="empty-panel" style="padding:16px"><p>Loading...</p></div></div>
+    </div>
+  </div>
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-history"></i> Decision Log <span style="font-weight:400;font-size:12px;color:var(--txt3);margin-left:8px">(last 20)</span></div>
+    <div id="brain-decisions"><div class="empty-panel"><p>No decisions logged yet.</p></div></div>
+  </div>
+  <div class="tab-section">
+    <div class="tab-section-title"><i class="fas fa-sticky-note"></i> Notes</div>
+    <div id="brain-notes" style="display:flex;flex-direction:column;gap:6px"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <input type="text" id="brain-note-input" placeholder="Add a note..." style="flex:1">
+      <button class="btn btn-outline btn-sm" onclick="addBrainNote()"><i class="fas fa-plus"></i> Add</button>
+    </div>
+  </div>
+
+  <div class="tab-section" style="border-top:2px solid var(--teal-dk);padding-top:28px;margin-top:8px">
+    <div class="intel-header" style="margin-bottom:16px">
+      <div>
+        <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-sync-alt"></i> Monthly System Update</div>
+        <div class="intel-timestamp" id="sysupdate-timestamp">Synthesises all month's data into a master directive, validates it, bug-checks it, then injects into brain</div>
+      </div>
+      <button class="btn btn-primary" onclick="runSystemUpdate()" id="sysupdate-btn"><i class="fas fa-rocket"></i> Run System Update</button>
+    </div>
+    <div id="sysupdate-result" style="display:none"></div>
+    <div class="tab-section" style="margin-top:20px">
+      <div class="tab-section-title" style="margin-bottom:12px"><i class="fas fa-history"></i> Update History</div>
+      <div id="sysupdate-history"><div class="empty-panel"><p>No system updates run yet.</p></div></div>
+    </div>
+  </div>
+</div>
 
 <script>
 (function() {
@@ -645,17 +1309,22 @@
 
   /* ── Tab switching ────────────────────────────────────────────────── */
   window.switchTab = function(name) {
-    var panel = document.getElementById('tab-' + name);
-    var btn = document.getElementById('tabnav-' + name);
-    if (!panel || !btn) return;
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-    panel.classList.add('active');
-    btn.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('tabnav-' + name).classList.add('active');
     if (name === 'dashboard') loadDashboard();
-    else if (name === 'products') loadProducts();
     else if (name === 'competitors') loadCompetitors();
+    else if (name === 'analytics') loadAnalytics();
+    else if (name === 'campaigns') loadCampaigns();
+    else if (name === 'brain') loadBrain();
+    else if (name === 'quotes') loadQuotes();
+    else if (name === 'reporting') loadReporting();
     else if (name === 'monitor') loadMonitor();
+    else if (name === 'agents') loadAgents();
+    else if (name === 'synthesis') loadSynthesis();
+    else if (name === 'simulations') loadSimHistory();
+    else if (name === 'datahealth') loadDataHealth();
     else if (name === 'pricing') loadPricingIntelligence();
   };
 
@@ -1011,51 +1680,10 @@
     try {
       var r = await fetch('/api/analytics');
       var data = await r.json();
-
-      // Cache for other tabs
-      window._analyticsCache = data;
-
-      // Section 1: Business KPIs
-      var bm = data.businessMetrics || {};
-      var qm = bm.quotes || {};
-      var cd = bm.competitorData || {};
-      var pipeline = (qm.byStatus ? ((qm.byStatus.sent || 0) + (qm.byStatus.viewed || 0)) : '—');
-      document.getElementById('stat-pipeline').textContent = pipeline;
-      document.getElementById('stat-accept-rate').textContent = qm.acceptanceRate != null ? qm.acceptanceRate + '%' : '—';
-      document.getElementById('stat-avg-value').textContent = qm.avgValueAUD ? 'A$' + qm.avgValueAUD.toLocaleString('en-AU') : '—';
-      document.getElementById('stat-avg-response').textContent = qm.avgResponseHours != null ? qm.avgResponseHours + 'h' : '—';
       document.getElementById('stat-s7').textContent = data.sessions7d || 0;
       document.getElementById('stat-s30').textContent = data.sessions30d || 0;
+      document.getElementById('stat-total').textContent = data.totalSessions || 0;
 
-      // Section 2: Quote status breakdown
-      var byStatus = qm.byStatus || {};
-      var total = qm.total || 0;
-      var statusRows = ['draft','sent','viewed','accepted','rejected'].map(function(st) {
-        var cnt = byStatus[st] || 0;
-        var pct = total > 0 ? (cnt/total*100).toFixed(1) : '0.0';
-        return '<tr><td style="text-transform:capitalize;color:var(--txt2)">' + st + '</td><td>' + cnt + '</td><td>' + pct + '%</td></tr>';
-      }).join('');
-      document.querySelector('#analytics-quote-status tbody').innerHTML = statusRows ||
-        '<tr><td colspan="3" style="text-align:center;color:var(--txt3)">No quotes yet</td></tr>';
-
-      // Site funnel
-      var fc = data.funnelCounts || {};
-      var cr = data.conversionRates || {};
-      var funnelSteps = [
-        { label: 'Product View', key: 'product-view', conv: null },
-        { label: 'Add to Cart', key: 'add-to-cart', conv: cr.viewToCart },
-        { label: 'Quote Started', key: 'quote-started', conv: cr.cartToQuote },
-        { label: 'Purchase', key: 'purchase', conv: cr.checkoutToPurchase },
-      ];
-      document.querySelector('#analytics-funnel tbody').innerHTML = funnelSteps.map(function(s) {
-        return '<tr><td style="color:var(--txt2)">' + s.label + '</td><td>' + (fc[s.key] || 0) + '</td><td>' + (s.conv != null ? s.conv + '%' : '—') + '</td></tr>';
-      }).join('');
-
-      // Section 3: Competitor card
-      document.getElementById('stat-products-tracked').textContent = cd.productsTracked != null ? cd.productsTracked : '—';
-      document.getElementById('stat-last-crawled').textContent = cd.lastCrawled ? fmtDate(cd.lastCrawled) : 'Never';
-
-      // Section 4: Traffic
       var top = data.topProducts || [];
       var maxViews = top.length ? top[0].views : 1;
       document.getElementById('analytics-top-products').innerHTML = top.length ?
@@ -1068,229 +1696,13 @@
         pages.map(function(p) { return '<div class="bar-row"><div class="bar-label">' + escHtml(p.page) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + Math.round(p.views/maxP*100) + '%"></div></div><div class="bar-val">' + p.views + '</div></div>'; }).join('') :
         '<div class="panel-empty">No page views yet</div>';
 
-      // Section 5: Recent Sessions
       var tbody = document.querySelector('#analytics-recent tbody');
       var sessions = data.recentSessions || [];
       tbody.innerHTML = sessions.length ?
         sessions.map(function(s) { return '<tr><td>' + fmtDate(s.timestamp) + '</td><td>' + escHtml(s.page||'—') + '</td><td>' + (s.duration ? Math.round(s.duration/1000) + 's' : '—') + '</td><td>' + ((s.productViews||[]).join(', ')||'—') + '</td></tr>'; }).join('') :
         '<tr><td colspan="4" style="text-align:center;color:var(--txt3)">No sessions recorded yet</td></tr>';
-
-      // Update dashboard stat cards if visible
-      if (document.getElementById('dash-s7')) {
-        document.getElementById('dash-s7').textContent = data.sessions7d != null ? data.sessions7d : '—';
-        document.getElementById('dash-s30').textContent = data.sessions30d != null ? data.sessions30d : '—';
-      }
     } catch(e) {
-      var s7 = document.getElementById('stat-s7');
-      if (s7) s7.textContent = '!';
-    }
-  };
-
-  // ── CSV Import ────────────────────────────────────────────────────
-  window.openCsvImportModal = function() {
-    var m = document.getElementById('csv-import-modal');
-    m.style.display = 'flex';
-    document.getElementById('csv-import-result').innerHTML = '';
-    document.getElementById('csv-import-data').value = '';
-  };
-  window.closeCsvImportModal = function() {
-    document.getElementById('csv-import-modal').style.display = 'none';
-  };
-  window.runCsvImport = async function() {
-    var btn = document.getElementById('csv-import-btn');
-    var result = document.getElementById('csv-import-result');
-    var raw = document.getElementById('csv-import-data').value.trim();
-    var format = document.getElementById('csv-import-format').value;
-    var review = document.getElementById('csv-import-review').checked;
-    if (!raw) { result.innerHTML = '<div style="color:#f85149">Paste some data first.</div>'; return; }
-    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing…';
-    result.innerHTML = '';
-    try {
-      var products = [];
-      if (raw.startsWith('http')) {
-        // URL — fetch and re-parse
-        var fetchRes = await fetch('/api/dicker-catalog?url=' + encodeURIComponent(raw));
-        var fetchData = await fetchRes.json();
-        products = fetchData.products || fetchData || [];
-      } else if (format === 'json') {
-        products = JSON.parse(raw);
-      } else {
-        // CSV parsing
-        var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
-        var headers = lines[0].split(',').map(function(h){ return h.trim().toLowerCase().replace(/"/g,''); });
-        products = lines.slice(1).map(function(line) {
-          var cols = line.match(/(".*?"|[^,]+)/g) || [];
-          var obj = {};
-          headers.forEach(function(h, i) { obj[h] = (cols[i]||'').replace(/^"|"$/g,'').trim(); });
-          // Normalise field names
-          return {
-            name: obj.name || obj.description || obj.title || obj.product || '',
-            sku: obj.sku || obj.partno || obj['part no'] || obj['part number'] || '',
-            priceIncGst: parseFloat(obj.price || obj.priceinc || obj.rrp || 0) || 0,
-            category: obj.category || 'General',
-            description: obj.description || obj.name || '',
-            handle: (obj.sku || obj.name || '').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),
-          };
-        }).filter(function(p){ return p.name; });
-      }
-      if (!products.length) { result.innerHTML = '<div style="color:#f85149">No products found. Check format.</div>'; return; }
-      // Send to import queue or direct import
-      var r = await fetch('/api/dicker-import', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'add', products: products }),
-      });
-      var data = await r.json();
-      if (data.error) throw new Error(data.error);
-      result.innerHTML = '<div style="color:var(--teal-lt)"><i class="fas fa-check-circle"></i> ' + products.length + ' product(s) added to import queue. <button class="btn btn-outline btn-sm" style="font-size:11px;padding:2px 8px;margin-left:8px" onclick="switchTab(\'products\');closeCsvImportModal()">Review Queue</button></div>';
-      document.getElementById('dash-action-status').textContent = products.length + ' products queued';
-    } catch(e) {
-      result.innerHTML = '<div style="color:#f85149">Error: ' + escHtml(e.message) + '</div>';
-    } finally {
-      btn.disabled = false; btn.innerHTML = '<i class="fas fa-upload"></i> Import';
-    }
-  };
-
-  window.triggerDickerSync = async function() {
-    var status = document.getElementById('dash-action-status');
-    status.textContent = 'Syncing Dicker Data…';
-    try {
-      var r = await fetch('/api/dicker-sync', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Sync-Secret': '' }, body: '{}' });
-      var d = await r.json();
-      status.textContent = d.error ? '✗ ' + d.error : '✓ Dicker sync complete';
-    } catch(e) {
-      status.textContent = '✗ ' + e.message;
-    }
-  };
-
-  // ── Learning Notes ─────────────────────────────────────────────────
-  window.loadLearningNotes = async function() {
-    try {
-      var r = await fetch('/api/learning');
-      var d = await r.json();
-      var notes = d.notes || [];
-      document.getElementById('learn-count').textContent = notes.length;
-      var list = document.getElementById('learn-notes-list');
-      if (!notes.length) { list.innerHTML = '<div class="panel-empty">No learning notes yet</div>'; return; }
-      list.innerHTML = notes.map(function(n) {
-        return '<div style="border-bottom:1px solid var(--bdr);padding:10px 0;last-child:border-none">' +
-          '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">' +
-            '<div>' +
-              '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--teal-lt)">' + escHtml(n.category) + '</span>' +
-              (n.title ? '<div style="font-size:13px;font-weight:600;color:var(--white);margin-top:2px">' + escHtml(n.title) + '</div>' : '') +
-              '<div style="font-size:12px;color:var(--txt2);margin-top:4px;white-space:pre-wrap;max-height:60px;overflow:hidden">' + escHtml(n.content.slice(0,200)) + (n.content.length>200?'…':'') + '</div>' +
-              '<div style="font-size:11px;color:var(--txt3);margin-top:4px">' + fmtDate(n.addedAt) + '</div>' +
-            '</div>' +
-            '<button onclick="deleteLearningNote(' + n.id + ')" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:13px;flex-shrink:0" title="Delete"><i class="fas fa-trash-alt"></i></button>' +
-          '</div>' +
-        '</div>';
-      }).join('');
-    } catch(e) {
-      document.getElementById('learn-notes-list').innerHTML = '<div style="color:#f85149;padding:8px">Error: ' + escHtml(e.message) + '</div>';
-    }
-  };
-
-  window.addLearningNote = async function() {
-    var status = document.getElementById('learn-status');
-    var content = document.getElementById('learn-content').value.trim();
-    var title = document.getElementById('learn-title').value.trim();
-    var category = document.getElementById('learn-category').value;
-    if (!content) { status.textContent = 'Add some content first.'; return; }
-    status.textContent = 'Saving…';
-    try {
-      var r = await fetch('/api/learning', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'add', title, content, category }),
-      });
-      var d = await r.json();
-      if (d.error) throw new Error(d.error);
-      document.getElementById('learn-content').value = '';
-      document.getElementById('learn-title').value = '';
-      status.textContent = '✓ Saved';
-      setTimeout(function(){ status.textContent = ''; }, 3000);
-      loadLearningNotes();
-    } catch(e) {
-      status.textContent = '✗ ' + e.message;
-    }
-  };
-
-  window.deleteLearningNote = async function(id) {
-    if (!confirm('Delete this note?')) return;
-    await fetch('/api/learning', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', id }) });
-    loadLearningNotes();
-  };
-
-  // ── Cloudflare Analytics ──────────────────────────────────────────
-  window.loadCfAnalytics = async function() {
-    var days = document.getElementById('cf-days-select').value || '7';
-    var status = document.getElementById('cf-analytics-status');
-    status.textContent = 'Loading…';
-    ['cf-pageviews','cf-uniques','cf-requests','cf-cache','cf-rum-visits','cf-bandwidth'].forEach(function(id){ document.getElementById(id).textContent = '…'; });
-
-    try {
-      var r = await fetch('/api/cf-analytics?days=' + days);
-      var d = await r.json();
-
-      if (!d.configured) {
-        status.textContent = '⚠ ' + (d.error || 'Not configured');
-        status.style.color = 'var(--orange)';
-        ['cf-pageviews','cf-uniques','cf-requests','cf-cache','cf-rum-visits','cf-bandwidth'].forEach(function(id){ document.getElementById(id).textContent = '—'; });
-        return;
-      }
-
-      status.textContent = 'Updated ' + new Date(d.generatedAt).toLocaleTimeString();
-      status.style.color = 'var(--txt3)';
-
-      var z = d.zone || {};
-      document.getElementById('cf-pageviews').textContent = (z.pageViews || 0).toLocaleString();
-      document.getElementById('cf-uniques').textContent = (z.uniqueVisitors || 0).toLocaleString();
-      document.getElementById('cf-requests').textContent = (z.requests || 0).toLocaleString();
-      document.getElementById('cf-cache').textContent = z.cacheHitRate != null ? z.cacheHitRate + '%' : '—';
-      document.getElementById('cf-rum-visits').textContent = d.rum ? (d.rum.visits || 0).toLocaleString() : (d.rumError ? 'N/A' : '—');
-
-      var bytes = z.bytesServed || 0;
-      var bwLabel = bytes > 1073741824 ? (bytes/1073741824).toFixed(1)+' GB' : bytes > 1048576 ? (bytes/1048576).toFixed(1)+' MB' : bytes > 1024 ? (bytes/1024).toFixed(0)+' KB' : bytes+' B';
-      document.getElementById('cf-bandwidth').textContent = bwLabel;
-
-      var paths = (d.rum && d.rum.topPages && d.rum.topPages.length) ? d.rum.topPages.map(function(p){ return {path:p.path,count:p.pageViews}; }) : (z.topPaths||[]).map(function(p){ return {path:p.path,count:p.pageViews||p.requests}; });
-      var maxPath = paths.length ? paths[0].count : 1;
-      document.getElementById('cf-top-paths').innerHTML = paths.length ? paths.slice(0,10).map(function(p){
-        return '<div class="bar-row"><div class="bar-label" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+escHtml(p.path)+'">'+escHtml(p.path)+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(p.count/maxPath*100)+'%"></div></div><div class="bar-val">'+p.count+'</div></div>';
-      }).join('') : '<div class="panel-empty">No page data</div>';
-
-      var refs = (d.rum && d.rum.topReferers && d.rum.topReferers.length) ? d.rum.topReferers.map(function(p){ return {host:p.host,count:p.visits}; }) : (z.topReferers||[]).map(function(p){ return {host:p.host,count:p.requests}; });
-      refs = refs.filter(function(r){ return r.host && r.host !== '' && r.host !== 'null'; });
-      var maxRef = refs.length ? refs[0].count : 1;
-      document.getElementById('cf-top-referers').innerHTML = refs.length ? refs.slice(0,10).map(function(p){
-        return '<div class="bar-row"><div class="bar-label">'+escHtml(p.host)+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(p.count/maxRef*100)+'%"></div></div><div class="bar-val">'+p.count+'</div></div>';
-      }).join('') : '<div class="panel-empty">No referrer data</div>';
-
-      var countries = (d.rum && d.rum.countries && d.rum.countries.length) ? d.rum.countries.map(function(p){ return {name:p.country,count:p.visits}; }) : (z.topCountries||[]).map(function(p){ return {name:p.country,count:p.requests}; });
-      var maxC = countries.length ? countries[0].count : 1;
-      document.getElementById('cf-top-countries').innerHTML = countries.length ? countries.slice(0,10).map(function(p){
-        return '<div class="bar-row"><div class="bar-label">'+escHtml(p.name)+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(p.count/maxC*100)+'%"></div></div><div class="bar-val">'+p.count+'</div></div>';
-      }).join('') : '<div class="panel-empty">No country data</div>';
-
-      var devices = (d.rum && d.rum.devices) ? d.rum.devices.map(function(p){ return {name:p.type,count:p.visits}; }) : [];
-      var maxD = devices.length ? devices[0].count : 1;
-      document.getElementById('cf-devices').innerHTML = devices.length ? devices.map(function(p){
-        return '<div class="bar-row"><div class="bar-label">'+escHtml(p.name||'Unknown')+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(p.count/maxD*100)+'%"></div></div><div class="bar-val">'+p.count+'</div></div>';
-      }).join('') : '<div class="panel-empty">'+(d.rumError ? 'Install Web Analytics beacon for device data' : 'No device data')+'</div>';
-
-      var trend = (d.rum && d.rum.dailyTrend && d.rum.dailyTrend.length) ? d.rum.dailyTrend : (z.dailyTrend||[]);
-      document.getElementById('cf-daily-trend').innerHTML = trend.length ? (
-        '<table class="data-table"><thead><tr><th>Date</th><th>Page Views</th><th>'+(d.rum?'Visits':'Requests')+'</th>'+(z.dailyTrend?'<th>Uniques</th>':'')+'</tr></thead><tbody>'+
-        trend.map(function(row){
-          return '<tr><td>'+escHtml(row.date)+'</td><td>'+(row.pageViews||0).toLocaleString()+'</td><td>'+(row.visits||row.requests||0).toLocaleString()+'</td>'+(row.uniques!=null?'<td>'+(row.uniques||0).toLocaleString()+'</td>':'')+'</tr>';
-        }).join('')+'</tbody></table>'
-      ) : '<div class="panel-empty">No trend data for period</div>';
-
-      if (window._analyticsCache) window._analyticsCache.cfAnalytics = d;
-
-    } catch(e) {
-      var status2 = document.getElementById('cf-analytics-status');
-      if (status2) { status2.textContent = '✗ ' + e.message; status2.style.color = '#f85149'; }
+      document.getElementById('stat-s7').textContent = '!';
     }
   };
 
@@ -1304,8 +1716,6 @@
       var r = await fetch('/api/intelligence', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
       var data = await r.json();
       if (data.error) throw new Error(data.error);
-      // Store for campaign context (Task 7)
-      window._intelligenceCache = data;
       renderIntelligence(data);
     } catch(e) {
       el.innerHTML = '<div class="panel-empty" style="color:var(--red)"><i class="fas fa-exclamation-circle"></i> ' + escHtml(e.message) + '</div>';
@@ -1399,7 +1809,6 @@
             (s.recommendations&&s.recommendations.length ? '<ul style="padding-left:16px;font-size:13px;color:var(--txt3)">' + s.recommendations.map(function(rec){ return '<li style="margin-bottom:4px">'+escHtml(rec)+'</li>'; }).join('') + '</ul>' : '') +
           '</div>' +
           '<div class="sim-meta"><span style="color:var(--txt3)">Competitive: ' + escHtml(s.competitivePosition||'') + '</span></div>' +
-          (s.thinking ? '<div style="margin-top:6px"><button onclick="var n=this.nextElementSibling;n.style.display=n.style.display===\'none\'?\'block\':\'none\'" style="width:100%;text-align:left;background:none;border:1px solid var(--bdr2);border-radius:var(--rsm);padding:5px 10px;color:var(--txt3);font-size:11px;cursor:pointer;font-family:inherit"><i class="fas fa-brain"></i> Show Agent Thinking</button><div class="thinking-panel" style="display:none">' + escHtml(s.thinking) + '</div></div>' : '') +
         '</div>';
       }).join('');
       loadSimHistory();
@@ -1420,143 +1829,21 @@
   ══════════════════════════════════════════════════════════════════ */
   async function loadCampaigns() {
     var el = document.getElementById('campaigns-content');
-    // Load Klaviyo status
-    loadKlaviyoStatus();
-    // Update context card
-    updateCampaignContextCard();
     try {
       var r = await fetch('/api/campaigns');
       if (!r.ok) throw new Error('campaigns endpoint not available');
       var data = await r.json();
       renderCampaigns(el, data.campaigns || []);
     } catch(_) {
-      el.innerHTML = '<div class="panel-empty"><i class="fas fa-bullhorn" style="font-size:32px;display:block;margin-bottom:12px"></i>Click "Generate Strategy" to create AI marketing briefs</div>';
+      el.innerHTML = '<div class="panel-empty"><i class="fas fa-bullhorn" style="font-size:32px;display:block;margin-bottom:12px"></i>Click "Generate Campaigns" to create AI marketing briefs</div>';
     }
   }
-
-  async function loadKlaviyoStatus() {
-    var card = document.getElementById('klaviyo-status-card');
-    if (!card) return;
-    try {
-      var r = await fetch('/api/klaviyo');
-      var data = await r.json();
-      if (data.configured) {
-        // Fetch lists
-        var lr = await fetch('/api/klaviyo', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'get-lists'}) });
-        var ld = await lr.json();
-        var lists = ld.lists || [];
-        card.innerHTML =
-          '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">' +
-            '<span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block"></span>' +
-            '<span style="font-weight:600;color:var(--green)">Klaviyo Connected</span>' +
-          '</div>' +
-          '<div style="font-size:13px;color:var(--txt2);margin-bottom:10px">Lists (' + lists.length + '):</div>' +
-          (lists.length ? '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">' +
-            lists.map(function(l) { return '<span class="chip chip-grey">' + escHtml(l.name) + '</span>'; }).join('') +
-          '</div>' : '<div style="font-size:12px;color:var(--txt3);margin-bottom:14px">No lists yet</div>') +
-          '<div style="display:flex;gap:10px;align-items:center">' +
-            '<input type="text" id="klaviyo-new-list-name" placeholder="New list name..." style="max-width:240px">' +
-            '<button class="btn btn-outline btn-sm" onclick="createKlaviyoList()"><i class="fas fa-plus"></i> Create List</button>' +
-          '</div>';
-      } else {
-        card.innerHTML =
-          '<div style="display:flex;align-items:center;gap:8px">' +
-            '<span style="width:10px;height:10px;border-radius:50%;background:var(--orange);display:inline-block"></span>' +
-            '<span style="color:var(--txt2);font-size:13px">Klaviyo not configured — add KLAVIYO_API_KEY to Cloudflare Pages environment variables to enable.</span>' +
-          '</div>';
-      }
-    } catch(e) {
-      card.innerHTML = '<div style="color:var(--red);font-size:13px">Error loading Klaviyo status: ' + escHtml(e.message) + '</div>';
-    }
-  }
-
-  function updateCampaignContextCard() {
-    var card = document.getElementById('campaigns-context-card');
-    if (!card) return;
-    var cache = window._analyticsCache;
-    if (!cache) {
-      card.innerHTML = '<div style="font-size:13px;color:var(--txt3)">Analytics data not available.</div>';
-      return;
-    }
-    var bm = cache.businessMetrics || {};
-    var qm = bm.quotes || {};
-    var top = (cache.topProducts || []).slice(0, 5).map(function(p) { return p.handle; }).join(', ');
-    card.innerHTML =
-      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;font-size:13px">' +
-        '<div><div style="color:var(--txt3);font-size:11px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Acceptance Rate</div><div style="font-weight:700;color:var(--white)">' + (qm.acceptanceRate != null ? qm.acceptanceRate + '%' : '—') + '</div></div>' +
-        '<div><div style="color:var(--txt3);font-size:11px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Avg Deal Value</div><div style="font-weight:700;color:var(--white)">' + (qm.avgValueAUD ? 'A$' + qm.avgValueAUD.toLocaleString('en-AU') : '—') + '</div></div>' +
-        '<div><div style="color:var(--txt3);font-size:11px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Top Products</div><div style="font-weight:600;color:var(--txt2);font-size:12px">' + escHtml(top || '—') + '</div></div>' +
-      '</div>';
-  }
-
-  window.createKlaviyoList = async function() {
-    var input = document.getElementById('klaviyo-new-list-name');
-    var name = input ? input.value.trim() : '';
-    if (!name) { alert('Enter a list name'); return; }
-    try {
-      var r = await fetch('/api/klaviyo', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'create-list',name}) });
-      var data = await r.json();
-      if (data.error) throw new Error(data.error);
-      if (input) input.value = '';
-      loadKlaviyoStatus();
-    } catch(e) {
-      alert('Error: ' + e.message);
-    }
-  };
-
-  window.pushCampaignToKlaviyo = async function(campaignName) {
-    try {
-      var r = await fetch('/api/klaviyo', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'create-list',name:campaignName}) });
-      var data = await r.json();
-      if (data.error) throw new Error(data.error);
-      alert('List created in Klaviyo!\nList ID: ' + data.listId + '\n\nUse this ID to build a campaign in the Klaviyo dashboard.');
-      loadKlaviyoStatus();
-    } catch(e) {
-      alert('Error: ' + e.message);
-    }
-  };
-
-  window.syncCampaignToKlaviyo = async function() {
-    var el = document.getElementById('campaigns-content');
-    var cards = el ? el.querySelectorAll('[data-campaign-name]') : [];
-    if (!cards.length) { alert('Generate campaigns first, then sync.'); return; }
-    if (!confirm('Push all campaign names as Klaviyo lists?')) return;
-    var names = Array.from(cards).map(function(c){ return c.dataset.campaignName; });
-    var results = [];
-    for (var n of names) {
-      try {
-        var r = await fetch('/api/klaviyo', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'create-list',name:n}) });
-        var d = await r.json();
-        results.push(n + ': ' + (d.listId || 'error'));
-      } catch(e) { results.push(n + ': error'); }
-    }
-    alert('Klaviyo sync complete:\n' + results.join('\n'));
-    loadKlaviyoStatus();
-  };
 
   window.generateCampaigns = async function() {
     var el = document.getElementById('campaigns-content');
     el.innerHTML = '<div class="panel-loading"><div class="spinner"></div> Generating campaign strategies...</div>';
-    // Ensure analytics context is available
-    if (!window._analyticsCache) { try { await loadAnalytics(); } catch(_) {} }
-    updateCampaignContextCard();
     try {
-      var body = {};
-      if (window._analyticsCache) {
-        var bm = window._analyticsCache.businessMetrics || {};
-        var qm = bm.quotes || {};
-        body.analyticsContext = {
-          acceptanceRate: qm.acceptanceRate,
-          avgValueAUD: qm.avgValueAUD,
-          avgResponseHours: qm.avgResponseHours,
-          sessions7d: window._analyticsCache.sessions7d,
-          topProducts: (window._analyticsCache.topProducts || []).slice(0, 10),
-        };
-      }
-      if (window._intelligenceCache) {
-        body.intelligenceContext = window._intelligenceCache.summary || window._intelligenceCache.marketInsights || null;
-      }
-      var r = await fetch('/api/campaign-strategist', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+      var r = await fetch('/api/campaign-strategist', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
       var data = await r.json();
       if (data.error) throw new Error(data.error);
       renderCampaigns(el, data.campaigns || []);
@@ -1568,14 +1855,10 @@
   function renderCampaigns(el, campaigns) {
     if (!campaigns.length) { el.innerHTML = '<div class="panel-empty">No campaigns generated yet</div>'; return; }
     el.innerHTML = campaigns.map(function(c) {
-      var cName = escAttr(c.name || c.headline || '');
-      return '<div class="sim-card" style="margin-bottom:14px" data-campaign-name="' + cName + '">' +
+      return '<div class="sim-card" style="margin-bottom:14px">' +
         '<div class="sim-card-header">' +
           '<div><div class="sim-card-name">' + escHtml(c.name||c.headline) + '</div><span class="chip chip-teal" style="margin-top:4px">' + escHtml(c.type||'') + '</span></div>' +
-          '<div style="display:flex;align-items:center;gap:8px">' +
-            confPill(c.confidenceScore||0) +
-            '<button class="btn btn-outline btn-sm" onclick="pushCampaignToKlaviyo(\'' + cName + '\')"><i class="fab fa-mailchimp"></i> Push to Klaviyo</button>' +
-          '</div>' +
+          confPill(c.confidenceScore||0) +
         '</div>' +
         '<div class="sim-card-body">' +
           '<div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:6px">' + escHtml(c.headline||'') + '</div>' +
@@ -1695,97 +1978,91 @@
   window.loadDashboard = async function() {
     document.getElementById('dash-last-refreshed').textContent = 'Refreshing...';
     try {
-      var [brainR, auditR, compIntelR] = await Promise.all([
+      // Load analytics + brain in parallel
+      var [analyticsR, brainR] = await Promise.all([
+        fetch('/api/analytics').then(function(r){return r.json();}).catch(function(){return {};}),
         fetch('/api/brain').then(function(r){return r.json();}).catch(function(){return {};}),
-        fetch('/api/apply-price').then(function(r){return r.json();}).catch(function(){return {auditLog:[]};}),
-        fetch('/api/competitor-intelligence').then(function(r){return r.json();}).catch(function(){return {skus:[],lastRun:null};}),
       ]);
 
       // Stat cards
-      var auditLog = auditR.auditLog || [];
-      var thirtyDaysAgo = Date.now() - 30 * 24 * 3600 * 1000;
-      var recentChanges = auditLog.filter(function(e){ return new Date(e.changedAt||0).getTime() > thirtyDaysAgo; }).length;
-      var margins = auditLog.filter(function(e){ return e.marginPct != null; }).map(function(e){ return e.marginPct; });
-      var avgMargin = margins.length ? Math.round(margins.reduce(function(a,b){return a+b;},0) / margins.length) : null;
-
+      document.getElementById('dash-s7').textContent = analyticsR.sessions7d != null ? analyticsR.sessions7d : '—';
+      document.getElementById('dash-s30').textContent = analyticsR.sessions30d != null ? analyticsR.sessions30d : '—';
+      document.getElementById('dash-quality').textContent = brainR.meta && brainR.meta.dataQualityScore != null ? Math.round(brainR.meta.dataQualityScore * 100) + '%' : '—';
+      document.getElementById('dash-confidence').textContent = brainR.meta && brainR.meta.learningConfidence != null ? Math.round(brainR.meta.learningConfidence * 100) + '%' : '—';
       document.getElementById('dash-products').textContent = state.products.length || '—';
-      document.getElementById('dash-competitors').textContent = (compIntelR.skus||[]).length || '—';
-      document.getElementById('dash-last-scrape').textContent = compIntelR.lastRun ? fmtDate(compIntelR.lastRun) : 'Never';
-      document.getElementById('dash-price-changes').textContent = recentChanges;
-      document.getElementById('dash-avg-margin').textContent = avgMargin != null ? avgMargin + '%' : '—';
       document.getElementById('dash-last-run').textContent = brainR.meta && brainR.meta.lastOrchestrationAt ? fmtDate(brainR.meta.lastOrchestrationAt) : 'Never';
 
-      // Top products bar chart — by price descending (most valuable)
-      var top = (state.products || []).filter(function(p){return p.priceIncGst;}).sort(function(a,b){return b.priceIncGst - a.priceIncGst;}).slice(0, 8);
-      var maxV = top.length ? top[0].priceIncGst : 1;
+      // Top products bar chart
+      var top = analyticsR.topProducts || [];
+      var maxV = top.length ? top[0].views : 1;
       document.getElementById('dash-top-products').innerHTML = top.length
-        ? top.map(function(p) { return '<div class="bar-row"><div class="bar-label">' + escHtml(p.handle||p.title) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + Math.round(p.priceIncGst/maxV*100) + '%"></div></div><div class="bar-val">A$' + Math.round(p.priceIncGst/1000) + 'k</div></div>'; }).join('')
-        : '<div class="panel-empty">No products loaded</div>';
+        ? top.slice(0,8).map(function(p) { return '<div class="bar-row"><div class="bar-label">' + escHtml(p.handle) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + Math.round(p.views/maxV*100) + '%"></div></div><div class="bar-val">' + p.views + '</div></div>'; }).join('')
+        : '<div class="panel-empty">No view data yet</div>';
 
-      // Pricing loop status
+      // System status
       var now = Date.now();
       function statusDot(isoDate) {
         if (!isoDate) return '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:6px"></span>';
-        var age = (now - new Date(isoDate).getTime()) / 3600000;
-        var color = age < 6 ? 'var(--green)' : age < 48 ? 'var(--orange)' : 'var(--red)';
+        var age = (now - new Date(isoDate).getTime()) / 3600000; // hours
+        var color = age < 24 ? 'var(--green)' : age < 168 ? 'var(--orange)' : 'var(--red)';
         return '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + color + ';margin-right:6px"></span>';
       }
-      var m = brainR.meta || {};
       var h = brainR.history || {};
+      var m = brainR.meta || {};
       var lastIntel = (h.intelligenceRuns || [])[0] ? (h.intelligenceRuns[0].timestamp || null) : null;
+      var lastAnomaly = (h.anomaliesDetected || [])[0] ? (h.anomaliesDetected[0].detectedAt || null) : null;
       document.getElementById('dash-system-status').innerHTML =
         '<table class="data-table" style="font-size:12px"><tbody>' +
         [
-          ['Competitor Scrape', compIntelR.lastRun || null],
-          ['Intelligence Run', lastIntel],
+          ['Intelligence', lastIntel],
           ['Orchestration', m.lastOrchestrationAt || null],
-          ['Last Price Change', auditLog[0] ? auditLog[0].changedAt : null],
+          ['System Update', m.lastSystemUpdateAt || null],
+          ['Anomaly Detector', lastAnomaly],
         ].map(function(row) {
-          return '<tr><td style="color:var(--txt2);padding:4px 6px">' + row[0] + '</td><td style="padding:4px 6px">' + statusDot(row[1]) + (row[1] ? fmtDate(row[1]) : '<span style="color:var(--txt3)">Never</span>') + '</td></tr>';
+          return '<tr><td style="color:var(--txt2)">' + row[0] + '</td><td>' + statusDot(row[1]) + (row[1] ? fmtDate(row[1]) : '<span style="color:var(--txt3)">Never run</span>') + '</td></tr>';
         }).join('') +
         '</tbody></table>';
 
-      // Recent price changes
-      document.getElementById('dash-anomalies').innerHTML = auditLog.length
-        ? auditLog.slice(0,5).map(function(e) {
-            var dir = (e.newPrice||0) < (e.oldPrice||0) ? 'var(--green)' : 'var(--red)';
-            var pct = e.changePct != null ? ((e.changePct >= 0 ? '+' : '') + Number(e.changePct).toFixed(1) + '%') : '';
-            return '<div style="padding:6px 0;border-bottom:1px solid var(--bdr);font-size:12px;display:flex;justify-content:space-between;align-items:center">' +
-              '<span style="color:var(--txt2);flex:1">' + escHtml(e.sku||'—') + '</span>' +
-              '<span>A$' + Number(e.newPrice||0).toLocaleString() + ' <span style="color:' + dir + ';font-weight:700">' + pct + '</span></span>' +
-            '</div>';
+      // Recent anomalies
+      var anomalies = (h.anomaliesDetected || []).slice(0, 5);
+      document.getElementById('dash-anomalies').innerHTML = anomalies.length
+        ? anomalies.map(function(a) {
+            var sev = a.severity || 'low';
+            var color = sev === 'critical' ? 'var(--red)' : sev === 'high' ? 'var(--orange)' : 'var(--txt3)';
+            return '<div style="padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px"><div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:' + color + ';display:inline-block;flex-shrink:0"></span><span style="color:var(--txt2)">' + escHtml(a.type || a.flag || 'Anomaly') + '</span><span style="color:var(--txt3);font-size:11px;margin-left:auto">' + fmtDate(a.detectedAt || a.timestamp) + '</span></div>' + (a.businessImpact ? '<div style="color:var(--txt3);font-size:12px;padding-left:16px;margin-top:2px">' + escHtml(a.businessImpact) + '</div>' : '') + '</div>';
           }).join('')
-        : '<div class="panel-empty" style="padding:12px">No price changes yet</div>';
+        : '<div class="panel-empty" style="padding:12px">No anomalies detected</div>';
 
-      // Competitor undercut alerts from intelligence cache
-      var pendingAlerts = [];
-      (compIntelR.skus || []).forEach(function(skuData) {
-        var product = (state.products||[]).find(function(p){ return p.handle === skuData.sku; });
-        if (!product || !product.priceIncGst) return;
-        if (skuData.lowestPrice && skuData.lowestPrice < product.priceIncGst * 0.98) {
-          var diff = ((skuData.lowestPrice - product.priceIncGst) / product.priceIncGst * 100).toFixed(1);
-          pendingAlerts.push({ sku: skuData.sku, ourPrice: product.priceIncGst, lowestComp: skuData.lowestPrice, diff: diff });
-        }
-      });
-      document.getElementById('dash-comp-alerts').innerHTML = pendingAlerts.length
-        ? pendingAlerts.slice(0,5).map(function(a) {
-            return '<div style="padding:7px 0;border-bottom:1px solid var(--bdr);font-size:12px;display:flex;justify-content:space-between;align-items:center">' +
-              '<div><span style="font-weight:600;color:var(--white)">' + escHtml(a.sku) + '</span>' +
-              '<div style="color:var(--txt3);font-size:11px">Us A$' + Number(a.ourPrice).toLocaleString() + ' · Comp A$' + Number(a.lowestComp).toLocaleString() + '</div></div>' +
-              '<span style="color:var(--green);font-weight:700">' + a.diff + '%</span>' +
-            '</div>';
+      // Pending recommendations from last intelligence run
+      var lastRun = (h.intelligenceRuns || [])[0] || {};
+      var recs = (lastRun.priceRecommendations || []).slice(0, 3);
+      document.getElementById('dash-pending-recs').innerHTML = recs.length
+        ? recs.map(function(r) {
+            var chg = r.changePercent || 0;
+            var dir = chg >= 0 ? 'var(--red)' : 'var(--green)';
+            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bdr);gap:12px"><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--white)">' + escHtml(r.handle) + '</div><div style="font-size:12px;color:var(--txt3)">A$' + (r.currentPrice||0).toLocaleString('en-AU') + ' → A$' + (r.recommendedPrice||0).toLocaleString('en-AU') + ' <span style="color:' + dir + '">(' + (chg>=0?'+':'') + chg.toFixed(1) + '%)</span></div></div>' + confPill(r.confidence||0) + '<button class="btn btn-primary btn-sm" style="flex-shrink:0" onclick="applyPriceRec(\'' + escAttr(r.handle) + '\',' + (r.recommendedPrice||0) + ')"><i class="fas fa-check"></i> Apply</button></div>';
           }).join('')
-        : '<div class="panel-empty" style="padding:12px">No undercuts detected</div>';
+        : '<div class="panel-empty" style="padding:12px">Run Intelligence to see recommendations</div>';
 
-      document.getElementById('dash-pending-recs').innerHTML = pendingAlerts.length
-        ? pendingAlerts.slice(0,5).map(function(a) {
-            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bdr);gap:10px">' +
-              '<div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--white)">' + escHtml(a.sku) + '</div>' +
-              '<div style="font-size:11px;color:var(--txt3)">Competitor A$' + Number(a.lowestComp).toLocaleString() + ' vs our A$' + Number(a.ourPrice).toLocaleString() + ' <span style="color:var(--green)">' + a.diff + '%</span></div></div>' +
-              '<button class="btn btn-primary btn-sm" style="flex-shrink:0;font-size:11px;padding:3px 8px" onclick="switchTab('pricing')">Review</button>' +
-            '</div>';
-          }).join('')
-        : '<div class="panel-empty" style="padding:12px">No competitor undercuts — pricing looks competitive</div>';
+      // Competitor alerts — price changes where competitor is cheaper than us
+      try {
+        var compR = await fetch('/api/competitors').then(function(r){return r.json();}).catch(function(){return {products:[]};});
+        var products = compR.products || [];
+        var alerts = [];
+        products.forEach(function(p) {
+          (p.competitors || []).forEach(function(c) {
+            if (p.ourPrice && c.price < p.ourPrice) {
+              var diff = ((c.price - p.ourPrice) / p.ourPrice * 100).toFixed(1);
+              alerts.push({ handle: p.handle, ourPrice: p.ourPrice, compPrice: c.price, site: c.site, diff: diff });
+            }
+          });
+        });
+        document.getElementById('dash-comp-alerts').innerHTML = alerts.length
+          ? alerts.slice(0,5).map(function(a) {
+              return '<div style="padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600;color:var(--white)">' + escHtml(a.handle) + '</span><span style="color:var(--red);font-weight:700">' + a.diff + '%</span></div><div style="color:var(--txt3);font-size:12px;margin-top:2px">Us: A$' + a.ourPrice.toLocaleString('en-AU') + ' · ' + escHtml(a.site) + ': A$' + a.compPrice.toLocaleString('en-AU') + '</div></div>';
+            }).join('')
+          : '<div class="panel-empty" style="padding:12px">No competitor undercuts found</div>';
+      } catch(_) {}
 
       document.getElementById('dash-last-refreshed').textContent = 'Last updated ' + new Date().toLocaleTimeString('en-AU');
     } catch(e) {
@@ -2460,49 +2737,15 @@
     var results = data.strategyResults || data.results || [];
     var winner = data.winner;
     var narrative = data.narrative;
-    var narrativeThinking = data.narrativeThinking;
-
-    var narrativeHtml = '';
-    if (narrative) {
-      narrativeHtml = '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--teal-lt)">' +
-        '<div style="font-size:13px;color:var(--txt2);margin-bottom:8px">' + escHtml(narrative) + '</div>' +
-        (narrativeThinking ? '<button onclick="var n=this.nextElementSibling;n.style.display=n.style.display===\'none\'?\'block\':\'none\'" style="width:100%;text-align:left;background:none;border:1px solid var(--bdr2);border-radius:var(--rsm);padding:5px 10px;color:var(--txt3);font-size:11px;cursor:pointer;font-family:inherit"><i class="fas fa-brain"></i> Show Claude\'s Reasoning</button><div class="thinking-panel" style="display:none">' + escHtml(narrativeThinking) + '</div>' : '') +
-      '</div>';
-    }
-
-    var strategyCardsHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px">' +
+    el.innerHTML =
+      (narrative ? '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--teal-lt)"><div style="font-size:13px;color:var(--txt2)">' + escHtml(narrative) + '</div></div>' : '') +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px">' +
       results.map(function(s) {
         var isWinner = winner && winner.strategyId === s.strategyId;
         var sum = s.summary || {};
         var conf = s.confidence || {};
         var confPct = conf.score != null ? Math.round(conf.score * 100) : null;
         var meetsThreshold = conf.meetsThreshold;
-        var timeline = s.timeline || [];
-
-        var stepTraceHtml = '';
-        if (timeline.length && timeline[0] && timeline[0].stepTrace) {
-          var rows = timeline.slice(0, 6).map(function(t) {
-            var tr = t.stepTrace || {};
-            return '<tr style="font-size:10px;border-bottom:1px solid var(--bdr)">' +
-              '<td style="padding:3px 6px;color:var(--txt3)">' + escHtml(t.periodLabel||('P'+t.period)) + '</td>' +
-              '<td style="padding:3px 6px">' + (t.sessions||0) + '</td>' +
-              '<td style="padding:3px 6px">' + (t.leads||0) + '</td>' +
-              '<td style="padding:3px 6px">' + (t.acceptedDeals||0) + '</td>' +
-              '<td style="padding:3px 6px;color:var(--teal-lt)">A$' + Math.round((t.revenueAUD||0)/1000) + 'k</td>' +
-              '<td style="padding:3px 6px;color:' + (t.event?'var(--orange)':'var(--txt3)') + '">' + escHtml(t.event||'—') + '</td>' +
-              '<td style="padding:3px 6px;color:var(--txt3)">' + (tr.priceEffect||'') + 'x</td>' +
-            '</tr>';
-          }).join('');
-          stepTraceHtml = '<button onclick="var n=this.nextElementSibling;n.style.display=n.style.display===\'none\'?\'block\':\'none\'" style="width:100%;text-align:left;background:none;border:1px solid var(--bdr2);border-radius:var(--rsm);padding:4px 8px;color:var(--txt3);font-size:10px;cursor:pointer;font-family:inherit;margin-top:8px"><i class="fas fa-calculator"></i> Show Step Trace</button>' +
-            '<div style="display:none;margin-top:4px;overflow-x:auto">' +
-              '<table style="width:100%;border-collapse:collapse;font-size:10px">' +
-                '<thead><tr style="color:var(--txt3);border-bottom:1px solid var(--bdr2)">' +
-                  '<th style="padding:3px 6px;text-align:left">Period</th><th style="padding:3px 6px">Sessions</th>' +
-                  '<th style="padding:3px 6px">Leads</th><th style="padding:3px 6px">Deals</th>' +
-                  '<th style="padding:3px 6px">Revenue</th><th style="padding:3px 6px">Event</th><th style="padding:3px 6px">PriceEff</th>' +
-                '</tr></thead><tbody>' + rows + '</tbody></table></div>';
-        }
-
         return '<div class="card" style="' + (isWinner ? 'border:1px solid var(--green)' : '') + '">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
             '<span style="font-weight:700;color:' + (isWinner?'var(--green)':'var(--white)') + '">' + escHtml(s.strategyName||s.strategyId) + '</span>' +
@@ -2514,18 +2757,13 @@
           (meetsThreshold ? '<div style="font-size:11px;color:var(--green);margin-bottom:6px"><i class="fas fa-check-circle"></i> Recommended — meets 95% confidence threshold</div>' : '') +
           '<div style="font-size:12px;color:var(--txt2);display:grid;gap:3px">' +
             '<div>Total Revenue: <strong>A$' + Math.round(sum.totalRevenueAUD||0).toLocaleString('en-AU') + '</strong></div>' +
-            '<div>Leads: <strong>' + (sum.totalLeads||0) + '</strong> · Quotes: <strong>' + (sum.totalQuotes||0) + '</strong></div>' +
-            '<div>Resilience: <strong>' + Math.round((sum.resilienceScore||0)*100) + '%</strong> · Growth: <strong>' + (sum.growthTrajectory >= 0 ? '+' : '') + Math.round((sum.growthTrajectory||0)*100) + '%</strong></div>' +
+            '<div>Total Leads: <strong>' + (sum.totalLeads||0) + '</strong> · Quotes: <strong>' + (sum.totalQuotes||0) + '</strong></div>' +
+            '<div>Resilience: <strong>' + Math.round((sum.resilienceScore||0)*100) + '%</strong></div>' +
+            '<div>Growth: <strong>' + (sum.growthTrajectory >= 0 ? '+' : '') + Math.round((sum.growthTrajectory||0)*100) + '%</strong></div>' +
           '</div>' +
-          stepTraceHtml +
         '</div>';
-      }).join('') + '</div>';
-
-    el.innerHTML =
-      narrativeHtml +
-      strategyCardsHtml +
+      }).join('') + '</div>' +
       (data.recommendations && data.recommendations.length ? '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--green)"><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px"><i class="fas fa-check-circle"></i> RECOMMENDED STRATEGIES (' + data.recommendations.length + ')</div>' + data.recommendations.map(function(r){ return '<div style="font-size:13px;color:var(--txt2);margin-top:4px">' + escHtml(r.strategyName) + ' — ' + Math.round(r.confidenceScore*100) + '% confidence</div>'; }).join('') + '</div>' : '') +
-      (data.riskWarnings && data.riskWarnings.length ? '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--orange)"><div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px"><i class="fas fa-exclamation-triangle"></i> RISK WARNINGS</div>' + data.riskWarnings.map(function(w){ return '<div style="font-size:12px;color:var(--txt2);margin-top:4px">' + escHtml(w.risk||w) + (w.affectedStrategy ? ' <span style="color:var(--txt3)">(' + escHtml(w.affectedStrategy) + ')</span>' : '') + '</div>'; }).join('') + '</div>' : '') +
       (data.insights ? '<div style="display:grid;gap:8px">' + (data.insights||[]).slice(0,4).map(function(ins) {
         return '<div style="font-size:13px;padding:8px 12px;background:var(--bg3);border-radius:var(--rsm)">' + escHtml(ins.insight||ins) + '</div>';
       }).join('') + '</div>' : '');
@@ -2673,420 +2911,473 @@
     } catch(e) {}
   };
 
-  /* ── Init ─────────────────────────────────────────────────────── */
-  loadProducts(); loadDashboard();
-})();
 
   /* ══════════════════════════════════════════════════════════════════
      PRICING INTELLIGENCE TAB
   ══════════════════════════════════════════════════════════════════ */
 
   var _pricingState = {
-    products: [],
     selectedProduct: null,
     competitorData: null,
-    recommendation: null,
+    lastRecommendation: null,
+  };
+
+  var _pricingRules = {
+    pricing_mode: 'premium',
+    minimum_margin_percent: 20,
+    max_daily_price_change_percent: 10,
+    max_weekly_price_change_percent: 25,
+  };
+
+  async function loadPricingRules() {
+    try {
+      var r = await fetch('/api/pricing-rules');
+      if (r.ok) {
+        var d = await r.json();
+        var rules = d.rules || {};
+        // Merge OEM/ODM fields from stored rules
+        if (rules.pricing_mode) _pricingRules.pricing_mode = rules.pricing_mode;
+        if (rules.minimum_margin_percent) _pricingRules.minimum_margin_percent = rules.minimum_margin_percent;
+        if (rules.max_daily_price_change_percent) _pricingRules.max_daily_price_change_percent = rules.max_daily_price_change_percent;
+        if (rules.max_weekly_price_change_percent) _pricingRules.max_weekly_price_change_percent = rules.max_weekly_price_change_percent;
+      }
+    } catch(e) {}
+    // Sync UI
+    var pm = document.getElementById('pi-pricing-mode');
+    var mm = document.getElementById('pi-min-margin');
+    var md = document.getElementById('pi-max-daily');
+    var mw = document.getElementById('pi-max-weekly');
+    if (pm) pm.value = _pricingRules.pricing_mode;
+    if (mm) mm.value = _pricingRules.minimum_margin_percent;
+    if (md) md.value = _pricingRules.max_daily_price_change_percent;
+    if (mw) mw.value = _pricingRules.max_weekly_price_change_percent;
+  }
+
+  window.savePricingRules = async function() {
+    var pm = document.getElementById('pi-pricing-mode');
+    var mm = document.getElementById('pi-min-margin');
+    var md = document.getElementById('pi-max-daily');
+    var mw = document.getElementById('pi-max-weekly');
+    var statusEl = document.getElementById('pi-rules-status');
+    _pricingRules = {
+      pricing_mode: pm ? pm.value : 'premium',
+      minimum_margin_percent: mm ? Number(mm.value) : 20,
+      max_daily_price_change_percent: md ? Number(md.value) : 10,
+      max_weekly_price_change_percent: mw ? Number(mw.value) : 25,
+    };
+    if (statusEl) statusEl.textContent = 'Saving...';
+    try {
+      // Load full existing rules to merge
+      var gr = await fetch('/api/pricing-rules');
+      var existing = gr.ok ? ((await gr.json()).rules || {}) : {};
+      var merged = Object.assign({}, existing, _pricingRules);
+      await fetch('/api/pricing-rules', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rules: merged }),
+      });
+      if (statusEl) { statusEl.textContent = 'Saved.'; setTimeout(function(){ statusEl.textContent=''; }, 2000); }
+    } catch(e) {
+      if (statusEl) statusEl.textContent = 'Save failed: ' + e.message;
+    }
   };
 
   window.loadPricingIntelligence = async function() {
-    // Load products for SKU list
-    try {
-      var r = await fetch('/api/admin');
-      var d = await r.json();
-      _pricingState.products = d.products || [];
-    } catch(_) {
-      if (window._state && window._state.products) _pricingState.products = window._state.products;
-    }
-    renderPricingSkuList(_pricingState.products);
-    // Check Apify status
-    try {
-      var r2 = await fetch('/api/competitor-intelligence');
-      var d2 = await r2.json();
-      var statusEl = document.getElementById('pricing-apify-status');
-      if (statusEl) {
-        statusEl.textContent = d2.apifyConfigured
-          ? ('Apify connected · Last run: ' + (d2.lastRun ? new Date(d2.lastRun).toLocaleDateString() : 'never'))
-          : 'APIFY_API_KEY not set in Cloudflare env';
-        statusEl.style.color = d2.apifyConfigured ? 'var(--green)' : 'var(--orange)';
-      }
-    } catch(_) {}
+    await loadPricingRules();
+    renderPricingProductList(state.products || []);
+    await loadCompetitorIntelSummary();
+    await loadPricingAudit();
   };
 
-  function renderPricingSkuList(products) {
-    var el = document.getElementById('pricing-sku-list');
+  function renderPricingProductList(products) {
+    var el = document.getElementById('pi-product-list');
     if (!el) return;
-    if (!products.length) { el.innerHTML = '<div class="panel-empty" style="font-size:12px">No products found</div>'; return; }
+    if (!products.length) { el.innerHTML = '<div class="panel-empty">No products loaded</div>'; return; }
     el.innerHTML = products.map(function(p) {
-      return '<div class="sku-item" onclick="selectPricingProduct(' + JSON.stringify(JSON.stringify(p)) + ')" data-handle="' + escAttr(p.handle||'') + '">' +
-        '<div style="font-weight:600;font-size:12px">' + escHtml(p.title||p.handle||'') + '</div>' +
-        '<div style="font-size:11px;color:var(--txt3)">' + escHtml(p.handle||'') + (p.priceIncGst ? ' · A$' + Number(p.priceIncGst).toLocaleString('en-AU') : '') + '</div>' +
+      var price = p.priceIncGst || p.price || 0;
+      var sel = _pricingState.selectedProduct && _pricingState.selectedProduct.handle === p.handle;
+      return '<div class="pi-product-item' + (sel ? ' selected' : '') + '" onclick="selectPricingProduct(' + JSON.stringify(JSON.stringify(p)).replace(/"/g, '&quot;') + ')">' +
+        '<div>' + escHtml(p.title || p.handle || '') + '</div>' +
+        '<div class="pi-product-price">A$' + Number(price).toLocaleString('en-AU') + (p.handle ? ' · ' + escHtml(p.handle) : '') + '</div>' +
       '</div>';
     }).join('');
   }
 
-  window.filterPricingSkus = function(query) {
-    var items = document.querySelectorAll('#pricing-sku-list .sku-item');
+  window.filterPricingProducts = function(query) {
+    var products = state.products || [];
+    if (!query) { renderPricingProductList(products); return; }
     var q = query.toLowerCase();
-    items.forEach(function(item) {
-      item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
-    });
+    renderPricingProductList(products.filter(function(p) {
+      return (p.title||'').toLowerCase().includes(q) || (p.handle||'').toLowerCase().includes(q);
+    }));
   };
 
-  window.selectPricingProduct = function(productJson) {
-    var product = JSON.parse(productJson);
-    _pricingState.selectedProduct = product;
+  window.selectPricingProduct = async function(pJson) {
+    var p = JSON.parse(pJson);
+    _pricingState.selectedProduct = p;
     _pricingState.competitorData = null;
-    _pricingState.recommendation = null;
+    renderPricingProductList(state.products || []);
 
-    // Update active state
-    document.querySelectorAll('#pricing-sku-list .sku-item').forEach(function(item) {
-      item.classList.toggle('active', item.dataset.handle === product.handle);
-    });
-
-    // Update quick stats
-    var statsEl = document.getElementById('pricing-stats-content');
-    if (statsEl) {
-      var margin = product.costExGst && product.priceIncGst
-        ? Math.round((1 - product.costExGst / (product.priceIncGst / 1.1)) * 100)
-        : null;
-      statsEl.innerHTML =
-        '<div class="sku-stat-row"><span class="sku-stat-label">Price (inc GST)</span><span class="sku-stat-value">' + (product.priceIncGst ? 'A$' + Number(product.priceIncGst).toLocaleString('en-AU') : '—') + '</span></div>' +
-        '<div class="sku-stat-row"><span class="sku-stat-label">Cost (ex GST)</span><span class="sku-stat-value">' + (product.costExGst ? 'A$' + Number(product.costExGst).toLocaleString('en-AU') : '—') + '</span></div>' +
-        '<div class="sku-stat-row"><span class="sku-stat-label">Margin</span><span class="sku-stat-value" style="color:' + (margin != null ? (margin >= 20 ? 'var(--green)' : margin >= 10 ? 'var(--teal-lt)' : 'var(--orange)') : 'var(--txt3)') + '">' + (margin != null ? margin + '%' : '—') + '</span></div>' +
-        '<div class="sku-stat-row"><span class="sku-stat-label">Stock</span><span class="sku-stat-value">' + (product.stock != null ? product.stock + ' units' : '—') + '</span></div>' +
-        '<div class="sku-stat-row"><span class="sku-stat-label">Category</span><span class="sku-stat-value">' + escHtml(product.category||'—') + '</span></div>';
+    // Show system specs
+    var statsEl = document.getElementById('pi-selected-stats');
+    var specEl = document.getElementById('pi-spec-grid');
+    if (statsEl) statsEl.style.display = 'block';
+    if (specEl) {
+      var specs = [
+        ['System Type', p.system_type || p.category || '—'],
+        ['GPU Class', p.gpu_class || '—'],
+        ['GPU Count', p.gpu_count || '—'],
+        ['CPU Tier', p.cpu_tier || '—'],
+        ['RAM Tier', p.ram_tier || '—'],
+        ['Lifecycle', p.lifecycle_stage || 'active'],
+        ['Stock', p.stock || 0],
+        ['Cost ex-GST', p.costExGst ? 'A$' + Number(p.costExGst).toLocaleString('en-AU') : '—'],
+      ];
+      specEl.innerHTML = specs.map(function(s) {
+        return '<div class="pi-spec-chip"><div style="font-size:10px;color:var(--txt3)">' + escHtml(s[0]) + '</div><strong>' + escHtml(String(s[1])) + '</strong></div>';
+      }).join('');
     }
-    document.getElementById('pricing-sku-stats').style.display = 'block';
 
-    // Enable analyse button
-    var btn = document.getElementById('pricing-rec-btn');
-    if (btn) btn.disabled = false;
-
-    // Update center header
-    var titleEl = document.getElementById('pricing-center-title');
-    if (titleEl) titleEl.textContent = escHtml(product.title || product.handle);
-
-    // Load competitor data
-    loadCompetitorLandscape(product.handle);
-
-    // Clear recommendation panel
-    document.getElementById('pricing-rec-content').innerHTML = '<div class="panel-empty" style="font-size:12px">Click Analyse to get AI recommendation</div>';
-  };
-
-  async function loadCompetitorLandscape(sku) {
-    var el = document.getElementById('pricing-center-content');
-    el.innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Loading competitor data...</div>';
+    // Load competitor intelligence for this SKU
+    var sku = p.handle || p.sku;
     try {
       var r = await fetch('/api/competitor-intelligence?sku=' + encodeURIComponent(sku));
-      var data = await r.json();
-      _pricingState.competitorData = data;
-      renderCompetitorLandscape(data);
+      if (r.ok) {
+        var d = await r.json();
+        _pricingState.competitorData = d;
+        renderCompetitorLandscape(d);
+        renderPriceTrends(d.priceTrend || []);
+      }
     } catch(e) {
-      el.innerHTML = '<div style="font-size:12px;color:var(--txt3)">No competitor data cached. Run Apify scrape or configure competitor sites.</div>';
+      document.getElementById('pi-competitor-landscape').innerHTML = '<div class="panel-empty">Failed to load competitor data</div>';
+    }
+  };
+
+  async function loadCompetitorIntelSummary() {
+    var statusEl = document.getElementById('pi-apify-status');
+    try {
+      var r = await fetch('/api/competitor-intelligence');
+      if (r.ok) {
+        var d = await r.json();
+        var total = (d.skus || []).reduce(function(a, s) { return a + (s.competitorCount||0); }, 0);
+        var lastRun = d.lastRun ? new Date(d.lastRun).toLocaleString('en-AU', {dateStyle:'short',timeStyle:'short'}) : 'Never';
+        if (statusEl) statusEl.innerHTML =
+          '<span style="color:' + (d.apifyConfigured ? 'var(--teal-lt)' : '#fbbf24') + '">' +
+          (d.apifyConfigured ? '<i class="fas fa-check-circle"></i> Apify ready' : '<i class="fas fa-exclamation-triangle"></i> APIFY_API_KEY not set') +
+          '</span><br><span style="font-size:11px">Last run: ' + escHtml(lastRun) + ' · ' + total + ' competitors tracked</span>';
+      }
+    } catch(e) {
+      if (statusEl) statusEl.textContent = 'Status check failed';
     }
   }
 
   function renderCompetitorLandscape(data) {
-    var el = document.getElementById('pricing-center-content');
+    var el = document.getElementById('pi-competitor-landscape');
+    var countEl = document.getElementById('pi-comp-count');
+    if (!el) return;
     var competitors = data.competitors || [];
-    var product = _pricingState.selectedProduct;
-    var ourPrice = product && product.priceIncGst ? Number(product.priceIncGst) : null;
-
-    // Price position matrix (SVG scatter)
-    var matrixHtml = renderPriceMatrix(competitors, ourPrice);
-
-    // 30-day trend if available
-    var trendHtml = '';
-    if (data.priceTrend && data.priceTrend.length) {
-      trendHtml = '<div class="section-label" style="margin:16px 0 8px">Recent Price Changes</div>' +
-        '<div style="display:grid;gap:4px">' +
-        data.priceTrend.slice(-10).reverse().map(function(t) {
-          var dir = t.newPrice < t.oldPrice ? '<span style="color:var(--green)">↓</span>' : '<span style="color:var(--red)">↑</span>';
-          return '<div style="display:flex;align-items:center;gap:8px;font-size:12px;padding:4px 0;border-bottom:1px solid var(--bdr)">' +
-            '<span style="color:var(--txt3);min-width:80px">' + escHtml(t.competitor) + '</span>' +
-            '<span style="color:var(--txt2)">A$' + Number(t.oldPrice).toLocaleString() + '</span>' +
-            dir +
-            '<span style="font-weight:600;color:var(--white)">A$' + Number(t.newPrice).toLocaleString() + '</span>' +
-            '<span style="color:var(--txt3);margin-left:auto;font-size:11px">' + new Date(t.changedAt).toLocaleDateString() + '</span>' +
-          '</div>';
-        }).join('') + '</div>';
+    if (countEl) countEl.textContent = '(' + competitors.length + ' sources)';
+    if (!competitors.length) {
+      el.innerHTML = '<div class="panel-empty">No competitor data for this SKU. Run Scrape Competitors.</div>';
+      return;
     }
-
-    // Active campaigns & bundles
-    var campaignsHtml = '';
-    var allCampaigns = competitors.reduce(function(acc, c) {
-      return acc.concat((c.activeCampaigns||[]).map(function(camp) { return Object.assign({}, camp, {competitor: c.competitor}); }));
-    }, []);
-    if (allCampaigns.length) {
-      campaignsHtml = '<div class="section-label" style="margin:16px 0 8px">Active Campaigns & Bundles</div>' +
-        '<div style="display:grid;gap:4px">' +
-        allCampaigns.slice(0, 5).map(function(camp) {
-          return '<div style="font-size:12px;padding:6px 10px;background:var(--bg3);border-radius:var(--rsm)">' +
-            '<div style="display:flex;justify-content:space-between">' +
-              '<span style="font-weight:600">' + escHtml(camp.competitor) + ' — ' + escHtml(camp.name||'Campaign') + '</span>' +
-              (camp.discountPercent ? '<span style="color:var(--orange)">-' + camp.discountPercent + '%</span>' : '') +
-            '</div>' +
-            (camp.effectivePrice ? '<div style="color:var(--teal-lt);margin-top:2px">Effective: A$' + Number(camp.effectivePrice).toLocaleString() + '</div>' : '') +
-            (camp.validUntil ? '<div style="color:var(--txt3);font-size:11px">Until: ' + new Date(camp.validUntil).toLocaleDateString() + '</div>' : '') +
-          '</div>';
-        }).join('') + '</div>';
-    }
-
-    var freshBadge = data.fresh === false ? '<span style="color:var(--orange);font-size:11px"><i class="fas fa-exclamation-triangle"></i> Data ' + (data.ageHours||'?') + 'h old</span>' : (data.fresh ? '<span style="color:var(--green);font-size:11px"><i class="fas fa-check-circle"></i> Fresh</span>' : '');
-
-    el.innerHTML =
-      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">' +
-        '<div class="section-label">Price Position Matrix</div>' +
-        freshBadge +
-      '</div>' +
-      matrixHtml +
-      '<div class="section-label" style="margin:16px 0 8px">Competitor Prices</div>' +
-      (competitors.length ? competitors.map(function(c) {
-        if (!c.price) return '';
-        var diff = ourPrice ? ((c.price - ourPrice) / ourPrice * 100) : null;
-        var badgeClass = diff == null ? '' : (diff < -2 ? 'under' : diff > 2 ? 'premium' : 'parity');
-        var badgeLabel = diff == null ? '' : (diff < -2 ? 'Undercuts us' : diff > 2 ? 'Premium' : 'Parity');
-        return '<div class="comp-row">' +
-          '<span class="comp-name">' + escHtml(c.competitor) + '</span>' +
-          '<span class="comp-price">A$' + Number(c.price).toLocaleString('en-AU') + '</span>' +
-          (badgeClass ? '<span class="comp-badge ' + badgeClass + '">' + badgeLabel + '</span>' : '') +
-          '<span style="font-size:10px;color:' + (c.stockStatus==='in_stock'?'var(--green)':c.stockStatus==='out_of_stock'?'var(--red)':'var(--txt3)') + '">' + escHtml(c.stockStatus||'—') + '</span>' +
-        '</div>';
-      }).join('') : '<div style="font-size:12px;color:var(--txt3)">No competitor prices cached. Click Run Apify Scrape or add competitor URLs manually.</div>') +
-      trendHtml +
-      campaignsHtml;
+    var rows = competitors.map(function(c) {
+      var stockClass = c.stockStatus === 'in_stock' ? 'in-stock' : c.stockStatus === 'out_of_stock' ? 'out-stock' : 'unknown';
+      var stockLabel = c.stockStatus === 'in_stock' ? 'In Stock' : c.stockStatus === 'out_of_stock' ? 'Out of Stock' : 'Unknown';
+      return '<div class="comp-row">' +
+        '<div><div style="font-weight:600;color:var(--white)">' + escHtml(c.competitor||'') + '</div>' +
+          '<div style="font-size:11px;color:var(--txt3)">' + escHtml((c.productName||'').slice(0,60)) + '</div></div>' +
+        '<div style="font-weight:700;color:var(--teal-lt)">' + (c.price ? 'A$' + Number(c.price).toLocaleString('en-AU') : '—') + '</div>' +
+        '<div><span class="comp-badge ' + stockClass + '">' + stockLabel + '</span></div>' +
+        '<div style="font-size:11px;color:var(--txt3)">' + (c.lastUpdated ? new Date(c.lastUpdated).toLocaleDateString('en-AU') : '—') + '</div>' +
+      '</div>';
+    }).join('');
+    el.innerHTML = '<div class="comp-row comp-row-header"><div>Competitor / Product</div><div>Price</div><div>Stock</div><div>Updated</div></div>' + rows;
   }
 
-  function renderPriceMatrix(competitors, ourPrice) {
-    var allPrices = competitors.filter(function(c) { return c.price; }).map(function(c) { return c.price; });
-    if (ourPrice) allPrices.push(ourPrice);
-    if (!allPrices.length) return '<div style="font-size:12px;color:var(--txt3);padding:20px 0;text-align:center">No price data for matrix</div>';
-
-    var minP = Math.min.apply(null, allPrices) * 0.95;
-    var maxP = Math.max.apply(null, allPrices) * 1.05;
-    var W = 400, H = 120, padL = 20, padR = 20, padT = 20, padB = 30;
-    var plotW = W - padL - padR, plotH = H - padT - padB;
-
-    function xPos(price) { return padL + (price - minP) / (maxP - minP) * plotW; }
-
-    var dots = '';
-    competitors.filter(function(c) { return c.price; }).forEach(function(c) {
-      var x = xPos(c.price);
-      var diff = ourPrice ? (c.price - ourPrice) / ourPrice : 0;
-      var col = diff < -0.02 ? '#f85149' : diff > 0.02 ? '#3ddc84' : '#14a8ae';
-      dots += '<circle cx="' + x + '" cy="' + (padT + plotH/2) + '" r="8" fill="' + col + '" opacity="0.7"/>';
-      dots += '<text x="' + x + '" y="' + (padT + plotH/2 + 20) + '" text-anchor="middle" font-size="9" fill="#8fa8b2">' + escHtml(c.competitor.slice(0,8)) + '</text>';
-      dots += '<text x="' + x + '" y="' + (padT + plotH/2 - 12) + '" text-anchor="middle" font-size="9" fill="#e2eaed">$' + Math.round(c.price/1000) + 'k</text>';
-    });
-    if (ourPrice) {
-      var ox = xPos(ourPrice);
-      dots += '<circle cx="' + ox + '" cy="' + (padT + plotH/2) + '" r="10" fill="none" stroke="#14a8ae" stroke-width="2.5"/>';
-      dots += '<circle cx="' + ox + '" cy="' + (padT + plotH/2) + '" r="4" fill="#14a8ae"/>';
-      dots += '<text x="' + ox + '" y="' + (padT + plotH/2 - 14) + '" text-anchor="middle" font-size="10" fill="#14a8ae" font-weight="bold">YOU</text>';
-    }
-    var axis = '<line x1="' + padL + '" y1="' + (padT+plotH+5) + '" x2="' + (W-padR) + '" y2="' + (padT+plotH+5) + '" stroke="#2d3f4a" stroke-width="1"/>';
-    axis += '<text x="' + padL + '" y="' + (H-4) + '" font-size="9" fill="#6e8898">A$' + Math.round(minP/1000) + 'k</text>';
-    axis += '<text x="' + (W-padR) + '" y="' + (H-4) + '" text-anchor="end" font-size="9" fill="#6e8898">A$' + Math.round(maxP/1000) + 'k</text>';
-
-    return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="price-matrix-svg" style="background:var(--bg3);border-radius:var(--rsm)">' + axis + dots + '</svg>';
+  function renderPriceTrends(trends) {
+    var el = document.getElementById('pi-trend-history');
+    if (!el) return;
+    if (!trends || !trends.length) { el.innerHTML = '<div class="panel-empty">No price changes recorded yet</div>'; return; }
+    el.innerHTML = trends.slice(0, 20).map(function(t) {
+      return '<div class="pi-trend-row">' +
+        '<span style="color:var(--txt2);flex:1">' + escHtml(t.competitor||'') + '</span>' +
+        '<span style="color:var(--txt3)">A$' + Number(t.oldPrice).toLocaleString('en-AU') + '</span>' +
+        '<span style="color:var(--txt3);padding:0 4px">→</span>' +
+        '<span style="color:var(--white);font-weight:700">A$' + Number(t.newPrice).toLocaleString('en-AU') + '</span>' +
+        '<span class="pi-trend-badge ' + (t.trend||'stable') + '">' + (t.trend||'stable') + '</span>' +
+        '<span style="color:var(--txt3);font-size:11px;margin-left:8px">' + (t.changedAt ? new Date(t.changedAt).toLocaleDateString('en-AU') : '') + '</span>' +
+      '</div>';
+    }).join('');
   }
 
-  window.getPricingRecommendation = async function() {
-    var product = _pricingState.selectedProduct;
-    if (!product) return;
-    var el = document.getElementById('pricing-rec-content');
-    el.innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Analysing with Claude...</div>';
+  window.loadPricingAudit = async function() {
+    var el = document.getElementById('pi-audit-list');
+    var card = document.getElementById('pi-audit-card');
+    if (card) card.style.display = 'block';
+    if (!el) return;
     try {
-      var payload = {
-        sku: product.handle,
-        currentPrice: product.priceIncGst ? Number(product.priceIncGst) : 0,
-        costOfGoods: product.costExGst ? Number(product.costExGst) : 0,
-        inventoryLevel: product.stock || 0,
-        daysInStock: 30,
-        marginFloor: 0.15,
-        competitorData: _pricingState.competitorData ? _pricingState.competitorData.competitors : [],
-      };
-      var r = await fetch('/api/pricing-recommendation', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      var r = await fetch('/api/apply-price');
+      if (!r.ok) { el.innerHTML = '<div class="panel-empty">Could not load audit log</div>'; return; }
+      var d = await r.json();
+      var entries = d.auditLog || [];
+      if (!entries.length) { el.innerHTML = '<div class="panel-empty">No price changes recorded</div>'; return; }
+      el.innerHTML = '<div class="pi-audit-row" style="color:var(--txt3);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px"><div>Product</div><div>Old Price</div><div>New Price</div><div>Change</div><div>Date</div></div>' +
+        entries.slice(0, 30).map(function(e) {
+          var dir = e.newPrice > e.oldPrice ? 'up' : e.newPrice < e.oldPrice ? 'down' : 'flat';
+          var sign = dir === 'up' ? '+' : '';
+          return '<div class="pi-audit-row">' +
+            '<div style="color:var(--txt2)">' + escHtml(e.productTitle || e.sku || '') + '</div>' +
+            '<div style="color:var(--txt3)">A$' + Number(e.oldPrice).toLocaleString('en-AU') + '</div>' +
+            '<div style="font-weight:700;color:var(--white)">A$' + Number(e.newPrice).toLocaleString('en-AU') + '</div>' +
+            '<div class="pi-price-change ' + dir + '">' + sign + e.changePct + '%</div>' +
+            '<div style="color:var(--txt3);font-size:11px">' + (e.changedAt ? new Date(e.changedAt).toLocaleDateString('en-AU') : '') + '</div>' +
+          '</div>';
+        }).join('');
+    } catch(e) {
+      if (el) el.innerHTML = '<div class="panel-empty">Error loading audit: ' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  window.scrapeCompetitorIntel = async function() {
+    var p = _pricingState.selectedProduct;
+    if (!p) { alert('Select a system first'); return; }
+    var sku = p.handle || p.sku;
+    var statusEl = document.getElementById('pi-apify-status');
+    if (statusEl) statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scraping...';
+
+    // Get competitor sites for this SKU from sites config
+    try {
+      var sitesR = await fetch('/api/competitors');
+      var sites = [];
+      if (sitesR.ok) {
+        var sd = await sitesR.json();
+        sites = (sd.sites || []).slice(0, 5).map(function(s) {
+          return { competitor: s.name || s.url, url: s.url };
+        });
+      }
+
+      if (!sites.length) {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#fbbf24"><i class="fas fa-exclamation-triangle"></i> No competitor sites configured</span>';
+        return;
+      }
+
+      var r = await fetch('/api/competitor-intelligence', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'run', sku, urls: sites }),
+      });
+      var d = await r.json();
+      if (d.error) throw new Error(d.error);
+      if (statusEl) statusEl.innerHTML = '<span style="color:var(--teal-lt)"><i class="fas fa-check"></i> Scraped ' + d.count + ' results</span>';
+
+      // Reload competitor data
+      var cr = await fetch('/api/competitor-intelligence?sku=' + encodeURIComponent(sku));
+      if (cr.ok) {
+        var cd = await cr.json();
+        _pricingState.competitorData = cd;
+        renderCompetitorLandscape(cd);
+        renderPriceTrends(cd.priceTrend || []);
+      }
+    } catch(e) {
+      if (statusEl) statusEl.innerHTML = '<span style="color:#f87171"><i class="fas fa-times"></i> ' + escHtml(e.message) + '</span>';
+    }
+  };
+
+  window.runPricingIntelligence = async function() {
+    var p = _pricingState.selectedProduct;
+    if (!p) { alert('Select a system to analyse'); return; }
+
+    var recEl = document.getElementById('pi-recommendation');
+    if (recEl) recEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--txt3)"><i class="fas fa-brain fa-spin" style="font-size:24px;display:block;margin-bottom:10px"></i>Running 8-step OEM/ODM analysis...</div>';
+
+    var payload = {
+      system: {
+        system_name: p.title || p.handle,
+        gpu_class: p.gpu_class || null,
+        gpu_count: p.gpu_count || null,
+        cpu_tier: p.cpu_tier || null,
+        ram_tier: p.ram_tier || null,
+        power_supply_spec: p.power_supply_spec || null,
+        cooling_type: p.cooling_type || null,
+        system_type: p.system_type || p.category || null,
+        current_price: Number(p.priceIncGst || p.price || 0),
+        cost: p.costExGst ? Number(p.costExGst) * 1.1 : null,
+        inventory_level: p.stock || 0,
+        lifecycle_stage: p.lifecycle_stage || 'active',
+        sku: p.handle,
+      },
+      competitors: (_pricingState.competitorData && _pricingState.competitorData.competitors) || [],
+      businessRules: _pricingRules,
+      marketSignals: _pricingState.marketSignals || null,
+    };
+
+    try {
+      var r = await fetch('/api/pricing-recommendation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
       var data = await r.json();
       if (data.error) throw new Error(data.error);
-      _pricingState.recommendation = data;
-      renderPricingRecommendation(data, product);
+      _pricingState.lastRecommendation = data;
+      renderPricingRecommendation(data, p);
     } catch(e) {
-      el.innerHTML = '<div style="font-size:12px;color:var(--red)">' + escHtml(e.message) + '</div>';
+      if (recEl) recEl.innerHTML = '<div class="panel-empty" style="color:#f87171"><i class="fas fa-times-circle"></i> Analysis failed: ' + escHtml(e.message) + '</div>';
     }
   };
 
   function renderPricingRecommendation(data, product) {
-    var el = document.getElementById('pricing-rec-content');
-    var margin = data.recommendedPrice && product.costExGst
-      ? Math.round((1 - Number(product.costExGst) / (data.recommendedPrice / 1.1)) * 100)
-      : null;
-    var conf = typeof data.confidenceScore === 'number' ? Math.round(data.confidenceScore * 100) : null;
-    var confColor = conf == null ? 'var(--txt3)' : conf >= 80 ? 'var(--green)' : conf >= 60 ? 'var(--orange)' : 'var(--red)';
+    var el = document.getElementById('pi-recommendation');
+    if (!el) return;
 
-    // Strategies
-    var strategiesHtml = (data.strategies || []).map(function(s, i) {
-      var sMargin = s.price && product.costExGst ? Math.round((1 - Number(product.costExGst)/(s.price/1.1))*100) : null;
-      return '<div class="strategy-card" id="strategy-' + i + '" onclick="selectStrategy(' + i + ')">' +
-        '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
-          '<div class="strategy-name">' + escHtml(s.strategy) + '</div>' +
-          (s.bundlePrice ? '<span class="chip" style="font-size:10px">Bundle</span>' : '') +
+    var posClass = data.market_position === 'underpriced' ? 'underpriced' : data.market_position === 'premium' ? 'premium' : 'aligned';
+    var confClass = data.confidence === 'high' ? 'high' : data.confidence === 'low' ? 'low' : 'medium';
+
+    var priceChange = data.price_change_percent || 0;
+    var changeClass = priceChange > 0 ? 'up' : priceChange < 0 ? 'down' : 'flat';
+    var changeSign = priceChange > 0 ? '+' : '';
+
+    var cs = data.competitor_summary || {};
+
+    var html = '<div style="margin-bottom:14px">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">' +
+        '<span class="pi-pos-badge ' + posClass + '"><i class="fas fa-' + (posClass==='premium'?'crown':posClass==='underpriced'?'arrow-up':'check') + '"></i> ' + (data.market_position||'—') + '</span>' +
+        '<span class="pi-conf-badge ' + confClass + '">' + (data.confidence||'—') + ' confidence</span>' +
+        (data.pricing_mode ? '<span style="font-size:11px;color:var(--txt3)">· ' + escHtml(data.pricing_mode) + ' mode</span>' : '') +
+      '</div>' +
+      '<div style="text-align:center;padding:12px 0">' +
+        '<div style="font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Recommended Price</div>' +
+        '<div class="pi-price-big">A$' + Number(data.recommended_price||0).toLocaleString('en-AU') + '</div>' +
+        '<div style="margin-top:4px">' +
+          '<span style="font-size:12px;color:var(--txt3)">Current: A$' + Number(data.current_price||0).toLocaleString('en-AU') + '</span>' +
+          (priceChange !== 0 ? ' <span class="pi-price-change ' + changeClass + '">' + changeSign + priceChange + '%</span>' : '') +
         '</div>' +
-        '<div class="strategy-price">A$' + Number(s.price||s.bundlePrice||0).toLocaleString('en-AU') + '</div>' +
-        (sMargin != null ? '<div class="strategy-margin">' + sMargin + '% margin</div>' : '') +
-        (s.impact ? '<div class="strategy-impact">' + escHtml(s.impact) + '</div>' : '') +
-        (s.risk ? '<div class="strategy-risk"><i class="fas fa-exclamation-triangle"></i> ' + escHtml(s.risk) + '</div>' : '') +
+      '</div>' +
+    '</div>';
+
+    // Competitor summary grid
+    if (cs.lowest_price || cs.average_price || cs.highest_price) {
+      html += '<div class="pi-comp-grid">' +
+        '<div class="pi-comp-stat"><div class="pi-comp-stat-label">Lowest</div><div class="pi-comp-stat-value">' + (cs.lowest_price ? 'A$' + Number(cs.lowest_price).toLocaleString('en-AU') : '—') + '</div></div>' +
+        '<div class="pi-comp-stat"><div class="pi-comp-stat-label">Average</div><div class="pi-comp-stat-value">' + (cs.average_price ? 'A$' + Number(cs.average_price).toLocaleString('en-AU') : '—') + '</div></div>' +
+        '<div class="pi-comp-stat"><div class="pi-comp-stat-label">Highest</div><div class="pi-comp-stat-value">' + (cs.highest_price ? 'A$' + Number(cs.highest_price).toLocaleString('en-AU') : '—') + '</div></div>' +
+        '<div class="pi-comp-stat"><div class="pi-comp-stat-label">Pressure</div><div class="pi-comp-stat-value" style="text-transform:capitalize">' + escHtml(cs.stock_pressure||'—') + '</div></div>' +
       '</div>';
-    }).join('');
+    }
 
-    // Stock insights
-    var stockHtml = data.stockInsights ? '<div class="section-label" style="margin:12px 0 6px">Stock Insights</div>' +
-      '<div style="font-size:12px;color:var(--txt2);padding:8px;background:var(--bg3);border-radius:var(--rsm)">' +
-        (data.stockInsights.recommendation ? escHtml(data.stockInsights.recommendation) : '') +
-      '</div>' : '';
+    // Reason
+    if (data.reason) {
+      html += '<div style="margin:10px 0;padding:10px;background:var(--bg4);border-radius:var(--rsm);font-size:12px;color:var(--txt2)">' + escHtml(data.reason) + '</div>';
+    }
 
-    // Thinking block
-    var thinkingHtml = data.thinking ? '<div style="margin-top:12px">' +
-      '<button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'" style="width:100%;text-align:left;background:none;border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 10px;color:var(--txt3);font-size:11px;cursor:pointer;font-family:inherit"><i class="fas fa-brain"></i> Show Agent Reasoning</button>' +
-      '<div class="thinking-panel" style="display:none">' + escHtml(data.thinking) + '</div>' +
-    '</div>' : '';
+    // Key factors
+    if (data.key_factors && data.key_factors.length) {
+      html += '<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Key Factors</div>' +
+        data.key_factors.map(function(f) { return '<div class="pi-key-factor"><i class="fas fa-dot-circle" style="color:var(--teal-lt);margin-right:6px;font-size:10px"></i>' + escHtml(f) + '</div>'; }).join('') +
+      '</div>';
+    }
 
-    // Manual override
-    var overrideHtml = '<div class="section-label" style="margin:12px 0 6px">Manual Override</div>' +
-      '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">' +
-        '<input type="number" id="pricing-manual-price" placeholder="Enter price..." style="flex:1" value="' + (data.recommendedPrice||'') + '" />' +
-        '<button class="btn btn-outline btn-sm" onclick="applyManualPrice()"><i class="fas fa-check"></i> Apply</button>' +
-      '</div>' +
-      '<textarea id="pricing-apply-reason" rows="2" placeholder="Reason for change (required for audit)..." style="width:100%;font-size:12px;margin-bottom:6px"></textarea>' +
-      '<div id="pricing-apply-status" style="font-size:11px;color:var(--txt3)"></div>';
+    // Warnings
+    if (data.warnings && data.warnings.length) {
+      html += '<div style="margin-bottom:10px">' +
+        data.warnings.map(function(w) { return '<div class="pi-warning"><i class="fas fa-exclamation-triangle" style="margin-right:6px"></i>' + escHtml(w) + '</div>'; }).join('') +
+      '</div>';
+    }
 
-    el.innerHTML =
-      '<div style="text-align:center;padding:12px 0;border-bottom:1px solid var(--bdr);margin-bottom:12px">' +
-        '<div class="rec-price-display">A$' + Number(data.recommendedPrice||0).toLocaleString('en-AU') + '</div>' +
-        (margin != null ? '<div class="rec-margin-display">' + margin + '% margin</div>' : '') +
-        (conf != null ? '<div style="margin-top:4px"><span style="font-size:12px;color:' + confColor + '">' + conf + '% confidence</span></div>' : '') +
-      '</div>' +
+    // Apply Price button (only if high/medium confidence)
+    if (data.confidence !== 'low' && data.recommended_price && data.recommended_price !== data.current_price) {
+      html += '<button class="pi-apply-btn" onclick="applyRecommendedPrice(' + data.recommended_price + ', ' + JSON.stringify(JSON.stringify(data.reason || 'AI pricing recommendation')).replace(/"/g, '&quot;') + ')">' +
+        '<i class="fas fa-check-circle"></i> Apply A$' + Number(data.recommended_price).toLocaleString('en-AU') + ' (' + changeSign + priceChange + '%)' +
+      '</button>';
+    }
 
-      (data.reasoning && data.reasoning.length ? '<div style="margin-bottom:12px">' +
-        '<div class="section-label" style="margin-bottom:6px">Reasoning</div>' +
-        '<ul style="padding-left:14px">' +
-        data.reasoning.map(function(r) { return '<li style="font-size:12px;color:var(--txt2);margin-bottom:4px">' + escHtml(r) + '</li>'; }).join('') +
-        '</ul></div>' : '') +
+    // Strategic Insights
+    var insights = data.insights;
+    if (insights) {
+      html += '<div style="margin-top:16px"><div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px"><i class="fas fa-lightbulb" style="color:var(--teal-lt)"></i> Strategic Insights</div>';
 
-      '<div class="section-label" style="margin-bottom:8px">Strategies</div>' +
-      strategiesHtml +
+      if (insights.market_structure_insights && insights.market_structure_insights.length) {
+        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Market Structure</div>' +
+          insights.market_structure_insights.map(function(i) { return '<div class="pi-insight-item">' + escHtml(i) + '</div>'; }).join('') + '</div>';
+      }
+      if (insights.competitor_movements && insights.competitor_movements.length) {
+        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Competitor Movements</div>' +
+          insights.competitor_movements.map(function(i) { return '<div class="pi-insight-item">' + escHtml(i) + '</div>'; }).join('') + '</div>';
+      }
+      if (insights.emerging_demand_signals && insights.emerging_demand_signals.length) {
+        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Demand Signals</div>' +
+          insights.emerging_demand_signals.map(function(i) { return '<div class="pi-insight-item">' + escHtml(i) + '</div>'; }).join('') + '</div>';
+      }
+      if (insights.margin_risks && insights.margin_risks.length) {
+        html += '<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--txt3);margin-bottom:4px;font-weight:600">Margin Risks</div>' +
+          insights.margin_risks.map(function(i) { return '<div class="pi-warning" style="margin-bottom:3px"><i class="fas fa-exclamation-triangle" style="margin-right:6px"></i>' + escHtml(i) + '</div>'; }).join('') + '</div>';
+      }
+      html += '</div>';
+    }
 
-      stockHtml +
-      thinkingHtml +
-      overrideHtml;
+    // Claude thinking toggle
+    if (data.thinking) {
+      var thinkId = 'pi-thinking-' + Date.now();
+      html += '<div style="margin-top:12px">' +
+        '<button class="btn btn-outline btn-sm" onclick="document.getElementById('' + thinkId + '').style.display=document.getElementById('' + thinkId + '').style.display==='none'?'block':'none'">' +
+          '<i class="fas fa-brain"></i> Show Claude's Reasoning' +
+        '</button>' +
+        '<div id="' + thinkId + '" class="pi-thinking-panel" style="display:none">' + escHtml(data.thinking) + '</div>' +
+      '</div>';
+    }
+
+    el.innerHTML = html;
   }
 
-  window.selectStrategy = function(idx) {
-    var data = _pricingState.recommendation;
-    if (!data || !data.strategies) return;
-    var s = data.strategies[idx];
-    document.querySelectorAll('.strategy-card').forEach(function(c, i) { c.classList.toggle('selected', i === idx); });
-    var priceInput = document.getElementById('pricing-manual-price');
-    if (priceInput) priceInput.value = s.price || s.bundlePrice || '';
-  };
+  window.applyRecommendedPrice = async function(newPrice, reasonJson) {
+    var p = _pricingState.selectedProduct;
+    if (!p) return;
+    var reason = '';
+    try { reason = JSON.parse(reasonJson); } catch(e) { reason = reasonJson; }
+    var sku = p.handle || p.sku;
+    var oldPrice = Number(p.priceIncGst || p.price || 0);
+    var changePct = oldPrice > 0 ? Math.abs((newPrice - oldPrice) / oldPrice) : 0;
 
-  window.applyManualPrice = async function() {
-    var product = _pricingState.selectedProduct;
-    if (!product) return;
-    var priceInput = document.getElementById('pricing-manual-price');
-    var reasonInput = document.getElementById('pricing-apply-reason');
-    var statusEl = document.getElementById('pricing-apply-status');
-    var price = parseFloat(priceInput.value);
-    var reason = reasonInput.value.trim();
-    if (!price || price <= 0) { statusEl.textContent = 'Enter a valid price'; statusEl.style.color = 'var(--red)'; return; }
-    if (!reason) { statusEl.textContent = 'Reason is required for audit trail'; statusEl.style.color = 'var(--red)'; return; }
-    statusEl.textContent = 'Applying...'; statusEl.style.color = 'var(--txt3)';
+    if (!confirm('Apply price change to ' + (p.title||sku) + '?
+
+Old: A$' + oldPrice.toLocaleString('en-AU') + '
+New: A$' + Number(newPrice).toLocaleString('en-AU') + '
+
+' + (changePct > 0.1 ? '⚠ This change exceeds 10%. Force approval required.' : ''))) return;
+
     try {
       var r = await fetch('/api/apply-price', {
         method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ sku: product.handle, newPrice: price, reason: reason }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sku, newPrice, reason: String(reason).slice(0, 200), force: changePct > 0.1 }),
       });
       var d = await r.json();
-      if (d.error && !d.requiresApproval) throw new Error(d.error);
       if (d.requiresApproval) {
-        statusEl.textContent = '⚠ Change >' + Math.abs(Math.round((price - Number(product.priceIncGst)) / Number(product.priceIncGst) * 100)) + '% — requires approval. Use the Force flag or review the change.';
-        statusEl.style.color = 'var(--orange)';
-        return;
+        if (confirm(d.error + '\n\nForce apply?')) {
+          var r2 = await fetch('/api/apply-price', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sku, newPrice, reason: String(reason).slice(0, 200), force: true }),
+          });
+          d = await r2.json();
+        } else return;
       }
-      statusEl.textContent = '✓ Price updated to A$' + Number(d.newPrice).toLocaleString('en-AU') + ' (margin: ' + (d.marginPct ? Math.round(d.marginPct*100)+'%' : '—') + ')';
-      statusEl.style.color = 'var(--green)';
-      product.priceIncGst = price;
-      reasonInput.value = '';
-    } catch(e) {
-      statusEl.textContent = e.message;
-      statusEl.style.color = 'var(--red)';
-    }
-  };
-
-  window.refreshCompetitorData = function() {
-    if (_pricingState.selectedProduct) loadCompetitorLandscape(_pricingState.selectedProduct.handle);
-  };
-
-  window.runApifyScrape = async function() {
-    var product = _pricingState.selectedProduct;
-    if (!product) { setStatus('Select a product first', 'error'); return; }
-    var btn = document.getElementById('pricing-run-apify-btn');
-    btn.disabled = true; btn.textContent = 'Running...';
-    try {
-      // Build competitor URLs from competitor-sites config
-      var sitesR = await fetch('/api/brain'); // reuse brain endpoint or add dedicated one
-      // Fallback: use known competitor URLs for the product
-      var urls = [
-        { competitor: 'Scorptec', url: 'https://www.scorptec.com.au/search?q=' + encodeURIComponent(product.title||product.handle) },
-        { competitor: 'Umart', url: 'https://www.umart.com.au/search/?q=' + encodeURIComponent(product.title||product.handle) },
-        { competitor: 'MSY', url: 'https://www.msy.com.au/search?q=' + encodeURIComponent(product.title||product.handle) },
-      ];
-      var r = await fetch('/api/competitor-intelligence', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ action: 'run', sku: product.handle, urls }),
-      });
-      var d = await r.json();
       if (d.error) throw new Error(d.error);
-      setStatus('Apify scrape complete — ' + d.count + ' results', 'success');
-      loadCompetitorLandscape(product.handle);
+      // Update local product price
+      p.priceIncGst = newPrice;
+      var idx = (state.products||[]).findIndex(function(x){ return x.handle === p.handle; });
+      if (idx >= 0) state.products[idx].priceIncGst = newPrice;
+      alert('Price applied successfully. Audit ID: ' + d.auditId);
+      await loadPricingAudit();
     } catch(e) {
-      setStatus('Apify error: ' + e.message, 'error');
-    } finally {
-      btn.disabled = false; btn.innerHTML = '<i class="fas fa-spider"></i> Run Apify Scrape';
+      alert('Apply failed: ' + e.message);
     }
   };
 
-  window.loadPricingAudit = async function() {
-    var el = document.getElementById('pricing-center-content');
-    el.innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Loading audit log...</div>';
-    try {
-      var r = await fetch('/api/apply-price');
-      var d = await r.json();
-      var log = d.auditLog || [];
-      var titleEl = document.getElementById('pricing-center-title');
-      if (titleEl) titleEl.textContent = 'Price Change Audit Log';
-      if (!log.length) { el.innerHTML = '<div class="panel-empty">No price changes recorded yet</div>'; return; }
-      el.innerHTML =
-        '<div class="audit-row" style="font-size:11px;font-weight:700;color:var(--txt3);border-bottom:2px solid var(--bdr)">' +
-          '<span>SKU</span><span>Old</span><span>New</span><span>Margin</span><span>Date</span>' +
-        '</div>' +
-        log.slice(0, 50).map(function(entry) {
-          var dir = entry.newPrice < entry.oldPrice ? 'price-change-down' : 'price-change-up';
-          return '<div class="audit-row">' +
-            '<span style="color:var(--txt2)">' + escHtml(entry.sku||'—') + '</span>' +
-            '<span style="color:var(--txt3)">A$' + Number(entry.oldPrice||0).toLocaleString() + '</span>' +
-            '<span class="' + dir + '" style="font-weight:600">A$' + Number(entry.newPrice||0).toLocaleString() + '</span>' +
-            '<span style="color:var(--txt3)">' + (entry.marginPct ? Math.round(entry.marginPct*100)+'%' : '—') + '</span>' +
-            '<span style="color:var(--txt3);font-size:11px">' + new Date(entry.changedAt||Date.now()).toLocaleDateString() + '</span>' +
-          '</div>';
-        }).join('') +
-        '<div style="margin-top:8px;font-size:11px;color:var(--txt3)">' + log.length + ' total changes</div>';
-    } catch(e) {
-      el.innerHTML = '<div style="font-size:12px;color:var(--red)">' + escHtml(e.message) + '</div>';
-    }
-  };
+  /* ── Init ─────────────────────────────────────────────────────── */
+  loadProducts(); loadDashboard();
+})();
 </script>
 
 </body>

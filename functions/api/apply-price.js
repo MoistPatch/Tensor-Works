@@ -7,7 +7,7 @@
 const OWNER = 'MoistPatch', REPO = 'Tensor-Works';
 const PRODUCTS_FILE = 'data/products.json';
 const AUDIT_FILE = 'data/pricing-audit.json';
-const BIG_CHANGE_THRESHOLD = 0.10; // 10%
+const BIG_CHANGE_THRESHOLD = 0.10;
 
 async function ghGet(path, token) {
   const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
@@ -56,7 +56,6 @@ export async function onRequest(context) {
   const token = env.GITHUB_PAT;
   if (!token) return jsonResponse({ error: 'GITHUB_PAT not configured' }, 500);
 
-  // GET: return audit log
   if (request.method === 'GET') {
     const { data } = await loadJSON(AUDIT_FILE, token, { entries: [] });
     return jsonResponse({ auditLog: (data?.entries || []).slice(0, 100) });
@@ -71,7 +70,6 @@ export async function onRequest(context) {
   if (!newPrice || newPrice <= 0) return jsonResponse({ error: 'newPrice must be a positive number' }, 400);
   if (!reason?.trim()) return jsonResponse({ error: 'reason is required for audit trail' }, 400);
 
-  // Load products
   const { data: products, sha: productsSha } = await loadJSON(PRODUCTS_FILE, token, []);
   const productList = Array.isArray(products) ? products : [];
 
@@ -82,7 +80,6 @@ export async function onRequest(context) {
   const oldPrice = product.priceIncGst || product.price || 0;
   const costExGst = product.costExGst || 0;
 
-  // Check 10% threshold
   const changePct = oldPrice > 0 ? Math.abs((newPrice - oldPrice) / oldPrice) : 0;
   if (changePct > BIG_CHANGE_THRESHOLD && !force) {
     return jsonResponse({
@@ -94,14 +91,11 @@ export async function onRequest(context) {
     }, 200);
   }
 
-  // Compute margins
   const oldMarginPct = computeMarginPct(oldPrice, costExGst);
   const newMarginPct = computeMarginPct(newPrice, costExGst);
 
-  // Update product
   productList[productIdx] = { ...product, priceIncGst: newPrice };
 
-  // Build audit entry
   const auditId = 'pa-' + Date.now();
   const auditEntry = {
     auditId,
@@ -117,11 +111,9 @@ export async function onRequest(context) {
     changedAt: new Date().toISOString(),
   };
 
-  // Load audit log
   const { data: auditData, sha: auditSha } = await loadJSON(AUDIT_FILE, token, { entries: [] });
   const entries = [auditEntry, ...(auditData?.entries || [])].slice(0, 500);
 
-  // Commit both files (products first, then audit)
   await ghPut(PRODUCTS_FILE, JSON.stringify(productList, null, 2), productsSha,
     `Pricing: ${sku} ${oldPrice} → ${newPrice} (${reason.slice(0, 50)})`, token);
 

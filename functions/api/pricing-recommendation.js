@@ -1,7 +1,10 @@
 /**
- * Pricing Recommendation Engine — AI-powered analysis using competitor data,
- * inventory pressure, margin targets, and market positioning.
- * POST: generate recommendation for a SKU
+ * Pricing Intelligence Agent — 9-step OEM/ODM system-level analysis.
+ * Operates on engineered AI infrastructure systems, not individual components.
+ * POST: analyse a system and return structured pricing recommendation.
+ *
+ * Input accepts optional marketSignals: { reddit, googleTrends }
+ * Competitor data validated for freshness before analysis (Step 1).
  */
 
 const OWNER = 'MoistPatch', REPO = 'Tensor-Works';
@@ -13,6 +16,18 @@ async function ghGet(path, token) {
   if (!r.ok) throw new Error('GitHub GET ' + path + ' failed: ' + r.status);
   return r.json();
 }
+async function ghPut(path, content, sha, message, token) {
+  const encoded = btoa(unescape(encodeURIComponent(content)));
+  const body = { message, content: encoded };
+  if (sha) body.sha = sha;
+  const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
+    method: 'PUT',
+    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'TensorWorks', 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.message || 'GitHub PUT failed'); }
+  return r.json();
+}
 async function loadJSON(path, token, fallback = null) {
   try { const f = await ghGet(path, token); return { data: JSON.parse(atob(f.content.replace(/\s/g, ''))), sha: f.sha }; }
   catch (_) { return { data: fallback, sha: null }; }
@@ -21,15 +36,10 @@ function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
 }
 
-async function callClaude(apiKey, system, messages, maxTokens = 3072, enableThinking = true) {
-  const reqBody = {
-    model: 'claude-opus-4-7',
-    max_tokens: maxTokens,
-    system,
-    messages,
-  };
+async function callClaude(apiKey, system, messages, maxTokens = 4096, enableThinking = true) {
+  const reqBody = { model: 'claude-opus-4-7', max_tokens: maxTokens, system, messages };
   if (enableThinking) {
-    reqBody.thinking = { type: 'enabled', budget_tokens: Math.floor(maxTokens * 0.45) };
+    reqBody.thinking = { type: 'enabled', budget_tokens: Math.floor(maxTokens * 0.4) };
   }
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -48,143 +58,200 @@ function parseJSON(text) {
   return JSON.parse(clean);
 }
 
-// ── Deterministic pre-analysis ────────────────────────────────────────────────
+// ── Pricing Intelligence Agent System Prompt ─────────────────────────────────
 
-function assessInventoryPressure(daysInStock) {
-  if (daysInStock > 60) return { level: 'critical', factor: 0.85, label: 'Critical — 60+ days in stock' };
-  if (daysInStock > 45) return { level: 'high', factor: 0.92, label: 'High — 45+ days in stock' };
-  if (daysInStock > 30) return { level: 'medium', factor: 0.97, label: 'Medium — 30–45 days in stock' };
-  if (daysInStock < 10) return { level: 'low', factor: 1.05, label: 'Low — scarcity signal (<10 days stock)' };
-  return { level: 'normal', factor: 1.0, label: 'Normal velocity' };
+const AGENT_SYSTEM_PROMPT = `You are an autonomous market intelligence and pricing optimisation agent for a high-end AI infrastructure company.
+
+We specialise in:
+- OEM and ODM custom-built systems
+- AI edge computing hardware
+- AI inference and LLM infrastructure systems
+- High-performance GPUs, CPUs, power supplies, and cooling systems
+- Full system integration and engineered compute solutions
+
+We are NOT a retail store. We design, build, and supply engineered compute systems.
+
+---
+
+SYSTEM ARCHITECTURE CONTEXT:
+
+This system consists of multiple layers:
+1. Apify → primary data collection engine (competitor scraping, pricing, stock levels)
+2. GitHub → historical market and product memory (snapshots)
+3. n8n → orchestration layer (data movement and scheduling)
+4. Claude (YOU) → intelligence and decision engine
+5. Reddit + Google Trends → demand and sentiment signals
+6. Shopify API → execution layer (pricing and product updates)
+7. Admin dashboard → human oversight
+
+You are ONLY responsible for analysis and pricing decisions.
+You do NOT crawl websites.
+You do NOT fetch data directly.
+You analyse structured datasets provided to you.
+
+---
+
+STEP 1 — DATA VALIDATION (APIFY DATA CONTROL)
+
+All competitor data originates from Apify crawls.
+- Validate freshness using timestamps. Flag entries older than 24 hours.
+- Reject stale or incomplete data.
+- Ignore entries missing: price, gpu_class, stock_status (unless corroborated elsewhere).
+
+Assign confidence:
+- HIGH (complete + recent + consistent)
+- MEDIUM (minor missing fields, or timestamp 12–24h old)
+- LOW (ignore — missing critical fields or timestamp >24h)
+
+---
+
+STEP 2 — SYSTEM NORMALISATION
+
+Convert all products into comparable compute systems. Standardise into:
+- compute_class (edge / inference / training / workstation)
+- gpu_equivalence_class
+- cpu_tier
+- ram_tier
+- system_complexity_level
+
+Treat all inputs as ENGINEERED SYSTEMS, not retail products.
+If critical system data is missing → mark as LOW CONFIDENCE and exclude from pricing decisions.
+
+---
+
+STEP 3 — COMPETITOR MATCHING
+
+Match our systems with competitor systems using:
+- GPU class (primary driver)
+- GPU count
+- system_type equivalence
+- workload similarity
+
+Assign:
+- HIGH confidence match
+- MEDIUM confidence match
+- LOW confidence (ignore)
+
+---
+
+STEP 4 — MARKET STRUCTURE ANALYSIS
+
+For each system category calculate:
+- lowest competitor price (weighted by confidence)
+- average competitor price
+- highest competitor price
+- stock distribution (% in stock vs out of stock)
+- bundle/value additions (cooling, PSU, storage, tuning services)
+
+Infer demand signals:
+- declining stock → high demand pressure
+- stable stock → neutral demand
+- excess stock → saturated market
+
+---
+
+STEP 5 — STRATEGIC POSITIONING
+
+Determine positioning of each system:
+- underpriced
+- aligned
+- premium positioned
+
+Adjust based on:
+- pricing_mode (premium / competitive / aggressive)
+- inventory level
+- lifecycle stage (new / active / scaling / clearance)
+- system complexity advantage (OEM/ODM custom engineering value)
+- demand pressure signals from market signals
+
+---
+
+STEP 6 — PRICING DECISION ENGINE
+
+Apply rules:
+
+1. If competitors are predominantly OUT OF STOCK:
+   → increase price +5% to +20%
+
+2. If competitors undercut AND are IN STOCK:
+   → reduce price 2%–4% (HIGH confidence only)
+
+3. If OUR inventory is LOW:
+   → increase price moderately
+
+4. If OUR inventory is HIGH:
+   → allow controlled reduction to stimulate demand
+
+5. If competitor bundles include additional system value:
+   → adjust comparison using estimated system-level value equivalence
+
+6. NEVER reduce below:
+   cost + minimum margin requirement
+
+7. NEVER exceed:
+   max daily or weekly price change limits
+
+8. If confidence is LOW:
+   → do not recommend any price change
+
+---
+
+STEP 7 — MARKET SHIFT DETECTION (INCLUDING HISTORICAL SNAPSHOTS)
+
+Using historical snapshots:
+- detect price compression trends
+- detect GPU supply shortages
+- detect emerging competitor system classes
+- detect demand acceleration or decline
+
+Only report meaningful structural changes.
+
+---
+
+STEP 8 — OUTPUT FORMAT (STRICT JSON ONLY)
+
+Return a JSON object with exactly these fields (no markdown, no preamble):
+{
+  "system_name": "string",
+  "current_price": number,
+  "recommended_price": number,
+  "price_change_percent": number,
+  "market_position": "underpriced|aligned|premium",
+  "pricing_mode": "string",
+  "reason": "string",
+  "key_factors": ["string"],
+  "competitor_summary": {
+    "lowest_price": number,
+    "average_price": number,
+    "highest_price": number,
+    "stock_pressure": "low|medium|high"
+  },
+  "confidence": "low|medium|high",
+  "warnings": ["string"]
 }
 
-function computeMargin(price, costExGst) {
-  if (!price || !costExGst) return null;
-  const priceExGst = price / 1.1;
-  return (priceExGst - costExGst) / priceExGst;
+STEP 9 — STRATEGIC INSIGHTS
+
+After the pricing JSON, append a second JSON object on a new line:
+{
+  "market_structure_insights": ["string", "string", "string"],
+  "competitor_movements": ["string"],
+  "emerging_demand_signals": ["string"],
+  "margin_risks": ["string"]
 }
 
-function classifyCompetitorPosition(ourPrice, competitors) {
-  const competitorPrices = competitors.filter(c => c.price).map(c => ({ competitor: c.competitor, price: c.price }));
-  if (!competitorPrices.length || !ourPrice) return { undercutters: [], parity: [], premium: [] };
+The emerging_demand_signals field must incorporate Reddit sentiment and Google Trends data if provided.
 
-  const undercutters = competitorPrices.filter(c => c.price < ourPrice * 0.98);
-  const parity = competitorPrices.filter(c => Math.abs(c.price - ourPrice) / ourPrice <= 0.02);
-  const premium = competitorPrices.filter(c => c.price > ourPrice * 1.02);
+---
 
-  return {
-    undercutters,
-    parity,
-    premium,
-    lowestCompetitor: competitorPrices.sort((a, b) => a.price - b.price)[0] || null,
-    highestCompetitor: competitorPrices.sort((a, b) => b.price - a.price)[0] || null,
-    avgCompetitorPrice: competitorPrices.reduce((s, c) => s + c.price, 0) / competitorPrices.length,
-    ourPercentile: competitorPrices.filter(c => c.price < ourPrice).length / competitorPrices.length,
-  };
-}
-
-function generateDeterministicStrategies(params) {
-  const { currentPrice, costOfGoods, inventoryPressure, competitorPositions, marginFloor } = params;
-  const costExGst = costOfGoods || 0;
-  const marginFloorPct = marginFloor || 0.15;
-
-  const strategies = [];
-
-  // Strategy 1: Hold
-  const holdMargin = computeMargin(currentPrice, costExGst);
-  strategies.push({
-    strategy: 'Hold Position',
-    price: currentPrice,
-    margin: holdMargin,
-    impact: 'Maintains current positioning. Natural velocity continues.',
-    risk: inventoryPressure.level !== 'normal' ? `Stock pressure: ${inventoryPressure.label}` : null,
-  });
-
-  // Strategy 2: Competitive undercut (if being undercut)
-  if (competitorPositions.undercutters.length > 0) {
-    const lowestComp = competitorPositions.lowestCompetitor;
-    const undercutPrice = Math.round(lowestComp.price * 0.99 / 50) * 50; // round to $50
-    const undercutMargin = computeMargin(undercutPrice, costExGst);
-    if (undercutMargin === null || undercutMargin >= marginFloorPct) {
-      strategies.push({
-        strategy: 'Undercut Leader',
-        price: undercutPrice,
-        margin: undercutMargin,
-        impact: `1% below ${lowestComp.competitor} ($${lowestComp.price.toLocaleString('en-AU')}). Likely conversion lift 20–40%.`,
-        risk: undercutMargin && undercutMargin < 0.20 ? 'Thin margin — may trigger price war' : null,
-      });
-    }
-  }
-
-  // Strategy 3: Bundle (preserve margin, obscure comparison)
-  const bundlePrice = Math.round(currentPrice * 1.06 / 100) * 100;
-  strategies.push({
-    strategy: 'Bundle Premium',
-    price: bundlePrice,
-    bundlePrice,
-    margin: computeMargin(bundlePrice, costExGst),
-    impact: 'Bundle with accessories (PSU, cables, warranty). Harder to price-compare. AOV increase.',
-    risk: null,
-  });
-
-  // Strategy 4: Inventory clearance (if high pressure)
-  if (inventoryPressure.level === 'high' || inventoryPressure.level === 'critical') {
-    const clearancePrice = Math.round(currentPrice * 0.93 / 50) * 50;
-    const clearanceMargin = computeMargin(clearancePrice, costExGst);
-    if (clearanceMargin === null || clearanceMargin >= marginFloorPct - 0.02) {
-      strategies.push({
-        strategy: 'Clearance Discount',
-        price: clearancePrice,
-        margin: clearanceMargin,
-        impact: `7% reduction moves stock faster. ${inventoryPressure.label}.`,
-        risk: clearanceMargin && clearanceMargin < marginFloorPct ? `Below ${Math.round(marginFloorPct * 100)}% margin floor` : null,
-      });
-    }
-  }
-
-  // Strategy 5: Scarcity premium (if low stock, we're competitive)
-  if (inventoryPressure.level === 'low' && competitorPositions.undercutters.length === 0) {
-    const premiumPrice = Math.round(currentPrice * 1.04 / 50) * 50;
-    strategies.push({
-      strategy: 'Scarcity Premium',
-      price: premiumPrice,
-      margin: computeMargin(premiumPrice, costExGst),
-      impact: 'Low stock creates urgency. Competitors at parity or higher. Capture margin now.',
-      risk: 'May slow velocity slightly',
-    });
-  }
-
-  return strategies;
-}
-
-function computeConfidenceScore(params) {
-  const { competitorData, daysInStock, currentPrice, costOfGoods } = params;
-  let score = 0.4;
-
-  const competitors = competitorData || [];
-  const freshComps = competitors.filter(c => {
-    if (!c.lastUpdated) return false;
-    return Date.now() - new Date(c.lastUpdated).getTime() < 12 * 3600 * 1000;
-  });
-
-  if (freshComps.length >= 2) score += 0.25;
-  else if (freshComps.length === 1) score += 0.12;
-  else if (competitors.length > 0) score += 0.05;
-
-  if (costOfGoods > 0) score += 0.15;
-  if (daysInStock > 0) score += 0.1;
-  if (currentPrice > 0) score += 0.05;
-
-  const prices = competitors.map(c => c.price).filter(Boolean);
-  if (prices.length >= 2) {
-    const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
-    const variance = prices.reduce((s, p) => s + Math.pow(p - avg, 2), 0) / prices.length;
-    const cv = Math.sqrt(variance) / avg;
-    if (cv < 0.05) score += 0.05; // stable market
-  }
-
-  return Math.min(Math.round(score * 100) / 100, 0.97);
-}
+CONSTRAINTS:
+- Do NOT hallucinate missing data
+- Do NOT treat retail products as isolated components
+- Do NOT optimise purely for lowest price
+- Do NOT override business rules
+- Prioritise OEM/ODM system value, margin protection, and market positioning
+- Treat Apify data as the PRIMARY source of market truth
+- Return ONLY two JSON objects separated by a newline — no other text`;
 
 // ── Request handler ───────────────────────────────────────────────────────────
 
@@ -207,145 +274,186 @@ export async function onRequest(context) {
   if (!apiKey) return jsonResponse({ error: 'ANTHROPIC_API_KEY not configured' }, 500);
 
   const body = await request.json().catch(() => ({}));
-  const {
-    sku,
-    currentPrice,
-    costOfGoods,
-    inventoryLevel = 0,
-    daysInStock = 30,
-    marginFloor = 0.15,
-    competitorData = null,
-  } = body;
+  const { system: systemData, competitors: competitorData, businessRules, marketSignals } = body;
 
-  if (!sku) return jsonResponse({ error: 'sku is required' }, 400);
-  if (!currentPrice) return jsonResponse({ error: 'currentPrice is required' }, 400);
+  if (!systemData) return jsonResponse({ error: 'system data is required' }, 400);
+  if (!systemData.current_price) return jsonResponse({ error: 'system.current_price is required' }, 400);
 
-  // Load competitor cache if not provided directly
+  // Load business rules (request body overrides stored rules)
+  const { data: storedRules } = await loadJSON('data/pricing-rules.json', token, {
+    pricing_mode: 'premium',
+    minimum_margin_percent: 20,
+    max_daily_price_change_percent: 10,
+    max_weekly_price_change_percent: 25,
+  });
+
+  const rules = { ...storedRules, ...(businessRules || {}) };
+
+  // Load previous snapshot for market shift detection (Step 7)
+  const { data: snapshots } = await loadJSON('data/pricing-snapshots.json', token, { snapshots: [] });
+  const lastSnapshot = (snapshots?.snapshots || []).find(s => s.system_name === systemData.system_name);
+
+  // Load competitor intelligence cache if competitors not provided directly
   let competitors = competitorData;
-  if (!competitors) {
+  if (!competitors || !competitors.length) {
+    const sku = systemData.sku || systemData.system_name;
     const { data: cache } = await loadJSON('data/competitor-intelligence.json', token, { skus: {} });
     competitors = cache?.skus?.[sku]?.competitors || [];
   }
 
-  // Pre-analysis
-  const inventoryPressure = assessInventoryPressure(daysInStock);
-  const competitorPositions = classifyCompetitorPosition(currentPrice, competitors);
-  const deterministicStrategies = generateDeterministicStrategies({
-    currentPrice,
-    costOfGoods,
-    inventoryPressure,
-    competitorPositions,
-    marginFloor,
+  // Step 1 pre-filter: tag competitor entries with data quality before sending to Claude
+  const now = Date.now();
+  const taggedCompetitors = competitors.slice(0, 15).map(c => {
+    const ts = c.lastUpdated || c.timestamp;
+    const ageMs = ts ? now - new Date(ts).getTime() : Infinity;
+    const ageHours = ageMs / 3600000;
+    const hasPrice = !!c.price;
+    const hasGpuClass = !!(c.gpu_class || c.gpuClass);
+    const hasStock = !!(c.stockStatus || c.stock_status);
+    let dataQuality;
+    if (!hasPrice || !hasGpuClass || ageHours > 24) dataQuality = 'LOW';
+    else if (!hasStock || ageHours > 12) dataQuality = 'MEDIUM';
+    else dataQuality = 'HIGH';
+    return {
+      competitor_name: c.competitor || c.competitor_name,
+      product_name: c.productName || c.product_name,
+      price: c.price,
+      currency: c.currency || 'AUD',
+      gpu_class: c.gpu_class || null,
+      gpu_count: c.gpu_count || null,
+      cpu: c.cpu || null,
+      ram: c.ram || null,
+      cooling: c.cooling || null,
+      power_specs: c.power_specs || null,
+      stock_status: c.stockStatus || c.stock_status || 'unknown',
+      bundle_inclusions: c.bundleDeals?.length ? c.bundleDeals : (c.bundle_inclusions || null),
+      url: c.url,
+      timestamp: ts || null,
+      data_age_hours: Math.round(ageHours * 10) / 10,
+      data_quality: dataQuality,
+    };
   });
 
-  const confScore = computeConfidenceScore({ competitorData: competitors, daysInStock, currentPrice, costOfGoods });
+  // Market signals section (Reddit + Google Trends)
+  const signals = marketSignals || {};
+  const signalsSection = (signals.reddit || signals.googleTrends || signals.keywords)
+    ? `MARKET SIGNAL DATA:
+${JSON.stringify({
+  reddit_sentiment: signals.reddit || null,
+  google_trends: signals.googleTrends || null,
+  detected_keywords: signals.keywords || null,
+  demand_spikes: signals.demandSpikes || null,
+}, null, 2)}`
+    : 'MARKET SIGNAL DATA: Not provided for this analysis run.';
 
-  // Build Claude prompt
-  const analysisPayload = {
-    sku,
-    currentPrice,
-    costOfGoods,
-    inventoryLevel,
-    daysInStock,
-    marginFloor,
-    inventoryPressure: { level: inventoryPressure.level, label: inventoryPressure.label },
-    competitors: competitors.slice(0, 10),
-    competitorPositions: {
-      undercutterCount: competitorPositions.undercutters.length,
-      parityCount: competitorPositions.parity.length,
-      premiumCount: competitorPositions.premium.length,
-      lowestCompetitor: competitorPositions.lowestCompetitor,
-      avgCompetitorPrice: Math.round(competitorPositions.avgCompetitorPrice || 0),
-      ourPercentile: Math.round((competitorPositions.ourPercentile || 0) * 100),
-    },
-    deterministicStrategies,
-  };
+  // Build user prompt with structured data
+  const userPrompt = `Analyse this AI infrastructure system and produce pricing + strategic intelligence.
 
-  const systemPrompt = `You are a pricing intelligence engine for Tensor Works, an Australian B2B AI hardware and GPU reseller.
-Given market data and pre-computed strategies, produce a refined pricing recommendation with clear reasoning.
-All prices are AUD inclusive of GST (10%). Margin floor is the minimum acceptable gross margin %.
-Return ONLY valid JSON — no markdown fences.`;
+OUR SYSTEM:
+${JSON.stringify({
+  system_name: systemData.system_name || systemData.title || 'Unknown System',
+  gpu_class: systemData.gpu_class || null,
+  gpu_count: systemData.gpu_count || null,
+  cpu_tier: systemData.cpu_tier || null,
+  ram_tier: systemData.ram_tier || null,
+  storage: systemData.storage || null,
+  power_supply_spec: systemData.power_supply_spec || null,
+  cooling_type: systemData.cooling_type || null,
+  system_type: systemData.system_type || null,
+  current_price: systemData.current_price,
+  cost: systemData.cost || (systemData.costExGst ? systemData.costExGst * 1.1 : null),
+  inventory_level: systemData.inventory_level || systemData.stock || 0,
+  lifecycle_stage: systemData.lifecycle_stage || 'active',
+}, null, 2)}
 
-  const userPrompt = `Analyse this pricing situation and recommend the optimal strategy.
+BUSINESS RULES:
+${JSON.stringify({
+  pricing_mode: rules.pricing_mode || 'premium',
+  minimum_margin_percent: rules.minimum_margin_percent || 20,
+  max_daily_price_change_percent: rules.max_daily_price_change_percent || 10,
+  max_weekly_price_change_percent: rules.max_weekly_price_change_percent || 25,
+}, null, 2)}
 
-Data:
-${JSON.stringify(analysisPayload, null, 2)}
+COMPETITOR DATASET — ${taggedCompetitors.length} entries (Apify-sourced, pre-tagged with data_quality):
+${JSON.stringify(taggedCompetitors, null, 2)}
 
-Return exactly this JSON structure:
-{
-  "recommendedPrice": 0,
-  "reasoning": ["bullet 1", "bullet 2", "bullet 3", "bullet 4"],
-  "strategies": [
-    {"strategy": "name", "price": 0, "margin": 0.0, "impact": "description", "risk": "or null"}
-  ],
-  "competitorPositions": {
-    "undercutter": {"competitor": "", "price": 0} or null,
-    "parity": {"competitor": "", "price": 0} or null,
-    "premium": {"competitor": "", "price": 0} or null
-  },
-  "stockInsights": {
-    "yourStockDays": 0,
-    "recommendation": "text"
-  },
-  "confidenceScore": 0.0,
-  "dataQualityNote": "text"
-}`;
+${signalsSection}
 
-  let claudeResult;
-  let thinkingOutput = '';
+HISTORICAL SNAPSHOT (for Step 7 market shift detection):
+${lastSnapshot ? JSON.stringify({
+  price: lastSnapshot.recommended_price || lastSnapshot.current_price,
+  market_position: lastSnapshot.market_position,
+  competitor_avg: lastSnapshot.competitor_summary?.average_price,
+  recorded_at: lastSnapshot.recorded_at,
+}, null, 2) : 'No previous snapshot available — first analysis for this system.'}
+
+Execute all 9 steps and return the two JSON objects as instructed.`;
+
+  let pricing, insights, thinking;
 
   try {
-    const { text, thinking } = await callClaude(
-      apiKey,
-      systemPrompt,
-      [{ role: 'user', content: userPrompt }],
-      3072,
-      true,
-    );
-    claudeResult = parseJSON(text);
-    thinkingOutput = thinking;
+    const { text, thinking: t } = await callClaude(apiKey, AGENT_SYSTEM_PROMPT, [{ role: 'user', content: userPrompt }], 4096, true);
+    thinking = t;
+
+    // Parse two JSON objects from response
+    const trimmed = text.trim();
+    const jsonBlocks = [];
+    let depth = 0, start = -1;
+    for (let i = 0; i < trimmed.length; i++) {
+      if (trimmed[i] === '{') { if (depth === 0) start = i; depth++; }
+      else if (trimmed[i] === '}') { depth--; if (depth === 0 && start !== -1) { jsonBlocks.push(trimmed.slice(start, i + 1)); start = -1; } }
+    }
+
+    if (jsonBlocks.length >= 1) pricing = JSON.parse(jsonBlocks[0]);
+    if (jsonBlocks.length >= 2) insights = JSON.parse(jsonBlocks[1]);
   } catch (e) {
-    // Graceful fallback — use deterministic output
-    const sorted = deterministicStrategies.sort((a, b) => {
-      const scoreA = (a.margin || 0) * (inventoryPressure.level === 'high' ? 0.5 : 1);
-      const scoreB = (b.margin || 0) * (inventoryPressure.level === 'high' ? 0.5 : 1);
-      return scoreB - scoreA;
-    });
-    claudeResult = {
-      recommendedPrice: sorted[0]?.price || currentPrice,
-      reasoning: [
-        `Current price: A$${currentPrice.toLocaleString('en-AU')}`,
-        `Inventory pressure: ${inventoryPressure.label}`,
-        `${competitorPositions.undercutters.length} competitor(s) undercut us`,
-        `Claude analysis unavailable: ${e.message}`,
-      ],
-      strategies: deterministicStrategies,
-      competitorPositions: {
-        undercutter: competitorPositions.lowestCompetitor || null,
-        parity: competitorPositions.parity[0] || null,
-        premium: competitorPositions.premium[0] || null,
-      },
-      stockInsights: { yourStockDays: daysInStock, recommendation: inventoryPressure.label },
-      confidenceScore: confScore * 0.7,
-      dataQualityNote: 'Deterministic fallback — Claude analysis unavailable',
+    // Deterministic fallback
+    const compPrices = competitors.filter(c => c.price).map(c => c.price);
+    const avgComp = compPrices.length ? compPrices.reduce((a, b) => a + b, 0) / compPrices.length : null;
+    const minComp = compPrices.length ? Math.min(...compPrices) : null;
+    const maxComp = compPrices.length ? Math.max(...compPrices) : null;
+    const cp = systemData.current_price;
+    const cost = systemData.cost || (systemData.costExGst ? systemData.costExGst * 1.1 : cp * 0.75);
+    const minPrice = cost * (1 + rules.minimum_margin_percent / 100);
+
+    let recPrice = cp;
+    let position = 'aligned';
+    if (minComp && cp > minComp * 1.05) { position = 'premium'; }
+    else if (minComp && cp < minComp * 0.95) { position = 'underpriced'; recPrice = Math.max(minPrice, cp * 1.05); }
+
+    pricing = {
+      system_name: systemData.system_name || systemData.title,
+      current_price: cp,
+      recommended_price: Math.round(recPrice),
+      price_change_percent: Math.round((recPrice - cp) / cp * 1000) / 10,
+      market_position: position,
+      pricing_mode: rules.pricing_mode,
+      reason: `Claude analysis unavailable (${e.message}). Deterministic fallback applied.`,
+      key_factors: compPrices.length ? [`${compPrices.length} competitor prices found`, `Avg competitor: A$${Math.round(avgComp).toLocaleString('en-AU')}`] : ['No competitor price data available'],
+      competitor_summary: { lowest_price: minComp, average_price: avgComp ? Math.round(avgComp) : null, highest_price: maxComp, stock_pressure: 'unknown' },
+      confidence: compPrices.length >= 2 ? 'medium' : 'low',
+      warnings: ['Using deterministic fallback — Claude analysis failed'],
     };
+    insights = { market_structure_insights: [], competitor_movements: [], emerging_demand_signals: [], margin_risks: ['Claude analysis unavailable — manual review recommended'] };
   }
 
-  // Blend confidence scores
-  const blendedConfidence = typeof claudeResult.confidenceScore === 'number'
-    ? Math.min((claudeResult.confidenceScore + confScore) / 2, 0.97)
-    : confScore;
+  // Save snapshot for future market shift detection
+  if (pricing && pricing.confidence !== 'low') {
+    try {
+      const snapshotStore = snapshots?.snapshots || [];
+      const idx = snapshotStore.findIndex(s => s.system_name === pricing.system_name);
+      const entry = { ...pricing, insights, recorded_at: new Date().toISOString() };
+      if (idx >= 0) snapshotStore[idx] = entry; else snapshotStore.push(entry);
+      if (snapshotStore.length > 100) snapshotStore.splice(0, snapshotStore.length - 100);
+      const { sha: snapSha } = await loadJSON('data/pricing-snapshots.json', token, null);
+      await ghPut('data/pricing-snapshots.json', JSON.stringify({ snapshots: snapshotStore }, null, 2), snapSha,
+        `Pricing snapshot: ${pricing.system_name} ${new Date().toISOString()}`, token);
+    } catch (_) {}
+  }
 
   return jsonResponse({
-    ...claudeResult,
-    confidenceScore: blendedConfidence,
-    thinking: thinkingOutput || null,
-    meta: {
-      sku,
-      generatedAt: new Date().toISOString(),
-      inventoryPressureLevel: inventoryPressure.level,
-      competitorCount: competitors.length,
-      deterministicStrategiesGenerated: deterministicStrategies.length,
-    },
+    ...pricing,
+    insights: insights || null,
+    thinking: thinking || null,
   });
 }
