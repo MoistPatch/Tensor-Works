@@ -1,1 +1,45 @@
-{"lastChecked": null, "overallScore": null, "sources": {}}
+{
+  "lastChecked": "2026-05-17T01:09:51.839Z",
+  "overallScore": 0.83,
+  "belowThreshold": false,
+  "recommendation": "Data quality good — system operating normally",
+  "sources": {
+    "products": {
+      "score": 1,
+      "issues": 0,
+      "warnings": 0,
+      "total": 8
+    },
+    "analytics": {
+      "score": 0,
+      "issues": 0,
+      "warnings": 5,
+      "total": 4
+    },
+    "competitorPrices": {
+      "score": 1,
+      "issues": 1,
+      "warnings": 0,
+      "total": 0
+    },
+    "trends": {
+      "score": 1,
+      "issues": 0,
+      "warnings": 0,
+      "days": 0
+    },
+    "brain": {
+      "score": 1,
+      "issues": 0,
+      "warnings": 0
+    },
+    "intelligenceReport": {
+      "score": 1,
+      "issues": 0,
+      "warnings": 1
+    }
+  },
+  "totalIssues": 1,
+  "totalWarnings": 6,
+  "newQuarantineItems": 0
+}
