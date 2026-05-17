@@ -75,6 +75,9 @@ export async function onRequest(context) {
     if (!apiKey) return jsonResponse({ error: 'ANTHROPIC_API_KEY not configured' }, 500);
 
     try {
+      const reqBody = await request.json().catch(() => ({}));
+      const { analyticsContext, intelligenceContext } = reqBody;
+
       const [
         { data: products },
         { data: analytics },
@@ -127,6 +130,16 @@ ${JSON.stringify({ insights: intelligenceReport?.insights, alerts: intelligenceR
 SEASONALITY & CONSTRAINTS FROM BRAIN:
 ${JSON.stringify({ seasonality: brain?.skills?.seasonality, constraints: brain?.constraints, patterns: brain?.skills?.products }, null, 2)}
 
+${analyticsContext ? `LIVE BUSINESS METRICS (from admin dashboard):
+- Acceptance Rate: ${analyticsContext.acceptanceRate ?? 'N/A'}%
+- Avg Quote Value: A$${analyticsContext.avgValueAUD ?? 'N/A'}
+- Avg Response Time: ${analyticsContext.avgResponseHours ?? 'N/A'}h
+- Sessions (7d): ${analyticsContext.sessions7d ?? 'N/A'}
+- Top Products: ${JSON.stringify((analyticsContext.topProducts || []).slice(0, 5))}
+` : ''}
+${intelligenceContext ? `INTELLIGENCE SUMMARY (from last AI analysis run):
+${intelligenceContext}
+` : ''}
 Generate campaigns targeting enterprises, universities, and research institutions. Return JSON:
 {
   "campaigns": [{
@@ -149,7 +162,7 @@ Generate campaigns targeting enterprises, universities, and research institution
 
       const claudeResult = await callClaude(
         apiKey,
-        'You are a B2B marketing strategist for Tensor Works, an Australian AI hardware reseller selling to enterprises, universities, and research institutions. Generate data-driven campaign strategies. Return JSON only.',
+        'You are a B2B marketing strategist for Tensor Works, an Australian AI hardware reseller selling to enterprises, universities, and research institutions. Generate data-driven campaign strategies grounded in real business metrics including quote acceptance rates, deal values, top-viewed products, and competitor pricing gaps. Return JSON only.',
         userPrompt,
         3000
       );

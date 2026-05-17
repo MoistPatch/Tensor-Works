@@ -422,17 +422,57 @@
     <div class="panel-scroll">
       <div class="panel-header">
         <div>
-          <div class="panel-title">Site Analytics</div>
-          <div class="panel-subtitle">Session data and product engagement over time</div>
+          <div class="panel-title">Analytics &amp; Business Metrics</div>
+          <div class="panel-subtitle">KPIs, quote pipeline, funnel conversion, and competitor intelligence</div>
         </div>
         <button class="btn btn-outline btn-sm" onclick="loadAnalytics()"><i class="fas fa-sync-alt"></i> Refresh</button>
       </div>
+
+      <!-- Section 1: Business KPIs -->
+      <div class="section-label">Business KPIs</div>
       <div class="stat-grid" id="analytics-stats">
+        <div class="stat-card"><div class="stat-card-label">Quote Pipeline (open)</div><div class="stat-card-value" id="stat-pipeline">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Acceptance Rate</div><div class="stat-card-value" id="stat-accept-rate">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Avg Quote Value</div><div class="stat-card-value" id="stat-avg-value">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Avg Response Time</div><div class="stat-card-value" id="stat-avg-response">—</div></div>
         <div class="stat-card"><div class="stat-card-label">Sessions (7d)</div><div class="stat-card-value" id="stat-s7">—</div></div>
         <div class="stat-card"><div class="stat-card-label">Sessions (30d)</div><div class="stat-card-value" id="stat-s30">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Total Recorded</div><div class="stat-card-value" id="stat-total">—</div></div>
       </div>
-      <div class="two-col">
+
+      <!-- Section 2: Quote Funnel + Site Funnel -->
+      <div class="section-label" style="margin-top:8px">Funnel &amp; Quote Status</div>
+      <div class="two-col" style="margin-bottom:20px">
+        <div class="card">
+          <div class="card-title">Quote Status Breakdown</div>
+          <table class="data-table" id="analytics-quote-status">
+            <thead><tr><th>Status</th><th>Count</th><th>%</th></tr></thead>
+            <tbody><tr><td colspan="3" style="text-align:center;color:var(--txt3)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title">Site Funnel Conversion</div>
+          <table class="data-table" id="analytics-funnel">
+            <thead><tr><th>Step</th><th>Count</th><th>Conv %</th></tr></thead>
+            <tbody><tr><td colspan="3" style="text-align:center;color:var(--txt3)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 3: Competitor Intelligence -->
+      <div class="section-label">Competitor Intelligence</div>
+      <div class="card" style="margin-bottom:20px" id="analytics-competitor-card">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <span style="font-size:13px;color:var(--txt2)">Products Tracked: </span><span id="stat-products-tracked" style="font-weight:700;color:var(--white)">—</span>
+            <span style="margin-left:24px;font-size:13px;color:var(--txt2)">Last Crawled: </span><span id="stat-last-crawled" style="font-weight:600;color:var(--txt)">—</span>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="switchTab('competitors')"><i class="fas fa-crosshairs"></i> View Competitors</button>
+        </div>
+      </div>
+
+      <!-- Section 4: Traffic -->
+      <div class="section-label">Traffic (7d)</div>
+      <div class="two-col" style="margin-bottom:20px">
         <div class="card">
           <div class="card-title">Top Products (7d views)</div>
           <div class="bar-list" id="analytics-top-products"><div class="panel-empty">No data yet</div></div>
@@ -442,8 +482,10 @@
           <div class="bar-list" id="analytics-top-pages"><div class="panel-empty">No data yet</div></div>
         </div>
       </div>
-      <div class="card" style="margin-top:20px">
-        <div class="card-title">Recent Sessions</div>
+
+      <!-- Section 5: Recent Sessions -->
+      <div class="section-label">Recent Sessions</div>
+      <div class="card" style="margin-top:0">
         <table class="data-table" id="analytics-recent">
           <thead><tr><th>Time</th><th>Page</th><th>Duration</th><th>Products Viewed</th></tr></thead>
           <tbody></tbody>
@@ -502,13 +544,32 @@
   <!-- ── Campaigns tab ───────────────────────────────────────────────── -->
   <div class="tab-panel" id="tab-campaigns">
     <div class="panel-scroll">
+      <!-- Section 1: Header -->
       <div class="panel-header">
         <div>
           <div class="panel-title">Campaign Strategist</div>
-          <div class="panel-subtitle">AI-generated marketing campaign briefs</div>
+          <div class="panel-subtitle">AI-generated marketing campaign briefs with Klaviyo integration</div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="generateCampaigns()"><i class="fas fa-magic"></i> Generate Campaigns</button>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline btn-sm" onclick="syncCampaignToKlaviyo()"><i class="fab fa-mailchimp"></i> Sync to Klaviyo</button>
+          <button class="btn btn-primary btn-sm" onclick="generateCampaigns()"><i class="fas fa-magic"></i> Generate Strategy</button>
+        </div>
       </div>
+
+      <!-- Section 2: Klaviyo Status -->
+      <div class="section-label">Klaviyo Connection</div>
+      <div class="card" style="margin-bottom:20px" id="klaviyo-status-card">
+        <div class="panel-loading"><div class="spinner spinner-sm"></div> Checking Klaviyo...</div>
+      </div>
+
+      <!-- Section 4: Context Feed -->
+      <div class="section-label">Analytics Context <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;color:var(--txt3)">(feeds campaign generation)</span></div>
+      <div class="card" style="margin-bottom:20px" id="campaigns-context-card">
+        <div style="font-size:13px;color:var(--txt3)">Load the Analytics tab first to populate context, or generate campaigns to auto-fetch.</div>
+      </div>
+
+      <!-- Section 3: Campaign Strategies -->
+      <div class="section-label">Campaign Strategies</div>
       <div id="campaigns-content"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading campaigns...</div></div>
     </div>
   </div>
@@ -1171,7 +1232,7 @@
     document.getElementById('tabnav-' + name).classList.add('active');
     if (name === 'dashboard') loadDashboard();
     else if (name === 'competitors') loadCompetitors();
-    else if (name === 'analytics') loadAnalytics();
+    else if (name === 'analytics') { if (!window._analyticsCache) loadAnalytics(); else loadAnalytics(); }
     else if (name === 'campaigns') loadCampaigns();
     else if (name === 'brain') loadBrain();
     else if (name === 'quotes') loadQuotes();
@@ -1535,10 +1596,51 @@
     try {
       var r = await fetch('/api/analytics');
       var data = await r.json();
+
+      // Cache for other tabs
+      window._analyticsCache = data;
+
+      // Section 1: Business KPIs
+      var bm = data.businessMetrics || {};
+      var qm = bm.quotes || {};
+      var cd = bm.competitorData || {};
+      var pipeline = (qm.byStatus ? ((qm.byStatus.sent || 0) + (qm.byStatus.viewed || 0)) : '—');
+      document.getElementById('stat-pipeline').textContent = pipeline;
+      document.getElementById('stat-accept-rate').textContent = qm.acceptanceRate != null ? qm.acceptanceRate + '%' : '—';
+      document.getElementById('stat-avg-value').textContent = qm.avgValueAUD ? 'A$' + qm.avgValueAUD.toLocaleString('en-AU') : '—';
+      document.getElementById('stat-avg-response').textContent = qm.avgResponseHours != null ? qm.avgResponseHours + 'h' : '—';
       document.getElementById('stat-s7').textContent = data.sessions7d || 0;
       document.getElementById('stat-s30').textContent = data.sessions30d || 0;
-      document.getElementById('stat-total').textContent = data.totalSessions || 0;
 
+      // Section 2: Quote status breakdown
+      var byStatus = qm.byStatus || {};
+      var total = qm.total || 0;
+      var statusRows = ['draft','sent','viewed','accepted','rejected'].map(function(st) {
+        var cnt = byStatus[st] || 0;
+        var pct = total > 0 ? (cnt/total*100).toFixed(1) : '0.0';
+        return '<tr><td style="text-transform:capitalize;color:var(--txt2)">' + st + '</td><td>' + cnt + '</td><td>' + pct + '%</td></tr>';
+      }).join('');
+      document.querySelector('#analytics-quote-status tbody').innerHTML = statusRows ||
+        '<tr><td colspan="3" style="text-align:center;color:var(--txt3)">No quotes yet</td></tr>';
+
+      // Site funnel
+      var fc = data.funnelCounts || {};
+      var cr = data.conversionRates || {};
+      var funnelSteps = [
+        { label: 'Product View', key: 'product-view', conv: null },
+        { label: 'Add to Cart', key: 'add-to-cart', conv: cr.viewToCart },
+        { label: 'Quote Started', key: 'quote-started', conv: cr.cartToQuote },
+        { label: 'Purchase', key: 'purchase', conv: cr.checkoutToPurchase },
+      ];
+      document.querySelector('#analytics-funnel tbody').innerHTML = funnelSteps.map(function(s) {
+        return '<tr><td style="color:var(--txt2)">' + s.label + '</td><td>' + (fc[s.key] || 0) + '</td><td>' + (s.conv != null ? s.conv + '%' : '—') + '</td></tr>';
+      }).join('');
+
+      // Section 3: Competitor card
+      document.getElementById('stat-products-tracked').textContent = cd.productsTracked != null ? cd.productsTracked : '—';
+      document.getElementById('stat-last-crawled').textContent = cd.lastCrawled ? fmtDate(cd.lastCrawled) : 'Never';
+
+      // Section 4: Traffic
       var top = data.topProducts || [];
       var maxViews = top.length ? top[0].views : 1;
       document.getElementById('analytics-top-products').innerHTML = top.length ?
@@ -1551,13 +1653,21 @@
         pages.map(function(p) { return '<div class="bar-row"><div class="bar-label">' + escHtml(p.page) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + Math.round(p.views/maxP*100) + '%"></div></div><div class="bar-val">' + p.views + '</div></div>'; }).join('') :
         '<div class="panel-empty">No page views yet</div>';
 
+      // Section 5: Recent Sessions
       var tbody = document.querySelector('#analytics-recent tbody');
       var sessions = data.recentSessions || [];
       tbody.innerHTML = sessions.length ?
         sessions.map(function(s) { return '<tr><td>' + fmtDate(s.timestamp) + '</td><td>' + escHtml(s.page||'—') + '</td><td>' + (s.duration ? Math.round(s.duration/1000) + 's' : '—') + '</td><td>' + ((s.productViews||[]).join(', ')||'—') + '</td></tr>'; }).join('') :
         '<tr><td colspan="4" style="text-align:center;color:var(--txt3)">No sessions recorded yet</td></tr>';
+
+      // Update dashboard stat cards if visible
+      if (document.getElementById('dash-s7')) {
+        document.getElementById('dash-s7').textContent = data.sessions7d != null ? data.sessions7d : '—';
+        document.getElementById('dash-s30').textContent = data.sessions30d != null ? data.sessions30d : '—';
+      }
     } catch(e) {
-      document.getElementById('stat-s7').textContent = '!';
+      var s7 = document.getElementById('stat-s7');
+      if (s7) s7.textContent = '!';
     }
   };
 
@@ -1571,6 +1681,8 @@
       var r = await fetch('/api/intelligence', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
       var data = await r.json();
       if (data.error) throw new Error(data.error);
+      // Store for campaign context (Task 7)
+      window._intelligenceCache = data;
       renderIntelligence(data);
     } catch(e) {
       el.innerHTML = '<div class="panel-empty" style="color:var(--red)"><i class="fas fa-exclamation-circle"></i> ' + escHtml(e.message) + '</div>';
@@ -1684,21 +1796,143 @@
   ══════════════════════════════════════════════════════════════════ */
   async function loadCampaigns() {
     var el = document.getElementById('campaigns-content');
+    // Load Klaviyo status
+    loadKlaviyoStatus();
+    // Update context card
+    updateCampaignContextCard();
     try {
       var r = await fetch('/api/campaigns');
       if (!r.ok) throw new Error('campaigns endpoint not available');
       var data = await r.json();
       renderCampaigns(el, data.campaigns || []);
     } catch(_) {
-      el.innerHTML = '<div class="panel-empty"><i class="fas fa-bullhorn" style="font-size:32px;display:block;margin-bottom:12px"></i>Click "Generate Campaigns" to create AI marketing briefs</div>';
+      el.innerHTML = '<div class="panel-empty"><i class="fas fa-bullhorn" style="font-size:32px;display:block;margin-bottom:12px"></i>Click "Generate Strategy" to create AI marketing briefs</div>';
     }
   }
+
+  async function loadKlaviyoStatus() {
+    var card = document.getElementById('klaviyo-status-card');
+    if (!card) return;
+    try {
+      var r = await fetch('/api/klaviyo');
+      var data = await r.json();
+      if (data.configured) {
+        // Fetch lists
+        var lr = await fetch('/api/klaviyo', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'get-lists'}) });
+        var ld = await lr.json();
+        var lists = ld.lists || [];
+        card.innerHTML =
+          '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">' +
+            '<span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block"></span>' +
+            '<span style="font-weight:600;color:var(--green)">Klaviyo Connected</span>' +
+          '</div>' +
+          '<div style="font-size:13px;color:var(--txt2);margin-bottom:10px">Lists (' + lists.length + '):</div>' +
+          (lists.length ? '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">' +
+            lists.map(function(l) { return '<span class="chip chip-grey">' + escHtml(l.name) + '</span>'; }).join('') +
+          '</div>' : '<div style="font-size:12px;color:var(--txt3);margin-bottom:14px">No lists yet</div>') +
+          '<div style="display:flex;gap:10px;align-items:center">' +
+            '<input type="text" id="klaviyo-new-list-name" placeholder="New list name..." style="max-width:240px">' +
+            '<button class="btn btn-outline btn-sm" onclick="createKlaviyoList()"><i class="fas fa-plus"></i> Create List</button>' +
+          '</div>';
+      } else {
+        card.innerHTML =
+          '<div style="display:flex;align-items:center;gap:8px">' +
+            '<span style="width:10px;height:10px;border-radius:50%;background:var(--orange);display:inline-block"></span>' +
+            '<span style="color:var(--txt2);font-size:13px">Klaviyo not configured — add KLAVIYO_API_KEY to Cloudflare Pages environment variables to enable.</span>' +
+          '</div>';
+      }
+    } catch(e) {
+      card.innerHTML = '<div style="color:var(--red);font-size:13px">Error loading Klaviyo status: ' + escHtml(e.message) + '</div>';
+    }
+  }
+
+  function updateCampaignContextCard() {
+    var card = document.getElementById('campaigns-context-card');
+    if (!card) return;
+    var cache = window._analyticsCache;
+    if (!cache) {
+      card.innerHTML = '<div style="font-size:13px;color:var(--txt3)">Analytics not loaded yet — <button class="btn btn-outline btn-sm" onclick="switchTab(\'analytics\')">Load Analytics</button> or generate campaigns to auto-fetch.</div>';
+      return;
+    }
+    var bm = cache.businessMetrics || {};
+    var qm = bm.quotes || {};
+    var top = (cache.topProducts || []).slice(0, 5).map(function(p) { return p.handle; }).join(', ');
+    card.innerHTML =
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;font-size:13px">' +
+        '<div><div style="color:var(--txt3);font-size:11px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Acceptance Rate</div><div style="font-weight:700;color:var(--white)">' + (qm.acceptanceRate != null ? qm.acceptanceRate + '%' : '—') + '</div></div>' +
+        '<div><div style="color:var(--txt3);font-size:11px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Avg Deal Value</div><div style="font-weight:700;color:var(--white)">' + (qm.avgValueAUD ? 'A$' + qm.avgValueAUD.toLocaleString('en-AU') : '—') + '</div></div>' +
+        '<div><div style="color:var(--txt3);font-size:11px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Top Products</div><div style="font-weight:600;color:var(--txt2);font-size:12px">' + escHtml(top || '—') + '</div></div>' +
+      '</div>';
+  }
+
+  window.createKlaviyoList = async function() {
+    var input = document.getElementById('klaviyo-new-list-name');
+    var name = input ? input.value.trim() : '';
+    if (!name) { alert('Enter a list name'); return; }
+    try {
+      var r = await fetch('/api/klaviyo', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'create-list',name}) });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      if (input) input.value = '';
+      loadKlaviyoStatus();
+    } catch(e) {
+      alert('Error: ' + e.message);
+    }
+  };
+
+  window.pushCampaignToKlaviyo = async function(campaignName) {
+    try {
+      var r = await fetch('/api/klaviyo', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'create-list',name:campaignName}) });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      alert('List created in Klaviyo!\nList ID: ' + data.listId + '\n\nUse this ID to build a campaign in the Klaviyo dashboard.');
+      loadKlaviyoStatus();
+    } catch(e) {
+      alert('Error: ' + e.message);
+    }
+  };
+
+  window.syncCampaignToKlaviyo = async function() {
+    var el = document.getElementById('campaigns-content');
+    var cards = el ? el.querySelectorAll('[data-campaign-name]') : [];
+    if (!cards.length) { alert('Generate campaigns first, then sync.'); return; }
+    if (!confirm('Push all campaign names as Klaviyo lists?')) return;
+    var names = Array.from(cards).map(function(c){ return c.dataset.campaignName; });
+    var results = [];
+    for (var n of names) {
+      try {
+        var r = await fetch('/api/klaviyo', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'create-list',name:n}) });
+        var d = await r.json();
+        results.push(n + ': ' + (d.listId || 'error'));
+      } catch(e) { results.push(n + ': error'); }
+    }
+    alert('Klaviyo sync complete:\n' + results.join('\n'));
+    loadKlaviyoStatus();
+  };
 
   window.generateCampaigns = async function() {
     var el = document.getElementById('campaigns-content');
     el.innerHTML = '<div class="panel-loading"><div class="spinner"></div> Generating campaign strategies...</div>';
+    // Ensure analytics context is available
+    if (!window._analyticsCache) { try { await loadAnalytics(); } catch(_) {} }
+    updateCampaignContextCard();
     try {
-      var r = await fetch('/api/campaign-strategist', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
+      var body = {};
+      if (window._analyticsCache) {
+        var bm = window._analyticsCache.businessMetrics || {};
+        var qm = bm.quotes || {};
+        body.analyticsContext = {
+          acceptanceRate: qm.acceptanceRate,
+          avgValueAUD: qm.avgValueAUD,
+          avgResponseHours: qm.avgResponseHours,
+          sessions7d: window._analyticsCache.sessions7d,
+          topProducts: (window._analyticsCache.topProducts || []).slice(0, 10),
+        };
+      }
+      if (window._intelligenceCache) {
+        body.intelligenceContext = window._intelligenceCache.summary || window._intelligenceCache.marketInsights || null;
+      }
+      var r = await fetch('/api/campaign-strategist', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
       var data = await r.json();
       if (data.error) throw new Error(data.error);
       renderCampaigns(el, data.campaigns || []);
@@ -1710,10 +1944,14 @@
   function renderCampaigns(el, campaigns) {
     if (!campaigns.length) { el.innerHTML = '<div class="panel-empty">No campaigns generated yet</div>'; return; }
     el.innerHTML = campaigns.map(function(c) {
-      return '<div class="sim-card" style="margin-bottom:14px">' +
+      var cName = escAttr(c.name || c.headline || '');
+      return '<div class="sim-card" style="margin-bottom:14px" data-campaign-name="' + cName + '">' +
         '<div class="sim-card-header">' +
           '<div><div class="sim-card-name">' + escHtml(c.name||c.headline) + '</div><span class="chip chip-teal" style="margin-top:4px">' + escHtml(c.type||'') + '</span></div>' +
-          confPill(c.confidenceScore||0) +
+          '<div style="display:flex;align-items:center;gap:8px">' +
+            confPill(c.confidenceScore||0) +
+            '<button class="btn btn-outline btn-sm" onclick="pushCampaignToKlaviyo(\'' + cName + '\')"><i class="fab fa-mailchimp"></i> Push to Klaviyo</button>' +
+          '</div>' +
         '</div>' +
         '<div class="sim-card-body">' +
           '<div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:6px">' + escHtml(c.headline||'') + '</div>' +
