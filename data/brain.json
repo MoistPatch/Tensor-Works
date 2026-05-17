@@ -74,6 +74,21 @@
             "urgency": "medium"
           }
         ]
+      },
+      {
+        "detectedAt": "2026-05-17T01:11:09.388Z",
+        "anomalies": [
+          {
+            "type": "traffic-spike",
+            "severity": "medium",
+            "metric": 4,
+            "baseline": 0.13333333333333333,
+            "detail": "Today sessions (4) above 300% of 30d avg (0.1)",
+            "businessImpact": "A sudden 30x surge in sessions versus the 30-day baseline could indicate a viral mention, paid campaign launch, bot/scraper activity, or competitor reconnaissance. While absolute volume is low, the relative spike may strain conversion tracking accuracy and could signal either a revenue opportunity (organic interest in AI hardware) or wasted ad spend/skewed analytics if traffic is non-human.",
+            "suggestedAction": "1) Check traffic sources in analytics (referrer, UTM, geo, device) to identify origin. 2) Inspect server logs for bot signatures or repeated IPs and apply rate limiting/WAF rules if malicious. 3) If legitimate, ensure product pages, inventory, and checkout are performing well and consider boosting ad budget on the converting channel. 4) Verify conversion funnel and add monitoring alerts for sustained elevated traffic.",
+            "urgency": "medium"
+          }
+        ]
       }
     ]
   },
