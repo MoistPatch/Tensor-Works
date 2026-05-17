@@ -483,8 +483,59 @@
         </div>
       </div>
 
-      <!-- Section 5: Recent Sessions -->
-      <div class="section-label">Recent Sessions</div>
+      <!-- Section 5: Cloudflare Analytics -->
+      <div class="section-label" style="margin-top:8px">
+        Cloudflare Analytics
+        <span style="font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--txt3);margin-left:8px" id="cf-analytics-status"></span>
+        <span style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <select id="cf-days-select" style="background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:3px 8px;border-radius:4px;font-size:12px">
+            <option value="7" selected>Last 7 days</option>
+            <option value="14">Last 14 days</option>
+            <option value="30">Last 30 days</option>
+          </select>
+          <button class="btn btn-outline btn-sm" onclick="loadCfAnalytics()"><i class="fas fa-cloud"></i> Load</button>
+        </span>
+      </div>
+
+      <!-- CF KPI bar -->
+      <div class="stat-grid" style="margin-bottom:16px" id="cf-kpi-grid">
+        <div class="stat-card"><div class="stat-card-label">Page Views</div><div class="stat-card-value" id="cf-pageviews">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Unique Visitors</div><div class="stat-card-value" id="cf-uniques">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Total Requests</div><div class="stat-card-value" id="cf-requests">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Cache Hit Rate</div><div class="stat-card-value" id="cf-cache">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">RUM Visits</div><div class="stat-card-value" id="cf-rum-visits">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Bandwidth</div><div class="stat-card-value" id="cf-bandwidth">—</div></div>
+      </div>
+
+      <div class="two-col" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-title">Top Pages (CF)</div>
+          <div class="bar-list" id="cf-top-paths"><div class="panel-empty">Load Cloudflare Analytics to see data</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Top Referrers</div>
+          <div class="bar-list" id="cf-top-referers"><div class="panel-empty">Load Cloudflare Analytics to see data</div></div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-title">Top Countries</div>
+          <div class="bar-list" id="cf-top-countries"><div class="panel-empty">Load Cloudflare Analytics to see data</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Device Breakdown</div>
+          <div class="bar-list" id="cf-devices"><div class="panel-empty">Load Cloudflare Analytics to see data</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Daily Trend</div>
+        <div id="cf-daily-trend" style="overflow-x:auto"><div class="panel-empty">Load Cloudflare Analytics to see trend</div></div>
+      </div>
+
+      <!-- Section 6: Recent Sessions -->
+      <div class="section-label">Recent Sessions (Beacon)</div>
       <div class="card" style="margin-top:0">
         <table class="data-table" id="analytics-recent">
           <thead><tr><th>Time</th><th>Page</th><th>Duration</th><th>Products Viewed</th></tr></thead>
@@ -1668,6 +1719,79 @@
     } catch(e) {
       var s7 = document.getElementById('stat-s7');
       if (s7) s7.textContent = '!';
+    }
+  };
+
+  // ── Cloudflare Analytics ──────────────────────────────────────────
+  window.loadCfAnalytics = async function() {
+    var days = document.getElementById('cf-days-select').value || '7';
+    var status = document.getElementById('cf-analytics-status');
+    status.textContent = 'Loading…';
+    ['cf-pageviews','cf-uniques','cf-requests','cf-cache','cf-rum-visits','cf-bandwidth'].forEach(function(id){ document.getElementById(id).textContent = '…'; });
+
+    try {
+      var r = await fetch('/api/cf-analytics?days=' + days);
+      var d = await r.json();
+
+      if (!d.configured) {
+        status.textContent = '⚠ ' + (d.error || 'Not configured');
+        status.style.color = 'var(--orange)';
+        ['cf-pageviews','cf-uniques','cf-requests','cf-cache','cf-rum-visits','cf-bandwidth'].forEach(function(id){ document.getElementById(id).textContent = '—'; });
+        return;
+      }
+
+      status.textContent = 'Updated ' + new Date(d.generatedAt).toLocaleTimeString();
+      status.style.color = 'var(--txt3)';
+
+      var z = d.zone || {};
+      document.getElementById('cf-pageviews').textContent = (z.pageViews || 0).toLocaleString();
+      document.getElementById('cf-uniques').textContent = (z.uniqueVisitors || 0).toLocaleString();
+      document.getElementById('cf-requests').textContent = (z.requests || 0).toLocaleString();
+      document.getElementById('cf-cache').textContent = z.cacheHitRate != null ? z.cacheHitRate + '%' : '—';
+      document.getElementById('cf-rum-visits').textContent = d.rum ? (d.rum.visits || 0).toLocaleString() : (d.rumError ? 'N/A' : '—');
+
+      var bytes = z.bytesServed || 0;
+      var bwLabel = bytes > 1073741824 ? (bytes/1073741824).toFixed(1)+' GB' : bytes > 1048576 ? (bytes/1048576).toFixed(1)+' MB' : bytes > 1024 ? (bytes/1024).toFixed(0)+' KB' : bytes+' B';
+      document.getElementById('cf-bandwidth').textContent = bwLabel;
+
+      var paths = (d.rum && d.rum.topPages && d.rum.topPages.length) ? d.rum.topPages.map(function(p){ return {path:p.path,count:p.pageViews}; }) : (z.topPaths||[]).map(function(p){ return {path:p.path,count:p.pageViews||p.requests}; });
+      var maxPath = paths.length ? paths[0].count : 1;
+      document.getElementById('cf-top-paths').innerHTML = paths.length ? paths.slice(0,10).map(function(p){
+        return '<div class="bar-row"><div class="bar-label" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+escHtml(p.path)+'">'+escHtml(p.path)+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(p.count/maxPath*100)+'%"></div></div><div class="bar-val">'+p.count+'</div></div>';
+      }).join('') : '<div class="panel-empty">No page data</div>';
+
+      var refs = (d.rum && d.rum.topReferers && d.rum.topReferers.length) ? d.rum.topReferers.map(function(p){ return {host:p.host,count:p.visits}; }) : (z.topReferers||[]).map(function(p){ return {host:p.host,count:p.requests}; });
+      refs = refs.filter(function(r){ return r.host && r.host !== '' && r.host !== 'null'; });
+      var maxRef = refs.length ? refs[0].count : 1;
+      document.getElementById('cf-top-referers').innerHTML = refs.length ? refs.slice(0,10).map(function(p){
+        return '<div class="bar-row"><div class="bar-label">'+escHtml(p.host)+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(p.count/maxRef*100)+'%"></div></div><div class="bar-val">'+p.count+'</div></div>';
+      }).join('') : '<div class="panel-empty">No referrer data</div>';
+
+      var countries = (d.rum && d.rum.countries && d.rum.countries.length) ? d.rum.countries.map(function(p){ return {name:p.country,count:p.visits}; }) : (z.topCountries||[]).map(function(p){ return {name:p.country,count:p.requests}; });
+      var maxC = countries.length ? countries[0].count : 1;
+      document.getElementById('cf-top-countries').innerHTML = countries.length ? countries.slice(0,10).map(function(p){
+        return '<div class="bar-row"><div class="bar-label">'+escHtml(p.name)+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(p.count/maxC*100)+'%"></div></div><div class="bar-val">'+p.count+'</div></div>';
+      }).join('') : '<div class="panel-empty">No country data</div>';
+
+      var devices = (d.rum && d.rum.devices) ? d.rum.devices.map(function(p){ return {name:p.type,count:p.visits}; }) : [];
+      var maxD = devices.length ? devices[0].count : 1;
+      document.getElementById('cf-devices').innerHTML = devices.length ? devices.map(function(p){
+        return '<div class="bar-row"><div class="bar-label">'+escHtml(p.name||'Unknown')+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(p.count/maxD*100)+'%"></div></div><div class="bar-val">'+p.count+'</div></div>';
+      }).join('') : '<div class="panel-empty">'+(d.rumError ? 'Install Web Analytics beacon for device data' : 'No device data')+'</div>';
+
+      var trend = (d.rum && d.rum.dailyTrend && d.rum.dailyTrend.length) ? d.rum.dailyTrend : (z.dailyTrend||[]);
+      document.getElementById('cf-daily-trend').innerHTML = trend.length ? (
+        '<table class="data-table"><thead><tr><th>Date</th><th>Page Views</th><th>'+(d.rum?'Visits':'Requests')+'</th>'+(z.dailyTrend?'<th>Uniques</th>':'')+'</tr></thead><tbody>'+
+        trend.map(function(row){
+          return '<tr><td>'+escHtml(row.date)+'</td><td>'+(row.pageViews||0).toLocaleString()+'</td><td>'+(row.visits||row.requests||0).toLocaleString()+'</td>'+(row.uniques!=null?'<td>'+(row.uniques||0).toLocaleString()+'</td>':'')+'</tr>';
+        }).join('')+'</tbody></table>'
+      ) : '<div class="panel-empty">No trend data for period</div>';
+
+      if (window._analyticsCache) window._analyticsCache.cfAnalytics = d;
+
+    } catch(e) {
+      var status2 = document.getElementById('cf-analytics-status');
+      if (status2) { status2.textContent = '✗ ' + e.message; status2.style.color = '#f85149'; }
     }
   };
 
