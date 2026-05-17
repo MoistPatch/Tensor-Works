@@ -246,12 +246,29 @@
       var totalItems = items.reduce(function (s, i) { return s + i.quantity; }, 0);
 
       var checkoutUrl = buildCheckoutUrl(items);
-      var checkoutBtn = checkoutUrl
-        ? '<a href="' + checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px">Proceed to Checkout <i class="fas fa-arrow-right"></i></a>'
-        : '<div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;margin-bottom:12px;text-align:center">' +
-            '<p style="font-size:13px;color:var(--txt2);margin-bottom:10px"><i class="fas fa-info-circle" style="color:var(--teal-lt)"></i> Online checkout coming soon — Shopify integration in progress.</p>' +
-            '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fas fa-envelope"></i> Send Enquiry for Quote &amp; Invoice</a>' +
-          '</div>';
+      var paymentMethods =
+        '<div style="margin-bottom:10px">' +
+          (checkoutUrl
+            ? '<a href="' + checkoutUrl + '" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:8px">Proceed to Checkout <i class="fas fa-arrow-right"></i></a>' +
+              '<a href="' + checkoutUrl + '?payment=shop_pay" class="tw-shop-pay-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:#5a31f4;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;margin-bottom:8px">' +
+                '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 0C3.134 0 0 3.134 0 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7z" fill="#fff" fill-opacity=".2"/><path d="M4.5 4.5h5v5h-5z" fill="#fff"/></svg>' +
+                'Buy with Shop Pay' +
+              '</a>'
+            : '<a href="/#enquiry" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:8px"><i class="fas fa-file-invoice-dollar"></i> Request Quote &amp; Invoice</a>') +
+          '<div style="display:flex;align-items:center;gap:8px;margin:10px 0">' +
+            '<div style="flex:1;height:1px;background:var(--bdr)"></div>' +
+            '<span style="font-size:11px;color:var(--txt3);white-space:nowrap">or pay with</span>' +
+            '<div style="flex:1;height:1px;background:var(--bdr)"></div>' +
+          '</div>' +
+          '<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:10px">' +
+            '<div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;color:var(--txt2);display:flex;align-items:center;gap:4px"><i class="fab fa-apple" style="font-size:13px"></i> Pay</div>' +
+            '<div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;color:var(--txt2);display:flex;align-items:center;gap:4px"><i class="fab fa-google" style="font-size:13px"></i> Pay</div>' +
+            '<div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;color:var(--txt2)">Afterpay</div>' +
+            '<div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;color:var(--txt2)">EFT</div>' +
+          '</div>' +
+          '<p style="font-size:11px;color:var(--txt3);text-align:center;margin:0">Apple Pay &amp; Google Pay available at checkout. Afterpay for orders under $2,000.</p>' +
+        '</div>';
+      var checkoutBtn = paymentMethods;
 
       el.innerHTML = '<div class="cart-layout">' +
         '<div class="cart-main">' +

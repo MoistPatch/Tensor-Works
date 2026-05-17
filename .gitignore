@@ -11,3 +11,8 @@ tensor-works-site/
 !.dev.vars.example
 .env*
 !.env.example
+
+# invoice service
+invoice-service/node_modules/
+invoice-service/invoices/*.pdf
+invoice-service/.env

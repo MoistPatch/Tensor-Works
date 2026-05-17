@@ -166,11 +166,16 @@ export async function onRequest(context) {
   stockOppData.lastChecked = crawledAt;
   stockOppData.opportunities = [...stockOpportunities, ...stockOppData.opportunities].slice(0, 50);
 
-  await Promise.all([
-    ghPut('data/competitor-prices.json', JSON.stringify(pricesData, null, 2), pricesSha, 'Update competitor prices', token),
-    ghPut('data/competitor-sites.json', JSON.stringify({ sites }, null, 2), sitesSha, 'Update competitor site crawl timestamps', token),
-    ghPut('data/stock-opportunities.json', JSON.stringify(stockOppData, null, 2), stockOppSha, 'Update stock opportunities', token),
-  ]);
+  const saveErrors = [];
+  try {
+    await Promise.all([
+      ghPut('data/competitor-prices.json', JSON.stringify(pricesData, null, 2), pricesSha, 'Update competitor prices', token),
+      ghPut('data/competitor-sites.json', JSON.stringify({ sites }, null, 2), sitesSha, 'Update competitor site crawl timestamps', token),
+      ghPut('data/stock-opportunities.json', JSON.stringify(stockOppData, null, 2), stockOppSha, 'Update stock opportunities', token),
+    ]);
+  } catch (saveErr) {
+    saveErrors.push(saveErr.message);
+  }
 
-  return jsonResponse({ success: true, sitesCrawled: sitesToCrawl.length - errors.length, matchesFound, stockOpportunities: stockOpportunities.length, errors });
+  return jsonResponse({ success: true, sitesCrawled: sitesToCrawl.length - errors.length, matchesFound, stockOpportunities: stockOpportunities.length, errors, saveErrors });
 }
