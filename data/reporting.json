@@ -1,7 +1,7 @@
 {
-  "lastGenerated": "2026-05-17T05:47:17.338Z",
+  "lastGenerated": "2026-05-17T06:29:33.620Z",
   "report": {
-    "generatedAt": "2026-05-17T05:47:17.338Z",
+    "generatedAt": "2026-05-17T06:29:33.620Z",
     "revenueByProduct": [],
     "marginByProduct": [],
     "quotePipeline": {
@@ -24,8 +24,8 @@
     },
     "topCustomers": [],
     "sessionSummary": {
-      "sessions7d": 28,
-      "sessions30d": 28
+      "sessions7d": 32,
+      "sessions30d": 32
     },
     "funnel": {
       "product-view": 0,
