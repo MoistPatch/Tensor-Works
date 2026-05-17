@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "runId": 1778980265671,
+      "checkedAt": "2026-05-17T01:11:05.671Z",
+      "overallStatus": "down",
+      "checks": [
+        {
+          "name": "brain",
+          "url": "https://tensorworks.online/api/brain",
+          "status": "ok",
+          "httpStatus": 200,
+          "responseTimeMs": 341,
+          "checkedAt": "2026-05-17T01:11:04.765Z",
+          "error": null
+        },
+        {
+          "name": "analytics",
+          "url": "https://tensorworks.online/api/analytics",
+          "status": "ok",
+          "httpStatus": 200,
+          "responseTimeMs": 340,
+          "checkedAt": "2026-05-17T01:11:04.765Z",
+          "error": null
+        },
+        {
+          "name": "competitors",
+          "url": "https://tensorworks.online/api/competitors",
+          "status": "ok",
+          "httpStatus": 200,
+          "responseTimeMs": 339,
+          "checkedAt": "2026-05-17T01:11:04.765Z",
+          "error": null
+        },
+        {
+          "name": "data-validator",
+          "url": "https://tensorworks.online/api/data-validator",
+          "status": "ok",
+          "httpStatus": 200,
+          "responseTimeMs": 624,
+          "checkedAt": "2026-05-17T01:11:04.765Z",
+          "error": null
+        },
+        {
+          "name": "intelligence-report",
+          "url": "https://tensorworks.online/api/intelligence",
+          "status": "down",
+          "httpStatus": 405,
+          "responseTimeMs": 65,
+          "checkedAt": "2026-05-17T01:11:04.765Z",
+          "error": null
+        },
+        {
+          "name": "quotes",
+          "url": "https://tensorworks.online/api/quote",
+          "status": "ok",
+          "httpStatus": 200,
+          "responseTimeMs": 334,
+          "checkedAt": "2026-05-17T01:11:04.765Z",
+          "error": null
+        },
+        {
+          "name": "monitor",
+          "url": "https://tensorworks.online/api/monitor",
+          "status": "ok",
+          "httpStatus": 200,
+          "responseTimeMs": 338,
+          "checkedAt": "2026-05-17T01:11:04.765Z",
+          "error": null
+        }
+      ]
+    }
+  ],
+  "lastRun": "2026-05-17T01:11:05.671Z",
+  "overallStatus": "down"
+}
