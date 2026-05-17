@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-05-17T01:09:51.839Z",
+  "lastChecked": "2026-05-17T01:10:31.315Z",
   "overallScore": 0.83,
   "belowThreshold": false,
   "recommendation": "Data quality good — system operating normally",
@@ -26,7 +26,7 @@
       "score": 1,
       "issues": 0,
       "warnings": 0,
-      "days": 0
+      "days": 1
     },
     "brain": {
       "score": 1,
