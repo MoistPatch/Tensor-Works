@@ -1,1 +1,68 @@
-{"campaigns": []}
+{
+  "campaigns": [
+    {
+      "id": "campaign-1778981360580-3nsa",
+      "name": "InfiniBand NDR400: Powering Next-Gen HPC Clusters",
+      "type": "featured-product",
+      "targetAudience": "University HPC centres, research computing labs, and AI research institutions building or expanding GPU clusters",
+      "headline": "Unlock 400Gb/s Fabric Performance for Your AI & HPC Workloads",
+      "keyMessage": "The Mellanox InfiniBand NDR400 Switch delivers ultra-low latency and 400Gb/s throughput — the backbone of modern multi-node GPU training clusters. Eliminate interconnect bottlenecks and scale your LLM training, CFD, and genomics workloads with confidence.",
+      "featuredProducts": [
+        "mellanox-infiniband-ndr400"
+      ],
+      "callToAction": "Request a cluster design consultation",
+      "urgencyTrigger": "Limited stock available for Q3 deployment timelines — secure units before EOFY procurement cycles close",
+      "estimatedImpact": "5-12 qualified enquiries from HPC/research segment; 1-2 cluster-scale opportunities (A$50k+ basket potential per deal)",
+      "confidenceScore": 0.62,
+      "suggestedTiming": "Launch within 7 days; sustain 3-week nurture cadence aligned with university capex planning (June-July AU FY close)",
+      "reasoning": "With zero product views and no traffic signals, the NDR400 needs awareness-building rather than discounting. Interconnect switches are rarely browsed organically — buyers reach them via solution conversations. A featured-product campaign positioning it as a cluster enabler is more effective than a price promo at A$6,350 (already near margin floor given A$500 min margin constraint).",
+      "status": "generated",
+      "generatedAt": "2026-05-17T01:29:20.580Z"
+    },
+    {
+      "id": "campaign-1778981360580-5kvc",
+      "name": "Build Your AI Cluster: Architecture Briefing Series",
+      "type": "awareness",
+      "targetAudience": "CTOs, Heads of Research Computing, and Infrastructure Architects at Go8 universities, CSIRO-adjacent labs, and AI-first enterprises",
+      "headline": "From Single GPU to Multi-Node: Architecting AI Infrastructure That Scales",
+      "keyMessage": "Tensor Works' solutions team walks you through reference architectures for AI training clusters — covering compute, interconnect (InfiniBand NDR), storage, and cooling. Vendor-neutral guidance, Australian support, enterprise SLAs.",
+      "featuredProducts": [
+        "mellanox-infiniband-ndr400"
+      ],
+      "callToAction": "Book a 30-minute architecture briefing",
+      "urgencyTrigger": "Q3 FY26 capex windows closing — lead times on interconnect fabric currently 8-12 weeks",
+      "estimatedImpact": "Top-of-funnel: 20-40 briefing requests over 6 weeks; pipeline seeding for H2 FY26",
+      "confidenceScore": 0.7,
+      "suggestedTiming": "Begin immediately; the site currently has near-zero traffic (4 sessions/day) so demand-generation is the priority over conversion optimisation",
+      "reasoning": "Analytics show critically low traffic (4 sessions on the sample day, no product views). Conversion-focused campaigns will underperform until top-of-funnel is rebuilt. An awareness campaign establishes Tensor Works as a trusted advisor and creates the contextual demand needed to sell high-ASP infrastructure like the NDR400.",
+      "status": "generated",
+      "generatedAt": "2026-05-17T01:29:20.580Z"
+    },
+    {
+      "id": "campaign-1778981360580-ogrh",
+      "name": "Research Institution Procurement Program",
+      "type": "email",
+      "targetAudience": "Procurement and grant-funded PIs at Australian universities and medical research institutes (WEHI, Garvan, QIMR, etc.)",
+      "headline": "Grant-Funded AI Infrastructure? We Speak Your Procurement Language",
+      "keyMessage": "Tensor Works supports ARC/NHMRC grant-aligned quoting, multi-year warranty bundling, and compliance documentation for research procurement. From single workstations to full cluster fabrics like NDR400 InfiniBand.",
+      "featuredProducts": [
+        "mellanox-infiniband-ndr400"
+      ],
+      "callToAction": "Download our Research Procurement Guide",
+      "urgencyTrigger": "Align quotes with mid-year grant disbursement cycles",
+      "estimatedImpact": "Build qualified research-sector email list (target 150+ opt-ins); 3-5 quote requests in first cycle",
+      "confidenceScore": 0.65,
+      "suggestedTiming": "Email send week commencing 25 May; follow-up sequence over 4 weeks",
+      "reasoning": "Research institutions have predictable, grant-driven buying cycles distinct from enterprise. A targeted email program nurtures this segment specifically and surfaces interconnect needs naturally. With no historical view data, this builds the first-party data foundation needed for future campaign personalisation.",
+      "status": "generated",
+      "generatedAt": "2026-05-17T01:29:20.580Z"
+    }
+  ],
+  "priorityOrder": [
+    "Build Your AI Cluster: Architecture Briefing Series",
+    "Research Institution Procurement Program",
+    "InfiniBand NDR400: Powering Next-Gen HPC Clusters"
+  ],
+  "marketInsight": "Current analytics signal a cold-start problem: only 4 sessions/day, zero product views, and no competitor or BI data to triangulate against. The single slow-moving SKU (NDR400 InfiniBand switch) is a high-ASP infrastructure component that is rarely bought via self-serve browsing — it's sold through solution consultations. Recommended strategic posture: prioritise demand-generation and account-based outreach to research/HPC segments over conversion optimisation or discounting. Discounting the NDR400 is not advised given the A$500 minimum margin constraint and the fact that low views indicate an awareness gap, not a price objection. Focus the next 60 days on rebuilding top-of-funnel traffic and establishing solution-selling motions; revisit data-driven personalisation once baseline traffic exceeds ~100 sessions/day.",
+  "lastUpdated": "2026-05-17T01:29:20.580Z"
+}
