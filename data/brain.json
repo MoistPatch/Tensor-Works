@@ -98,6 +98,15 @@
         "priceRecommendationCount": 1,
         "productRankingCount": 8,
         "bundleSuggestionCount": 3
+      },
+      {
+        "timestamp": "2026-05-17T05:47:04.859Z",
+        "confidenceScore": 0.058499999999999996,
+        "calculatedConfidence": 0.3,
+        "groundingScore": 0.15,
+        "priceRecommendationCount": 1,
+        "productRankingCount": 5,
+        "bundleSuggestionCount": 4
       }
     ],
     "anomaliesDetected": [
@@ -170,7 +179,7 @@
   "decisionLog": [],
   "meta": {
     "totalRunCount": 2,
-    "lastOrchestrationAt": "2026-05-17T05:41:14.150Z",
+    "lastOrchestrationAt": "2026-05-17T05:47:04.859Z",
     "dataQualityScore": 0,
     "learningConfidence": 0,
     "notes": [],
