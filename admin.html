@@ -326,17 +326,7 @@
   <button class="tab-btn active" onclick="switchTab('dashboard')" id="tabnav-dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
   <button class="tab-btn" onclick="switchTab('products')" id="tabnav-products"><i class="fas fa-box"></i> Products</button>
   <button class="tab-btn" onclick="switchTab('competitors')" id="tabnav-competitors"><i class="fas fa-crosshairs"></i> Competitors</button>
-  <button class="tab-btn" onclick="switchTab('analytics')" id="tabnav-analytics"><i class="fas fa-chart-bar"></i> Analytics</button>
-  <button class="tab-btn" onclick="switchTab('intelligence')" id="tabnav-intelligence"><i class="fas fa-brain"></i> Intelligence</button>
-  <button class="tab-btn" onclick="switchTab('simulations')" id="tabnav-simulations"><i class="fas fa-flask"></i> Simulations</button>
-  <button class="tab-btn" onclick="switchTab('campaigns')" id="tabnav-campaigns"><i class="fas fa-bullhorn"></i> Campaigns</button>
-  <button class="tab-btn" onclick="switchTab('brain')" id="tabnav-brain"><i class="fas fa-robot"></i> Brain</button>
-  <button class="tab-btn" onclick="switchTab('datahealth')" id="tabnav-datahealth"><i class="fas fa-shield-alt"></i> Data Health</button>
-  <button class="tab-btn" onclick="switchTab('quotes')" id="tabnav-quotes"><i class="fas fa-file-invoice-dollar"></i> Quotes</button>
-  <button class="tab-btn" onclick="switchTab('reporting')" id="tabnav-reporting"><i class="fas fa-chart-pie"></i> Reporting</button>
   <button class="tab-btn" onclick="switchTab('monitor')" id="tabnav-monitor"><i class="fas fa-heartbeat"></i> Monitor</button>
-  <button class="tab-btn" onclick="switchTab('agents')" id="tabnav-agents"><i class="fas fa-project-diagram"></i> Agents</button>
-  <button class="tab-btn" onclick="switchTab('synthesis')" id="tabnav-synthesis"><i class="fas fa-atom"></i> Synthesis</button>
   <button class="tab-btn" onclick="switchTab('pricing')" id="tabnav-pricing"><i class="fas fa-tags"></i> Pricing</button>
 </nav>
 
@@ -346,16 +336,19 @@
   <div class="tab-panel active" id="tab-dashboard">
     <div class="panel-scroll">
       <div class="panel-header">
-        <div><div class="panel-title">Command Centre</div><div class="panel-subtitle" id="dash-last-refreshed">Loading...</div></div>
-        <button class="btn btn-outline btn-sm" onclick="loadDashboard()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        <div><div class="panel-title">Pricing Intelligence</div><div class="panel-subtitle" id="dash-last-refreshed">Loading...</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-outline btn-sm" onclick="loadDashboard()"><i class="fas fa-sync-alt"></i> Refresh</button>
+          <button class="btn btn-primary btn-sm" onclick="switchTab('pricing')"><i class="fas fa-tags"></i> Pricing Engine</button>
+        </div>
       </div>
 
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-card-label">Sessions (7d)</div><div class="stat-card-value" id="dash-s7">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Sessions (30d)</div><div class="stat-card-value" id="dash-s30">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Data Quality</div><div class="stat-card-value" id="dash-quality">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Brain Confidence</div><div class="stat-card-value" id="dash-confidence">—</div></div>
         <div class="stat-card"><div class="stat-card-label">Products Listed</div><div class="stat-card-value" id="dash-products">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Competitors Tracked</div><div class="stat-card-value" id="dash-competitors">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Last Scrape</div><div class="stat-card-value" id="dash-last-scrape" style="font-size:13px">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Price Changes (30d)</div><div class="stat-card-value" id="dash-price-changes">—</div></div>
+        <div class="stat-card"><div class="stat-card-label">Avg Margin</div><div class="stat-card-value" id="dash-avg-margin">—</div></div>
         <div class="stat-card"><div class="stat-card-label">Last AI Run</div><div class="stat-card-value" id="dash-last-run" style="font-size:13px">—</div></div>
       </div>
 
@@ -412,11 +405,11 @@
       <div class="two-col">
         <div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-title">Top Products (7d)</div>
+            <div class="card-title">Products by Price</div>
             <div class="bar-list" id="dash-top-products"><div class="panel-empty" style="padding:16px">No data yet</div></div>
           </div>
           <div class="card">
-            <div class="card-title">Recent Anomalies</div>
+            <div class="card-title">Recent Price Changes</div>
             <div id="dash-anomalies"><div class="panel-empty" style="padding:12px">No anomalies detected</div></div>
           </div>
         </div>
@@ -426,11 +419,11 @@
             <div id="dash-system-status"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
           </div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-title">Competitor Alerts</div>
+            <div class="card-title">Competitor Undercuts</div>
             <div id="dash-comp-alerts"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
           </div>
           <div class="card">
-            <div class="card-title">Pending Recommendations</div>
+            <div class="card-title">Action Required</div>
             <div id="dash-pending-recs"><div class="panel-empty" style="padding:12px">Run Intelligence to see recommendations</div></div>
           </div>
         </div>
@@ -496,434 +489,20 @@
   </div>
 
   <!-- ── Analytics tab ───────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-analytics">
-    <div class="panel-scroll">
-      <div class="panel-header">
-        <div>
-          <div class="panel-title">Analytics &amp; Business Metrics</div>
-          <div class="panel-subtitle">KPIs, quote pipeline, funnel conversion, and competitor intelligence</div>
-        </div>
-        <button class="btn btn-outline btn-sm" onclick="loadAnalytics()"><i class="fas fa-sync-alt"></i> Refresh</button>
-      </div>
-
-      <!-- Section 1: Business KPIs -->
-      <div class="section-label">Business KPIs</div>
-      <div class="stat-grid" id="analytics-stats">
-        <div class="stat-card"><div class="stat-card-label">Quote Pipeline (open)</div><div class="stat-card-value" id="stat-pipeline">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Acceptance Rate</div><div class="stat-card-value" id="stat-accept-rate">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Avg Quote Value</div><div class="stat-card-value" id="stat-avg-value">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Avg Response Time</div><div class="stat-card-value" id="stat-avg-response">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Sessions (7d)</div><div class="stat-card-value" id="stat-s7">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Sessions (30d)</div><div class="stat-card-value" id="stat-s30">—</div></div>
-      </div>
-
-      <!-- Section 2: Quote Funnel + Site Funnel -->
-      <div class="section-label" style="margin-top:8px">Funnel &amp; Quote Status</div>
-      <div class="two-col" style="margin-bottom:20px">
-        <div class="card">
-          <div class="card-title">Quote Status Breakdown</div>
-          <table class="data-table" id="analytics-quote-status">
-            <thead><tr><th>Status</th><th>Count</th><th>%</th></tr></thead>
-            <tbody><tr><td colspan="3" style="text-align:center;color:var(--txt3)">Loading...</td></tr></tbody>
-          </table>
-        </div>
-        <div class="card">
-          <div class="card-title">Site Funnel Conversion</div>
-          <table class="data-table" id="analytics-funnel">
-            <thead><tr><th>Step</th><th>Count</th><th>Conv %</th></tr></thead>
-            <tbody><tr><td colspan="3" style="text-align:center;color:var(--txt3)">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Section 3: Competitor Intelligence -->
-      <div class="section-label">Competitor Intelligence</div>
-      <div class="card" style="margin-bottom:20px" id="analytics-competitor-card">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <span style="font-size:13px;color:var(--txt2)">Products Tracked: </span><span id="stat-products-tracked" style="font-weight:700;color:var(--white)">—</span>
-            <span style="margin-left:24px;font-size:13px;color:var(--txt2)">Last Crawled: </span><span id="stat-last-crawled" style="font-weight:600;color:var(--txt)">—</span>
-          </div>
-          <button class="btn btn-outline btn-sm" onclick="switchTab('competitors')"><i class="fas fa-crosshairs"></i> View Competitors</button>
-        </div>
-      </div>
-
-      <!-- Section 4: Traffic -->
-      <div class="section-label">Traffic (7d)</div>
-      <div class="two-col" style="margin-bottom:20px">
-        <div class="card">
-          <div class="card-title">Top Products (7d views)</div>
-          <div class="bar-list" id="analytics-top-products"><div class="panel-empty">No data yet</div></div>
-        </div>
-        <div class="card">
-          <div class="card-title">Top Pages (7d views)</div>
-          <div class="bar-list" id="analytics-top-pages"><div class="panel-empty">No data yet</div></div>
-        </div>
-      </div>
-
-      <!-- Section 5: Cloudflare Analytics -->
-      <div class="section-label" style="margin-top:8px">
-        Cloudflare Analytics
-        <span style="font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--txt3);margin-left:8px" id="cf-analytics-status"></span>
-        <span style="margin-left:auto;display:flex;align-items:center;gap:8px">
-          <select id="cf-days-select" style="background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:3px 8px;border-radius:4px;font-size:12px">
-            <option value="7" selected>Last 7 days</option>
-            <option value="14">Last 14 days</option>
-            <option value="30">Last 30 days</option>
-          </select>
-          <button class="btn btn-outline btn-sm" onclick="loadCfAnalytics()"><i class="fas fa-cloud"></i> Load</button>
-        </span>
-      </div>
-
-      <!-- CF KPI bar -->
-      <div class="stat-grid" style="margin-bottom:16px" id="cf-kpi-grid">
-        <div class="stat-card"><div class="stat-card-label">Page Views</div><div class="stat-card-value" id="cf-pageviews">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Unique Visitors</div><div class="stat-card-value" id="cf-uniques">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Total Requests</div><div class="stat-card-value" id="cf-requests">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Cache Hit Rate</div><div class="stat-card-value" id="cf-cache">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">RUM Visits</div><div class="stat-card-value" id="cf-rum-visits">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Bandwidth</div><div class="stat-card-value" id="cf-bandwidth">—</div></div>
-      </div>
-
-      <div class="two-col" style="margin-bottom:16px">
-        <div class="card">
-          <div class="card-title">Top Pages (CF)</div>
-          <div class="bar-list" id="cf-top-paths"><div class="panel-empty">Load Cloudflare Analytics to see data</div></div>
-        </div>
-        <div class="card">
-          <div class="card-title">Top Referrers</div>
-          <div class="bar-list" id="cf-top-referers"><div class="panel-empty">Load Cloudflare Analytics to see data</div></div>
-        </div>
-      </div>
-
-      <div class="two-col" style="margin-bottom:16px">
-        <div class="card">
-          <div class="card-title">Top Countries</div>
-          <div class="bar-list" id="cf-top-countries"><div class="panel-empty">Load Cloudflare Analytics to see data</div></div>
-        </div>
-        <div class="card">
-          <div class="card-title">Device Breakdown</div>
-          <div class="bar-list" id="cf-devices"><div class="panel-empty">Load Cloudflare Analytics to see data</div></div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-bottom:20px">
-        <div class="card-title">Daily Trend</div>
-        <div id="cf-daily-trend" style="overflow-x:auto"><div class="panel-empty">Load Cloudflare Analytics to see trend</div></div>
-      </div>
-
-      <!-- Section 6: Recent Sessions -->
-      <div class="section-label">Recent Sessions (Beacon)</div>
-      <div class="card" style="margin-top:0">
-        <table class="data-table" id="analytics-recent">
-          <thead><tr><th>Time</th><th>Page</th><th>Duration</th><th>Products Viewed</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 
   <!-- ── Intelligence tab ────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-intelligence">
-    <div class="panel-scroll">
-      <div class="panel-header">
-        <div>
-          <div class="panel-title">AI Intelligence</div>
-          <div class="panel-subtitle">Claude-generated recommendations and market insights</div>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="runIntelligence()"><i class="fas fa-brain"></i> Run Analysis</button>
-      </div>
-      <div id="intelligence-content">
-        <div class="panel-empty"><i class="fas fa-brain" style="font-size:32px;display:block;margin-bottom:12px"></i>Run an analysis to see recommendations and market insights</div>
-      </div>
-
-      <!-- Learning Feed -->
-      <div class="section-label" style="margin-top:24px">
-        Feed Data for Learning
-        <span style="font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--txt3);margin-left:6px">Injected as context into every intelligence run</span>
-      </div>
-      <div class="two-col" style="margin-bottom:0">
-        <div class="card">
-          <div class="card-title" style="margin-bottom:14px">Add Knowledge</div>
-          <div style="margin-bottom:10px">
-            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:5px">Category</label>
-            <select id="learn-category" style="background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:7px 10px;border-radius:4px;font-size:13px;width:100%">
-              <option>Market Intelligence</option>
-              <option>Supplier Pricing</option>
-              <option>Customer Feedback</option>
-              <option>Competitor Intel</option>
-              <option>Industry News</option>
-              <option>Custom</option>
-            </select>
-          </div>
-          <div style="margin-bottom:10px">
-            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:5px">Title (optional)</label>
-            <input id="learn-title" type="text" placeholder="e.g. H100 pricing update May 2026" style="width:100%;background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:7px 10px;border-radius:4px;font-size:13px;box-sizing:border-box">
-          </div>
-          <div style="margin-bottom:12px">
-            <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);display:block;margin-bottom:5px">Data / Notes</label>
-            <textarea id="learn-content" rows="6" placeholder="Paste any relevant data — supplier quotes, market observations, customer feedback, price lists, industry trends, competitor behaviour..." style="width:100%;background:var(--bg4);border:1px solid var(--bdr);color:var(--txt2);padding:9px 10px;border-radius:4px;font-size:13px;resize:vertical;box-sizing:border-box"></textarea>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <button class="btn btn-primary btn-sm" onclick="addLearningNote()"><i class="fas fa-plus"></i> Save to Learning Store</button>
-            <span id="learn-status" style="font-size:12px;color:var(--txt3)"></span>
-          </div>
-        </div>
-        <div class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-            <div class="card-title">Stored Notes (<span id="learn-count">0</span>)</div>
-            <button class="btn btn-outline btn-sm" style="font-size:11px;padding:3px 8px" onclick="loadLearningNotes()"><i class="fas fa-sync-alt"></i></button>
-          </div>
-          <div id="learn-notes-list" style="max-height:300px;overflow-y:auto">
-            <div class="panel-empty">No learning notes yet</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- ── Simulations tab ─────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-simulations">
-    <div class="panel-scroll">
-      <div class="panel-header">
-        <div>
-          <div class="panel-title">Scenario Simulations</div>
-          <div class="panel-subtitle">Model business scenarios and forecast impact</div>
-        </div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-outline btn-sm" onclick="runSimulations(currentScenarios)"><i class="fas fa-play"></i> Run Selected</button>
-          <button class="btn btn-primary btn-sm" onclick="runSimulations(null)"><i class="fas fa-layer-group"></i> Run All</button>
-        </div>
-      </div>
-      <div class="card" style="margin-bottom:20px">
-        <div class="card-title">Select Scenarios</div>
-        <div id="scenario-checkboxes" style="display:flex;flex-wrap:wrap;gap:10px">
-          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="price-increase-10pct"> Price Increase 10%</label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="price-decrease-5pct"> Price Decrease 5%</label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="top-product-stockout"> Top Product Stockout</label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="competitor-undercut-20pct"> Competitor Undercuts 20%</label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer"><input type="checkbox" checked data-scenario="demand-surge-gpu"> GPU Demand Surge 3x</label>
-        </div>
-      </div>
-      <div id="sim-results"><div class="panel-empty">Run simulations to see scenario forecasts</div></div>
-      <div style="margin-top:24px">
-        <div class="section-label">Past Runs</div>
-        <div id="sim-history"><div class="panel-empty" style="padding:16px">No previous runs</div></div>
-      </div>
-    </div>
-  </div>
 
   <!-- ── Campaigns tab ───────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-campaigns">
-    <div class="panel-scroll">
-      <!-- Section 1: Header -->
-      <div class="panel-header">
-        <div>
-          <div class="panel-title">Campaign Strategist</div>
-          <div class="panel-subtitle">AI-generated marketing campaign briefs with Klaviyo integration</div>
-        </div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-outline btn-sm" onclick="syncCampaignToKlaviyo()"><i class="fab fa-mailchimp"></i> Sync to Klaviyo</button>
-          <button class="btn btn-primary btn-sm" onclick="generateCampaigns()"><i class="fas fa-magic"></i> Generate Strategy</button>
-        </div>
-      </div>
-
-      <!-- Section 2: Klaviyo Status -->
-      <div class="section-label">Klaviyo Connection</div>
-      <div class="card" style="margin-bottom:20px" id="klaviyo-status-card">
-        <div class="panel-loading"><div class="spinner spinner-sm"></div> Checking Klaviyo...</div>
-      </div>
-
-      <!-- Section 4: Context Feed -->
-      <div class="section-label">Analytics Context <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;color:var(--txt3)">(feeds campaign generation)</span></div>
-      <div class="card" style="margin-bottom:20px" id="campaigns-context-card">
-        <div style="font-size:13px;color:var(--txt3)">Load the Analytics tab first to populate context, or generate campaigns to auto-fetch.</div>
-      </div>
-
-      <!-- Section 3: Campaign Strategies -->
-      <div class="section-label">Campaign Strategies</div>
-      <div id="campaigns-content"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading campaigns...</div></div>
-    </div>
-  </div>
 
   <!-- ── Brain tab ───────────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-brain">
-    <div class="panel-scroll">
-      <div class="panel-header">
-        <div>
-          <div class="panel-title">Agent Brain</div>
-          <div class="panel-subtitle">Central knowledge store, learned skills, and decision history</div>
-        </div>
-        <button class="btn btn-outline btn-sm" onclick="loadBrain()"><i class="fas fa-sync-alt"></i> Refresh</button>
-      </div>
-      <div class="stat-grid">
-        <div class="stat-card"><div class="stat-card-label">Total Runs</div><div class="stat-card-value" id="brain-runs">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Data Quality</div><div class="stat-card-value" id="brain-quality">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Learning Confidence</div><div class="stat-card-value" id="brain-confidence">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Last Orchestration</div><div class="stat-card-value" id="brain-last" style="font-size:14px">—</div></div>
-      </div>
-
-      <div class="brain-grid">
-        <div>
-          <div class="section-label">Safety Constraints <button class="btn btn-sm btn-outline" onclick="editConstraints()" style="padding:3px 10px;font-size:11px">Edit</button></div>
-          <div class="card" id="brain-constraints"><div class="panel-loading"><div class="spinner spinner-sm"></div></div></div>
-        </div>
-        <div>
-          <div class="section-label">Learned Skills</div>
-          <div class="card" id="brain-skills" style="max-height:260px;overflow-y:auto"><div class="panel-loading"><div class="spinner spinner-sm"></div></div></div>
-        </div>
-      </div>
-
-      <div class="section-label" style="margin-top:8px">Decision Log <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;color:var(--txt3)" id="decision-log-count"></span></div>
-      <div class="card" id="brain-decision-log" style="max-height:300px;overflow-y:auto;margin-bottom:24px"><div class="panel-loading"><div class="spinner spinner-sm"></div></div></div>
-
-      <div class="section-label">Notes <button class="btn btn-sm btn-outline" onclick="addBrainNote()" style="padding:3px 10px;font-size:11px"><i class="fas fa-plus"></i> Add</button></div>
-      <div class="card" id="brain-notes" style="max-height:200px;overflow-y:auto;margin-bottom:24px"></div>
-
-      <div class="card">
-        <div class="card-title"><i class="fas fa-sync-alt" style="color:var(--teal-lt)"></i> Monthly System Update</div>
-        <p style="font-size:13px;color:var(--txt2);margin-bottom:14px">Runs a 3-phase comprehensive update: synthesises all accumulated data into a master directive, validates against constraints, then implements into the brain.</p>
-        <div style="display:flex;gap:10px;align-items:center">
-          <button class="btn btn-primary" onclick="runSystemUpdate()"><i class="fas fa-rocket"></i> Run System Update</button>
-          <span id="system-update-status" style="font-size:13px;color:var(--txt3)"></span>
-        </div>
-        <div id="system-update-history" style="margin-top:16px"></div>
-      </div>
-    </div>
-  </div>
 
   <!-- ── Data Health tab ─────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-datahealth">
-    <div class="panel-scroll">
-      <div class="panel-header">
-        <div>
-          <div class="panel-title">Data Health &amp; Safety</div>
-          <div class="panel-subtitle">Data quality monitoring, quarantine queue, and brain rollback</div>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="runDataValidator()"><i class="fas fa-check-circle"></i> Run Validation</button>
-      </div>
-
-      <div class="two-col" style="margin-bottom:24px">
-        <div>
-          <div class="section-label">Overall Health Score</div>
-          <div class="card">
-            <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
-              <div id="health-score-ring" style="font-size:36px;font-weight:800;color:var(--white)">—</div>
-              <div>
-                <div id="health-verdict" style="font-size:14px;font-weight:700;color:var(--txt2)">Not yet checked</div>
-                <div id="health-checked" style="font-size:12px;color:var(--txt3);margin-top:2px"></div>
-              </div>
-            </div>
-            <div id="health-source-bars"><div class="panel-empty" style="padding:8px">Run validation to see source health</div></div>
-          </div>
-        </div>
-        <div>
-          <div class="section-label">Hallucination Guard</div>
-          <div class="card">
-            <p style="font-size:13px;color:var(--txt2);margin-bottom:14px">Run a grounding check on the latest intelligence report to verify Claude's output is grounded in actual data.</p>
-            <button class="btn btn-outline btn-sm" onclick="runGroundingCheck()"><i class="fas fa-search"></i> Check Latest Report</button>
-            <div id="grounding-result" style="margin-top:14px"></div>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-bottom:24px">
-        <div class="section-label">Quarantine Queue <button class="btn btn-sm btn-outline" onclick="clearAllQuarantine()" style="padding:3px 10px;font-size:11px">Clear All</button></div>
-        <div id="quarantine-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading quarantine...</div></div>
-      </div>
-
-      <div>
-        <div class="section-label">Brain Snapshots (Rollback) <button class="btn btn-sm btn-outline" onclick="snapshotBrain()" style="padding:3px 10px;font-size:11px"><i class="fas fa-camera"></i> Snapshot Now</button></div>
-        <div id="snapshot-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading snapshots...</div></div>
-      </div>
-    </div>
-  </div>
 
   <!-- ── Quotes tab ──────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-quotes">
-    <div class="panel-scroll">
-      <div class="panel-header">
-        <div><div class="panel-title">Quote Pipeline</div><div class="panel-subtitle">B2B quote and RFQ management</div></div>
-        <button class="btn btn-primary btn-sm" onclick="showCreateQuote()"><i class="fas fa-plus"></i> New Quote</button>
-      </div>
-
-      <div class="stat-grid" style="margin-bottom:24px" id="quote-stats">
-        <div class="stat-card"><div class="stat-card-label">Total Quotes</div><div class="stat-card-value" id="q-total">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Pending</div><div class="stat-card-value" id="q-sent">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Accepted</div><div class="stat-card-value" id="q-accepted" style="color:var(--green)">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Pipeline Value</div><div class="stat-card-value" id="q-value" style="font-size:16px">—</div></div>
-      </div>
-
-      <div id="quote-create-form" style="display:none" class="card" style="margin-bottom:24px">
-        <div class="card-title">New Quote</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-          <div class="form-group"><label>Customer Name *</label><input type="text" id="q-name" placeholder="Jane Smith" /></div>
-          <div class="form-group"><label>Email *</label><input type="text" id="q-email" placeholder="jane@company.com" /></div>
-          <div class="form-group"><label>Company</label><input type="text" id="q-company" placeholder="Acme Corp" /></div>
-          <div class="form-group"><label>Phone</label><input type="text" id="q-phone" placeholder="+61 4..." /></div>
-        </div>
-        <div class="form-group" style="margin-bottom:12px"><label>Customer Message</label><textarea id="q-msg" rows="2" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);color:var(--white);padding:8px;border-radius:var(--rsm);font-size:13px;font-family:inherit"></textarea></div>
-        <div class="form-group" style="margin-bottom:12px"><label>Internal Notes</label><textarea id="q-notes" rows="2" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);color:var(--white);padding:8px;border-radius:var(--rsm);font-size:13px;font-family:inherit"></textarea></div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-primary btn-sm" onclick="createQuote()"><i class="fas fa-save"></i> Create Draft</button>
-          <button class="btn btn-outline btn-sm" onclick="document.getElementById('quote-create-form').style.display='none'">Cancel</button>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="quote-filter-bar">
-        <button class="btn btn-sm btn-outline" onclick="loadQuotes('all')" id="qf-all">All</button>
-        <button class="btn btn-sm btn-outline" onclick="loadQuotes('draft')" id="qf-draft">Draft</button>
-        <button class="btn btn-sm btn-outline" onclick="loadQuotes('sent')" id="qf-sent">Sent</button>
-        <button class="btn btn-sm btn-outline" onclick="loadQuotes('accepted')" id="qf-accepted">Accepted</button>
-        <button class="btn btn-sm btn-outline" onclick="loadQuotes('rejected')" id="qf-rejected">Rejected</button>
-      </div>
-
-      <div id="quotes-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading quotes...</div></div>
-    </div>
-  </div>
 
   <!-- ── Reporting tab ────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-reporting">
-    <div class="panel-scroll">
-      <div class="panel-header">
-        <div><div class="panel-title">Revenue &amp; Margin Reporting</div><div class="panel-subtitle" id="report-generated-at">Loading...</div></div>
-        <button class="btn btn-primary btn-sm" onclick="generateReport()"><i class="fas fa-sync-alt"></i> Generate Report</button>
-      </div>
-
-      <div class="two-col" style="margin-bottom:24px">
-        <div>
-          <div class="section-label">Quote Pipeline</div>
-          <div class="card" id="report-pipeline"><div class="panel-empty">Run report to see pipeline</div></div>
-        </div>
-        <div>
-          <div class="section-label">Lead → Quote Conversion</div>
-          <div class="card" id="report-conversion"><div class="panel-empty">Run report to see conversion</div></div>
-        </div>
-      </div>
-
-      <div class="two-col" style="margin-bottom:24px">
-        <div>
-          <div class="section-label">Revenue by Product</div>
-          <div class="card" style="padding:0;overflow:hidden" id="report-revenue"><div class="panel-empty" style="padding:16px">No order data yet</div></div>
-        </div>
-        <div>
-          <div class="section-label">Margin by Product</div>
-          <div class="card" style="padding:0;overflow:hidden" id="report-margin"><div class="panel-empty" style="padding:16px">No cost data yet</div></div>
-        </div>
-      </div>
-
-      <div class="two-col" style="margin-bottom:24px">
-        <div>
-          <div class="section-label">Funnel (30d)</div>
-          <div class="card" id="report-funnel"><div class="panel-empty">Run report to see funnel</div></div>
-        </div>
-        <div>
-          <div class="section-label">Top Customers by Quote Value</div>
-          <div class="card" style="padding:0;overflow:hidden" id="report-customers"><div class="panel-empty" style="padding:16px">No accepted quotes yet</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- ── Monitor tab ──────────────────────────────────────────────── -->
   <div class="tab-panel" id="tab-monitor">
@@ -949,193 +528,8 @@
   </div>
 
   <!-- ── Agents tab ───────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-agents">
-    <div class="panel-scroll">
-      <div class="panel-header">
-        <div><div class="panel-title">Agent Control</div><div class="panel-subtitle">Live agent registry — spawn, monitor, and kill AI agents</div></div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-primary btn-sm" onclick="runParallelOrchestrate()"><i class="fas fa-rocket"></i> Run Parallel Pipeline</button>
-          <button class="btn btn-warning btn-sm" onclick="killAllAgents()"><i class="fas fa-skull"></i> Kill All</button>
-          <button class="btn btn-outline btn-sm" onclick="loadAgents()"><i class="fas fa-sync-alt"></i> Refresh</button>
-        </div>
-      </div>
-
-      <div class="stat-grid" style="margin-bottom:24px">
-        <div class="stat-card"><div class="stat-card-label">Running</div><div class="stat-card-value" id="ag-running" style="color:var(--teal-lt)">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Completed</div><div class="stat-card-value" id="ag-completed" style="color:var(--green)">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Failed</div><div class="stat-card-value" id="ag-failed" style="color:var(--red)">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Killed</div><div class="stat-card-value" id="ag-killed" style="color:var(--orange)">—</div></div>
-      </div>
-
-      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-        <button class="btn btn-sm btn-outline" onclick="loadAgents('all')">All</button>
-        <button class="btn btn-sm btn-outline" onclick="loadAgents('running')">Running</button>
-        <button class="btn btn-sm btn-outline" onclick="loadAgents('completed')">Completed</button>
-        <button class="btn btn-sm btn-outline" onclick="loadAgents('failed')">Failed</button>
-      </div>
-
-      <div id="agents-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading agents...</div></div>
-
-      <div class="section-label" style="margin-top:24px">Task Queue</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <div class="stat-card" style="flex:1"><div class="stat-card-label">Pending</div><div class="stat-card-value" id="tq-pending">—</div></div>
-        <div class="stat-card" style="flex:1"><div class="stat-card-label">Claimed</div><div class="stat-card-value" id="tq-claimed">—</div></div>
-        <div class="stat-card" style="flex:1"><div class="stat-card-label">Completed</div><div class="stat-card-value" id="tq-completed">—</div></div>
-        <div class="stat-card" style="flex:1"><div class="stat-card-label">Dead</div><div class="stat-card-value" id="tq-dead" style="color:var(--red)">—</div></div>
-      </div>
-      <div id="task-queue-list"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading queue...</div></div>
-
-      <div class="section-label" style="margin-top:24px">Multi-Agent Intelligence Reports</div>
-      <div id="multi-agent-reports"><div class="panel-loading"><div class="spinner spinner-sm"></div> Loading...</div></div>
-    </div>
-  </div>
 
   <!-- ── Synthesis tab ────────────────────────────────────────────── -->
-  <div class="tab-panel" id="tab-synthesis">
-    <div class="panel-scroll">
-      <div class="panel-header">
-        <div><div class="panel-title">Convergence Algorithm</div><div class="panel-subtitle">Multi-disciplinary synthesis — physics, psychology, biology, mathematics, history, consumer behaviour, marketing</div></div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-primary btn-sm" onclick="runSynthesis()"><i class="fas fa-atom"></i> Run Synthesis</button>
-          <button class="btn btn-outline btn-sm" onclick="runEvolver()"><i class="fas fa-dna"></i> Evolve Strategies</button>
-          <button class="btn btn-outline btn-sm" onclick="runTemporalSim()"><i class="fas fa-clock"></i> Simulate 12 Weeks</button>
-        </div>
-      </div>
-
-      <!-- Convergence Score -->
-      <div class="card" style="margin-bottom:24px" id="synthesis-convergence-card">
-        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
-          <div style="text-align:center">
-            <div style="font-size:48px;font-weight:900;color:var(--teal-lt)" id="synth-score">—</div>
-            <div style="font-size:12px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px">Convergence Score</div>
-          </div>
-          <div style="flex:1;min-width:200px">
-            <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px" id="synth-focus">Run synthesis to see insights</div>
-            <div style="font-size:13px;color:var(--txt2)" id="synth-summary"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Discipline Scores -->
-      <div class="section-label">Discipline Scores</div>
-      <div class="stat-grid" style="margin-bottom:24px" id="synth-disciplines">
-        <div class="stat-card"><div class="stat-card-label">Physics</div><div class="stat-card-value" id="sd-physics">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Psychology</div><div class="stat-card-value" id="sd-psychology">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Biology</div><div class="stat-card-value" id="sd-biology">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Mathematics</div><div class="stat-card-value" id="sd-mathematics">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">History</div><div class="stat-card-value" id="sd-history">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Consumer Behaviour</div><div class="stat-card-value" id="sd-consumerBehaviour">—</div></div>
-        <div class="stat-card"><div class="stat-card-label">Marketing</div><div class="stat-card-value" id="sd-marketing">—</div></div>
-      </div>
-
-      <div class="two-col" style="margin-bottom:24px">
-        <div>
-          <div class="section-label">Top Opportunities</div>
-          <div id="synth-opportunities"><div class="panel-empty">Run synthesis to see opportunities</div></div>
-        </div>
-        <div>
-          <div class="section-label">Critical Risks</div>
-          <div id="synth-risks"><div class="panel-empty">Run synthesis to see risks</div></div>
-        </div>
-      </div>
-
-      <!-- Strategy Evolution -->
-      <div class="section-label">Strategy Evolution <span id="evol-generation" style="color:var(--txt3);font-size:12px;font-weight:400;margin-left:8px"></span></div>
-      <div class="card" style="margin-bottom:24px" id="evol-elites">
-        <div class="panel-empty">Evolve strategies to see elite performers</div>
-      </div>
-
-      <!-- Temporal Simulation -->
-      <div class="section-label">Temporal Simulation Results</div>
-      <div id="temporal-results"><div class="panel-empty">Run a simulation to see how strategies perform over 12 weeks</div></div>
-
-      <!-- Simulation Gym -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:8px">
-        <div class="section-label" style="margin:0">Simulation Gym</div>
-        <button class="btn btn-outline btn-sm" onclick="loadGym()"><i class="fas fa-sync-alt"></i> Refresh</button>
-      </div>
-      <div class="card" style="margin-bottom:16px" id="gym-params-card">
-        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Core Parameters</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px">
-          <div class="form-group">
-            <label>Price Elasticity</label>
-            <input type="number" id="gym-elasticity" step="0.01" placeholder="-1.5" />
-          </div>
-          <div class="form-group">
-            <label>Charm Pricing Lift</label>
-            <input type="number" id="gym-charm" step="0.01" placeholder="0.08" />
-          </div>
-          <div class="form-group">
-            <label>Base Lead Rate</label>
-            <input type="number" id="gym-leadrate" step="0.001" placeholder="0.015" />
-          </div>
-          <div class="form-group">
-            <label>Lead → Quote Rate</label>
-            <input type="number" id="gym-leadquote" step="0.01" placeholder="0.40" />
-          </div>
-          <div class="form-group">
-            <label>Quote Acceptance Rate</label>
-            <input type="number" id="gym-acceptance" step="0.01" placeholder="0.30" />
-          </div>
-          <div class="form-group">
-            <label>Market Growth Rate</label>
-            <input type="number" id="gym-growth" step="0.001" placeholder="0.02" />
-          </div>
-          <div class="form-group">
-            <label>Event Probability</label>
-            <input type="number" id="gym-eventprob" step="0.01" placeholder="0.10" />
-          </div>
-          <div class="form-group">
-            <label>Seasonal Amplitude</label>
-            <input type="number" id="gym-seasonal" step="0.01" placeholder="0.25" />
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
-          <div class="form-group" style="flex:1;min-width:160px;margin:0">
-            <label>Confidence Threshold (%)</label>
-            <input type="number" id="gym-confidence" step="1" min="50" max="100" placeholder="95" />
-          </div>
-          <button class="btn btn-primary btn-sm" style="margin-top:auto" onclick="saveGymParams()"><i class="fas fa-save"></i> Save Parameters</button>
-        </div>
-      </div>
-
-      <div class="card" style="margin-bottom:16px">
-        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Add Custom Formula</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-          <div class="form-group">
-            <label>Name</label>
-            <input type="text" id="gym-fname" placeholder="e.g. Power-law demand elasticity" />
-          </div>
-          <div class="form-group">
-            <label>Type</label>
-            <select id="gym-ftype">
-              <option value="price-elasticity">Price Elasticity</option>
-              <option value="lead-rate">Lead Rate</option>
-              <option value="conversion-rate">Conversion Rate</option>
-              <option value="seasonal">Seasonal</option>
-              <option value="custom">Custom</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group" style="margin-bottom:12px">
-          <label>Description</label>
-          <input type="text" id="gym-fdesc" placeholder="What does this formula do and why?" />
-        </div>
-        <div class="form-group" style="margin-bottom:12px">
-          <label>Parameters (JSON)</label>
-          <textarea id="gym-fparams" rows="3" placeholder='{"elasticity": -1.8, "threshold": 500}'></textarea>
-        </div>
-        <div class="form-group" style="margin-bottom:12px">
-          <label>Source / Reference</label>
-          <input type="text" id="gym-fsource" placeholder="e.g. Journal of B2B Marketing, 2024" />
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="addGymFormula()"><i class="fas fa-plus"></i> Add Formula</button>
-      </div>
-
-      <div class="section-label">Active Formulas</div>
-      <div id="gym-formulas"><div class="panel-empty">No custom formulas added yet</div></div>
-    </div>
-  </div>
 
 </div>
 
@@ -1199,226 +593,18 @@
   </div>
 
 </div>
-</div><!-- /tab-content-products -->
 
 <!-- Competitors Tab -->
-<div id="tab-content-competitors" style="display:none" class="tab-panel">
-  <div class="intel-header">
-    <div class="tab-section-title"><i class="fas fa-globe"></i> Competitor Intelligence</div>
-    <button class="btn btn-primary btn-sm" onclick="crawlAllCompetitors()"><i class="fas fa-sync-alt"></i> Crawl All</button>
-  </div>
-
-  <div class="comp-add-form">
-    <div class="comp-add-form-title"><i class="fas fa-plus-circle"></i> Add Competitor Site</div>
-    <div class="comp-add-grid">
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" id="comp-name" placeholder="e.g. Dicker Data" />
-      </div>
-      <div class="form-group">
-        <label>Website URL</label>
-        <input type="text" id="comp-url" placeholder="https://www.example.com.au" />
-      </div>
-      <div class="form-group">
-        <label>Catalogue URL</label>
-        <input type="text" id="comp-catalogue-url" placeholder="https://www.example.com.au/products" />
-      </div>
-      <div class="form-group">
-        <label>&nbsp;</label>
-        <button class="btn btn-primary" onclick="addCompetitor()"><i class="fas fa-plus"></i> Add</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="tab-section">
-    <div class="tab-section-title"><i class="fas fa-list"></i> Monitored Sites</div>
-    <div class="comp-list" id="comp-list">
-      <div class="empty-panel"><i class="fas fa-globe"></i><p>Loading competitor sites...</p></div>
-    </div>
-  </div>
-
-  <div class="tab-section">
-    <div class="tab-section-title"><i class="fas fa-table"></i> Price Comparison</div>
-    <div class="price-table-wrap" id="price-table-wrap">
-      <div class="empty-panel"><i class="fas fa-chart-bar"></i><p>No price data yet. Add competitors and run a crawl.</p></div>
-    </div>
-  </div>
-</div>
 
 <!-- Analytics Tab -->
-<div id="tab-content-analytics" style="display:none" class="tab-panel">
-  <div class="tab-section-title"><i class="fas fa-chart-line"></i> Site Analytics</div>
-  <div class="stats-cards" id="analytics-stats">
-    <div class="stat-card"><div class="stat-card-label">Sessions (7d)</div><div class="stat-card-value teal" id="stat-7d">—</div></div>
-    <div class="stat-card"><div class="stat-card-label">Sessions (30d)</div><div class="stat-card-value" id="stat-30d">—</div></div>
-    <div class="stat-card"><div class="stat-card-label">Total Sessions</div><div class="stat-card-value" id="stat-total">—</div></div>
-    <div class="stat-card"><div class="stat-card-label">Unique Products Viewed</div><div class="stat-card-value teal" id="stat-products">—</div></div>
-  </div>
-  <div class="two-col-grid">
-    <div class="panel-box">
-      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-fire"></i> Top Products</div>
-      <div class="bar-list" id="top-products-list"><div class="empty-panel" style="padding:16px"><p>No product view data yet.</p></div></div>
-    </div>
-    <div class="panel-box">
-      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-file-alt"></i> Top Pages</div>
-      <div class="bar-list" id="top-pages-list"><div class="empty-panel" style="padding:16px"><p>No page view data yet.</p></div></div>
-    </div>
-  </div>
-  <div class="tab-section" style="margin-top:24px">
-    <div class="tab-section-title"><i class="fas fa-history"></i> Recent Sessions</div>
-    <div class="session-list" id="session-list"><div class="empty-panel"><p>No sessions recorded yet.</p></div></div>
-  </div>
-</div>
 
 <!-- Intelligence Tab -->
-<div id="tab-content-intelligence" style="display:none" class="tab-panel">
-  <div class="intel-header">
-    <div>
-      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-brain"></i> Business Intelligence</div>
-      <div class="intel-timestamp" id="intel-timestamp">No report generated yet</div>
-    </div>
-    <button class="btn btn-primary" onclick="runIntelligence()" id="intel-run-btn"><i class="fas fa-play"></i> Run Analysis</button>
-  </div>
-
-  <div id="intel-alerts-section" style="display:none" class="tab-section">
-    <div class="tab-section-title"><i class="fas fa-exclamation-triangle"></i> Alerts</div>
-    <div class="alert-list" id="intel-alerts"></div>
-  </div>
-
-  <div class="two-col-grid" style="margin-bottom:24px">
-    <div id="intel-trends-section" style="display:none" class="panel-box">
-      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-chart-line"></i> Trends</div>
-      <div class="trend-chips" id="intel-trends"></div>
-    </div>
-    <div id="intel-insights-section" style="display:none" class="panel-box">
-      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-lightbulb"></i> Insights</div>
-      <div class="insight-list" id="intel-insights"></div>
-    </div>
-  </div>
-
-  <div id="intel-recs-section" style="display:none" class="tab-section">
-    <div class="tab-section-title"><i class="fas fa-dollar-sign"></i> Price Recommendations</div>
-    <div class="rec-table-wrap">
-      <table class="rec-table">
-        <thead><tr><th>Product</th><th>Current Price</th><th>Recommended</th><th>Reasoning</th><th></th></tr></thead>
-        <tbody id="intel-recs"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div id="intel-ranking-section" style="display:none" class="tab-section">
-    <div class="tab-section-title" style="justify-content:space-between">
-      <span><i class="fas fa-sort-amount-down"></i> Product Ranking</span>
-      <button class="btn btn-outline btn-sm" onclick="applyProductRanking()" id="apply-ranking-btn"><i class="fas fa-check"></i> Apply Ranking</button>
-    </div>
-    <div class="ranking-list" id="intel-ranking"></div>
-  </div>
-
-  <div id="intel-bundles-section" style="display:none" class="tab-section">
-    <div class="tab-section-title"><i class="fas fa-boxes"></i> Bundle Suggestions</div>
-    <div class="bundle-cards" id="intel-bundles"></div>
-  </div>
-</div>
 
 <!-- Simulations Tab -->
-<div id="tab-content-simulations" style="display:none" class="tab-panel">
-  <div class="intel-header">
-    <div>
-      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-flask"></i> Simulation Engine</div>
-      <div class="intel-timestamp" id="sim-timestamp">Run simulations to model what-if scenarios</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-outline btn-sm" onclick="runSimulation('single')" id="sim-single-btn"><i class="fas fa-play"></i> Run Selected</button>
-      <button class="btn btn-primary" onclick="runSimulation('all')" id="sim-all-btn"><i class="fas fa-play-circle"></i> Run All</button>
-    </div>
-  </div>
-  <div class="tab-section">
-    <div class="tab-section-title"><i class="fas fa-list-ul"></i> Scenarios</div>
-    <div class="sim-scenario-list">
-      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Price Sensitivity" checked> <span>Price Sensitivity</span> <span class="sim-desc">Impact of reducing GPU prices 10%</span></label>
-      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Bundle Impact"> <span>Bundle Impact</span> <span class="sim-desc">Conversion lift from bundling top products at 8% discount</span></label>
-      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Competitor Response"> <span>Competitor Response</span> <span class="sim-desc">Our response strategy if competitor drops prices 20%</span></label>
-      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Demand Forecast"> <span>Demand Forecast</span> <span class="sim-desc">30-day demand forecast by product category</span></label>
-      <label class="sim-scenario-item"><input type="radio" name="scenario" value="Stock Prioritisation"> <span>Stock Prioritisation</span> <span class="sim-desc">Which products to prioritise for restocking</span></label>
-    </div>
-  </div>
-  <div class="tab-section" id="sim-results-section" style="display:none">
-    <div class="tab-section-title"><i class="fas fa-chart-bar"></i> Results</div>
-    <div id="sim-results"></div>
-  </div>
-  <div class="tab-section">
-    <div class="tab-section-title"><i class="fas fa-history"></i> Previous Simulations</div>
-    <div id="sim-history"><div class="empty-panel"><p>No simulations run yet.</p></div></div>
-  </div>
-</div>
 
 <!-- Campaigns Tab -->
-<div id="tab-content-campaigns" style="display:none" class="tab-panel">
-  <div class="intel-header">
-    <div>
-      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-bullhorn"></i> Campaign Strategist</div>
-      <div class="intel-timestamp" id="camp-timestamp">AI-generated marketing campaign strategies</div>
-    </div>
-    <button class="btn btn-primary" onclick="runCampaigns()" id="camp-run-btn"><i class="fas fa-magic"></i> Generate Campaigns</button>
-  </div>
-  <div id="camp-insight-bar" style="display:none" class="insight-item" style="margin-bottom:20px"><i class="fas fa-lightbulb"></i> <span id="camp-insight"></span></div>
-  <div id="camp-list"><div class="empty-panel"><i class="fas fa-bullhorn"></i><p>No campaigns generated yet. Click Generate Campaigns.</p></div></div>
-</div>
 
 <!-- Brain Tab -->
-<div id="tab-content-brain" style="display:none" class="tab-panel">
-  <div class="intel-header">
-    <div>
-      <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-database"></i> Knowledge Base (Brain)</div>
-      <div class="intel-timestamp" id="brain-timestamp">Central intelligence store — all agents read and write here</div>
-    </div>
-    <button class="btn btn-outline btn-sm" onclick="loadBrain()"><i class="fas fa-sync-alt"></i> Refresh</button>
-  </div>
-  <div class="stats-cards" style="margin-bottom:24px">
-    <div class="stat-card"><div class="stat-card-label">Total Runs</div><div class="stat-card-value teal" id="brain-runs">—</div></div>
-    <div class="stat-card"><div class="stat-card-label">Data Quality</div><div class="stat-card-value" id="brain-quality">—</div></div>
-    <div class="stat-card"><div class="stat-card-label">Learning Confidence</div><div class="stat-card-value teal" id="brain-confidence">—</div></div>
-    <div class="stat-card"><div class="stat-card-label">Last Updated</div><div class="stat-card-value" id="brain-updated" style="font-size:13px">—</div></div>
-  </div>
-  <div class="two-col-grid" style="margin-bottom:24px">
-    <div class="panel-box">
-      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-shield-alt"></i> Safety Constraints</div>
-      <div id="brain-constraints"><div class="empty-panel" style="padding:16px"><p>Loading...</p></div></div>
-      <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="editConstraints()"><i class="fas fa-edit"></i> Edit Constraints</button>
-    </div>
-    <div class="panel-box">
-      <div class="tab-section-title" style="margin-bottom:14px"><i class="fas fa-graduation-cap"></i> Learned Skills</div>
-      <div id="brain-skills"><div class="empty-panel" style="padding:16px"><p>Loading...</p></div></div>
-    </div>
-  </div>
-  <div class="tab-section">
-    <div class="tab-section-title"><i class="fas fa-history"></i> Decision Log <span style="font-weight:400;font-size:12px;color:var(--txt3);margin-left:8px">(last 20)</span></div>
-    <div id="brain-decisions"><div class="empty-panel"><p>No decisions logged yet.</p></div></div>
-  </div>
-  <div class="tab-section">
-    <div class="tab-section-title"><i class="fas fa-sticky-note"></i> Notes</div>
-    <div id="brain-notes" style="display:flex;flex-direction:column;gap:6px"></div>
-    <div style="display:flex;gap:8px;margin-top:12px">
-      <input type="text" id="brain-note-input" placeholder="Add a note..." style="flex:1">
-      <button class="btn btn-outline btn-sm" onclick="addBrainNote()"><i class="fas fa-plus"></i> Add</button>
-    </div>
-  </div>
-
-  <div class="tab-section" style="border-top:2px solid var(--teal-dk);padding-top:28px;margin-top:8px">
-    <div class="intel-header" style="margin-bottom:16px">
-      <div>
-        <div class="tab-section-title" style="margin-bottom:4px"><i class="fas fa-sync-alt"></i> Monthly System Update</div>
-        <div class="intel-timestamp" id="sysupdate-timestamp">Synthesises all month's data into a master directive, validates it, bug-checks it, then injects into brain</div>
-      </div>
-      <button class="btn btn-primary" onclick="runSystemUpdate()" id="sysupdate-btn"><i class="fas fa-rocket"></i> Run System Update</button>
-    </div>
-    <div id="sysupdate-result" style="display:none"></div>
-    <div class="tab-section" style="margin-top:20px">
-      <div class="tab-section-title" style="margin-bottom:12px"><i class="fas fa-history"></i> Update History</div>
-      <div id="sysupdate-history"><div class="empty-panel"><p>No system updates run yet.</p></div></div>
-    </div>
-  </div>
-</div>
 
 <script>
 (function() {
@@ -1459,23 +645,17 @@
 
   /* ── Tab switching ────────────────────────────────────────────────── */
   window.switchTab = function(name) {
+    var panel = document.getElementById('tab-' + name);
+    var btn = document.getElementById('tabnav-' + name);
+    if (!panel || !btn) return;
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-    document.getElementById('tab-' + name).classList.add('active');
-    document.getElementById('tabnav-' + name).classList.add('active');
+    panel.classList.add('active');
+    btn.classList.add('active');
     if (name === 'dashboard') loadDashboard();
+    else if (name === 'products') loadProducts();
     else if (name === 'competitors') loadCompetitors();
-    else if (name === 'analytics') { if (!window._analyticsCache) loadAnalytics(); else loadAnalytics(); }
-    else if (name === 'intelligence') loadLearningNotes();
-    else if (name === 'campaigns') loadCampaigns();
-    else if (name === 'brain') loadBrain();
-    else if (name === 'quotes') loadQuotes();
-    else if (name === 'reporting') loadReporting();
     else if (name === 'monitor') loadMonitor();
-    else if (name === 'agents') loadAgents();
-    else if (name === 'synthesis') loadSynthesis();
-    else if (name === 'simulations') loadSimHistory();
-    else if (name === 'datahealth') loadDataHealth();
     else if (name === 'pricing') loadPricingIntelligence();
   };
 
@@ -2295,7 +1475,7 @@
     if (!card) return;
     var cache = window._analyticsCache;
     if (!cache) {
-      card.innerHTML = '<div style="font-size:13px;color:var(--txt3)">Analytics not loaded yet — <button class="btn btn-outline btn-sm" onclick="switchTab(\'analytics\')">Load Analytics</button> or generate campaigns to auto-fetch.</div>';
+      card.innerHTML = '<div style="font-size:13px;color:var(--txt3)">Analytics data not available.</div>';
       return;
     }
     var bm = cache.businessMetrics || {};
@@ -2515,91 +1695,97 @@
   window.loadDashboard = async function() {
     document.getElementById('dash-last-refreshed').textContent = 'Refreshing...';
     try {
-      // Load analytics + brain in parallel
-      var [analyticsR, brainR] = await Promise.all([
-        fetch('/api/analytics').then(function(r){return r.json();}).catch(function(){return {};}),
+      var [brainR, auditR, compIntelR] = await Promise.all([
         fetch('/api/brain').then(function(r){return r.json();}).catch(function(){return {};}),
+        fetch('/api/apply-price').then(function(r){return r.json();}).catch(function(){return {auditLog:[]};}),
+        fetch('/api/competitor-intelligence').then(function(r){return r.json();}).catch(function(){return {skus:[],lastRun:null};}),
       ]);
 
       // Stat cards
-      document.getElementById('dash-s7').textContent = analyticsR.sessions7d != null ? analyticsR.sessions7d : '—';
-      document.getElementById('dash-s30').textContent = analyticsR.sessions30d != null ? analyticsR.sessions30d : '—';
-      document.getElementById('dash-quality').textContent = brainR.meta && brainR.meta.dataQualityScore != null ? Math.round(brainR.meta.dataQualityScore * 100) + '%' : '—';
-      document.getElementById('dash-confidence').textContent = brainR.meta && brainR.meta.learningConfidence != null ? Math.round(brainR.meta.learningConfidence * 100) + '%' : '—';
+      var auditLog = auditR.auditLog || [];
+      var thirtyDaysAgo = Date.now() - 30 * 24 * 3600 * 1000;
+      var recentChanges = auditLog.filter(function(e){ return new Date(e.changedAt||0).getTime() > thirtyDaysAgo; }).length;
+      var margins = auditLog.filter(function(e){ return e.marginPct != null; }).map(function(e){ return e.marginPct; });
+      var avgMargin = margins.length ? Math.round(margins.reduce(function(a,b){return a+b;},0) / margins.length) : null;
+
       document.getElementById('dash-products').textContent = state.products.length || '—';
+      document.getElementById('dash-competitors').textContent = (compIntelR.skus||[]).length || '—';
+      document.getElementById('dash-last-scrape').textContent = compIntelR.lastRun ? fmtDate(compIntelR.lastRun) : 'Never';
+      document.getElementById('dash-price-changes').textContent = recentChanges;
+      document.getElementById('dash-avg-margin').textContent = avgMargin != null ? avgMargin + '%' : '—';
       document.getElementById('dash-last-run').textContent = brainR.meta && brainR.meta.lastOrchestrationAt ? fmtDate(brainR.meta.lastOrchestrationAt) : 'Never';
 
-      // Top products bar chart
-      var top = analyticsR.topProducts || [];
-      var maxV = top.length ? top[0].views : 1;
+      // Top products bar chart — by price descending (most valuable)
+      var top = (state.products || []).filter(function(p){return p.priceIncGst;}).sort(function(a,b){return b.priceIncGst - a.priceIncGst;}).slice(0, 8);
+      var maxV = top.length ? top[0].priceIncGst : 1;
       document.getElementById('dash-top-products').innerHTML = top.length
-        ? top.slice(0,8).map(function(p) { return '<div class="bar-row"><div class="bar-label">' + escHtml(p.handle) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + Math.round(p.views/maxV*100) + '%"></div></div><div class="bar-val">' + p.views + '</div></div>'; }).join('')
-        : '<div class="panel-empty">No view data yet</div>';
+        ? top.map(function(p) { return '<div class="bar-row"><div class="bar-label">' + escHtml(p.handle||p.title) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + Math.round(p.priceIncGst/maxV*100) + '%"></div></div><div class="bar-val">A$' + Math.round(p.priceIncGst/1000) + 'k</div></div>'; }).join('')
+        : '<div class="panel-empty">No products loaded</div>';
 
-      // System status
+      // Pricing loop status
       var now = Date.now();
       function statusDot(isoDate) {
         if (!isoDate) return '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:6px"></span>';
-        var age = (now - new Date(isoDate).getTime()) / 3600000; // hours
-        var color = age < 24 ? 'var(--green)' : age < 168 ? 'var(--orange)' : 'var(--red)';
+        var age = (now - new Date(isoDate).getTime()) / 3600000;
+        var color = age < 6 ? 'var(--green)' : age < 48 ? 'var(--orange)' : 'var(--red)';
         return '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + color + ';margin-right:6px"></span>';
       }
-      var h = brainR.history || {};
       var m = brainR.meta || {};
+      var h = brainR.history || {};
       var lastIntel = (h.intelligenceRuns || [])[0] ? (h.intelligenceRuns[0].timestamp || null) : null;
-      var lastAnomaly = (h.anomaliesDetected || [])[0] ? (h.anomaliesDetected[0].detectedAt || null) : null;
       document.getElementById('dash-system-status').innerHTML =
         '<table class="data-table" style="font-size:12px"><tbody>' +
         [
-          ['Intelligence', lastIntel],
+          ['Competitor Scrape', compIntelR.lastRun || null],
+          ['Intelligence Run', lastIntel],
           ['Orchestration', m.lastOrchestrationAt || null],
-          ['System Update', m.lastSystemUpdateAt || null],
-          ['Anomaly Detector', lastAnomaly],
+          ['Last Price Change', auditLog[0] ? auditLog[0].changedAt : null],
         ].map(function(row) {
-          return '<tr><td style="color:var(--txt2)">' + row[0] + '</td><td>' + statusDot(row[1]) + (row[1] ? fmtDate(row[1]) : '<span style="color:var(--txt3)">Never run</span>') + '</td></tr>';
+          return '<tr><td style="color:var(--txt2);padding:4px 6px">' + row[0] + '</td><td style="padding:4px 6px">' + statusDot(row[1]) + (row[1] ? fmtDate(row[1]) : '<span style="color:var(--txt3)">Never</span>') + '</td></tr>';
         }).join('') +
         '</tbody></table>';
 
-      // Recent anomalies
-      var anomalies = (h.anomaliesDetected || []).slice(0, 5);
-      document.getElementById('dash-anomalies').innerHTML = anomalies.length
-        ? anomalies.map(function(a) {
-            var sev = a.severity || 'low';
-            var color = sev === 'critical' ? 'var(--red)' : sev === 'high' ? 'var(--orange)' : 'var(--txt3)';
-            return '<div style="padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px"><div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:' + color + ';display:inline-block;flex-shrink:0"></span><span style="color:var(--txt2)">' + escHtml(a.type || a.flag || 'Anomaly') + '</span><span style="color:var(--txt3);font-size:11px;margin-left:auto">' + fmtDate(a.detectedAt || a.timestamp) + '</span></div>' + (a.businessImpact ? '<div style="color:var(--txt3);font-size:12px;padding-left:16px;margin-top:2px">' + escHtml(a.businessImpact) + '</div>' : '') + '</div>';
+      // Recent price changes
+      document.getElementById('dash-anomalies').innerHTML = auditLog.length
+        ? auditLog.slice(0,5).map(function(e) {
+            var dir = (e.newPrice||0) < (e.oldPrice||0) ? 'var(--green)' : 'var(--red)';
+            var pct = e.changePct != null ? ((e.changePct >= 0 ? '+' : '') + Number(e.changePct).toFixed(1) + '%') : '';
+            return '<div style="padding:6px 0;border-bottom:1px solid var(--bdr);font-size:12px;display:flex;justify-content:space-between;align-items:center">' +
+              '<span style="color:var(--txt2);flex:1">' + escHtml(e.sku||'—') + '</span>' +
+              '<span>A$' + Number(e.newPrice||0).toLocaleString() + ' <span style="color:' + dir + ';font-weight:700">' + pct + '</span></span>' +
+            '</div>';
           }).join('')
-        : '<div class="panel-empty" style="padding:12px">No anomalies detected</div>';
+        : '<div class="panel-empty" style="padding:12px">No price changes yet</div>';
 
-      // Pending recommendations from last intelligence run
-      var lastRun = (h.intelligenceRuns || [])[0] || {};
-      var recs = (lastRun.priceRecommendations || []).slice(0, 3);
-      document.getElementById('dash-pending-recs').innerHTML = recs.length
-        ? recs.map(function(r) {
-            var chg = r.changePercent || 0;
-            var dir = chg >= 0 ? 'var(--red)' : 'var(--green)';
-            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bdr);gap:12px"><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--white)">' + escHtml(r.handle) + '</div><div style="font-size:12px;color:var(--txt3)">A$' + (r.currentPrice||0).toLocaleString('en-AU') + ' → A$' + (r.recommendedPrice||0).toLocaleString('en-AU') + ' <span style="color:' + dir + '">(' + (chg>=0?'+':'') + chg.toFixed(1) + '%)</span></div></div>' + confPill(r.confidence||0) + '<button class="btn btn-primary btn-sm" style="flex-shrink:0" onclick="applyPriceRec(\'' + escAttr(r.handle) + '\',' + (r.recommendedPrice||0) + ')"><i class="fas fa-check"></i> Apply</button></div>';
+      // Competitor undercut alerts from intelligence cache
+      var pendingAlerts = [];
+      (compIntelR.skus || []).forEach(function(skuData) {
+        var product = (state.products||[]).find(function(p){ return p.handle === skuData.sku; });
+        if (!product || !product.priceIncGst) return;
+        if (skuData.lowestPrice && skuData.lowestPrice < product.priceIncGst * 0.98) {
+          var diff = ((skuData.lowestPrice - product.priceIncGst) / product.priceIncGst * 100).toFixed(1);
+          pendingAlerts.push({ sku: skuData.sku, ourPrice: product.priceIncGst, lowestComp: skuData.lowestPrice, diff: diff });
+        }
+      });
+      document.getElementById('dash-comp-alerts').innerHTML = pendingAlerts.length
+        ? pendingAlerts.slice(0,5).map(function(a) {
+            return '<div style="padding:7px 0;border-bottom:1px solid var(--bdr);font-size:12px;display:flex;justify-content:space-between;align-items:center">' +
+              '<div><span style="font-weight:600;color:var(--white)">' + escHtml(a.sku) + '</span>' +
+              '<div style="color:var(--txt3);font-size:11px">Us A$' + Number(a.ourPrice).toLocaleString() + ' · Comp A$' + Number(a.lowestComp).toLocaleString() + '</div></div>' +
+              '<span style="color:var(--green);font-weight:700">' + a.diff + '%</span>' +
+            '</div>';
           }).join('')
-        : '<div class="panel-empty" style="padding:12px">Run Intelligence to see recommendations</div>';
+        : '<div class="panel-empty" style="padding:12px">No undercuts detected</div>';
 
-      // Competitor alerts — price changes where competitor is cheaper than us
-      try {
-        var compR = await fetch('/api/competitors').then(function(r){return r.json();}).catch(function(){return {products:[]};});
-        var products = compR.products || [];
-        var alerts = [];
-        products.forEach(function(p) {
-          (p.competitors || []).forEach(function(c) {
-            if (p.ourPrice && c.price < p.ourPrice) {
-              var diff = ((c.price - p.ourPrice) / p.ourPrice * 100).toFixed(1);
-              alerts.push({ handle: p.handle, ourPrice: p.ourPrice, compPrice: c.price, site: c.site, diff: diff });
-            }
-          });
-        });
-        document.getElementById('dash-comp-alerts').innerHTML = alerts.length
-          ? alerts.slice(0,5).map(function(a) {
-              return '<div style="padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600;color:var(--white)">' + escHtml(a.handle) + '</span><span style="color:var(--red);font-weight:700">' + a.diff + '%</span></div><div style="color:var(--txt3);font-size:12px;margin-top:2px">Us: A$' + a.ourPrice.toLocaleString('en-AU') + ' · ' + escHtml(a.site) + ': A$' + a.compPrice.toLocaleString('en-AU') + '</div></div>';
-            }).join('')
-          : '<div class="panel-empty" style="padding:12px">No competitor undercuts found</div>';
-      } catch(_) {}
+      document.getElementById('dash-pending-recs').innerHTML = pendingAlerts.length
+        ? pendingAlerts.slice(0,5).map(function(a) {
+            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bdr);gap:10px">' +
+              '<div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--white)">' + escHtml(a.sku) + '</div>' +
+              '<div style="font-size:11px;color:var(--txt3)">Competitor A$' + Number(a.lowestComp).toLocaleString() + ' vs our A$' + Number(a.ourPrice).toLocaleString() + ' <span style="color:var(--green)">' + a.diff + '%</span></div></div>' +
+              '<button class="btn btn-primary btn-sm" style="flex-shrink:0;font-size:11px;padding:3px 8px" onclick="switchTab('pricing')">Review</button>' +
+            '</div>';
+          }).join('')
+        : '<div class="panel-empty" style="padding:12px">No competitor undercuts — pricing looks competitive</div>';
 
       document.getElementById('dash-last-refreshed').textContent = 'Last updated ' + new Date().toLocaleTimeString('en-AU');
     } catch(e) {
