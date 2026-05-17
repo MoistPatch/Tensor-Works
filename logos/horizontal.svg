@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 80" role="img" aria-label="TensorWorks">
+  <title>TensorWorks — AI Hardware Solutions</title>
+  <!-- Mark (scaled to 80×80 within the 380 wide canvas) -->
+  <g transform="translate(0,0) scale(0.8)">
+    <line x1="50" y1="50" x2="50" y2="20" stroke="#1F5C99" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+    <line x1="50" y1="50" x2="76" y2="35" stroke="#1F5C99" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+    <line x1="50" y1="50" x2="76" y2="65" stroke="#1F5C99" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+    <line x1="50" y1="50" x2="50" y2="80" stroke="#1F5C99" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+    <line x1="50" y1="50" x2="24" y2="65" stroke="#1F5C99" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+    <line x1="50" y1="50" x2="24" y2="35" stroke="#1F5C99" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+    <polygon points="50,20 76,35 76,65 50,80 24,65 24,35" fill="none" stroke="#76B900" stroke-width="1.2" opacity="0.28"/>
+    <circle cx="50" cy="20" r="7.5" fill="#76B900"/>
+    <circle cx="76" cy="35" r="7.5" fill="#76B900"/>
+    <circle cx="76" cy="65" r="7.5" fill="#76B900"/>
+    <circle cx="50" cy="80" r="7.5" fill="#76B900"/>
+    <circle cx="24" cy="65" r="7.5" fill="#76B900"/>
+    <circle cx="24" cy="35" r="7.5" fill="#76B900"/>
+    <circle cx="50" cy="50" r="19" fill="#1F5C99" opacity="0.18"/>
+    <circle cx="50" cy="50" r="15" fill="#1F5C99"/>
+    <circle cx="50" cy="50" r="8" fill="#2D7EC4" opacity="0.55"/>
+    <circle cx="46" cy="46" r="3.5" fill="#fff" opacity="0.22"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="88" y="34" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" letter-spacing="-0.5" fill="#1F5C99">Tensor<tspan fill="#76B900">Works</tspan></text>
+  <!-- Subtext -->
+  <text x="90" y="54" font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="600" letter-spacing="2.5" fill="#666666">AI HARDWARE SOLUTIONS</text>
+  <!-- Divider -->
+  <line x1="88" y1="60" x2="360" y2="60" stroke="#76B900" stroke-width="1.5" opacity="0.35"/>
+  <!-- Tagline -->
+  <text x="90" y="73" font-family="Inter, Arial, sans-serif" font-size="8.5" font-weight="400" fill="#999999">Custom Builds · OEM/ODM · tensorworks.online</text>
+</svg>

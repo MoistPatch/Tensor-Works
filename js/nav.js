@@ -66,9 +66,9 @@
 
     var links = [
       { href: '/', label: 'Home', key: 'home' },
-      { href: '/products.html', label: 'Products', key: 'products' },
-      { href: '/#enquiry', label: 'Enquire', key: 'enquiry' },
-      { href: '/account.html', label: 'Account', key: 'account' },
+      { href: '/#solutions', label: 'Solutions', key: 'solutions' },
+      { href: '/#enquiry', label: 'OEM / ODM', key: 'oem' },
+      { href: '/#industries', label: 'Industries', key: 'industries' },
     ];
 
     var navLinksHTML = links.map(function (l) {
@@ -76,10 +76,14 @@
       return '<a href="' + l.href + '"' + active + '>' + l.label + '</a>';
     }).join('');
 
+    var logoHTML = (window.TW && window.TW.Logo)
+      ? window.TW.Logo.NavLogo()
+      : '<a href="/" class="logo"><div class="logo-mark">TW</div>Tensor<span>Works</span></a>';
+
     header.innerHTML =
       '<div class="container">' +
         '<div class="header-inner">' +
-          '<a href="/" class="logo"><div class="logo-mark">TW</div>Tensor<span>Works</span></a>' +
+          logoHTML +
           '<nav id="nav">' + navLinksHTML + '</nav>' +
           '<div class="header-cta">' +
             '<button class="cart-btn" onclick="Cart.toggleDrawer()" aria-label="Shopping cart">' +
