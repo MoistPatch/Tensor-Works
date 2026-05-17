@@ -36,15 +36,21 @@ async function loadJSON(path, token, fallback = null) {
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
 }
-async function callClaude(apiKey, system, messages, maxTokens = 2048) {
+async function callClaude(apiKey, system, messages, maxTokens = 2048, enableThinking = false) {
+  const reqBody = { model: 'claude-opus-4-7', max_tokens: maxTokens, system, messages };
+  if (enableThinking) {
+    reqBody.thinking = { type: 'enabled', budget_tokens: Math.floor(maxTokens * 0.45) };
+  }
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-opus-4-7', max_tokens: maxTokens, system, messages }),
+    body: JSON.stringify(reqBody),
   });
   const d = await r.json();
   if (d.error) throw new Error(d.error.message || 'Anthropic API error');
-  return (d.content || [])[0]?.text || '';
+  const thinkingBlocks = (d.content || []).filter(b => b.type === 'thinking').map(b => b.thinking);
+  const text = (d.content || []).filter(b => b.type === 'text').map(b => b.text).join('') || '';
+  return { text, thinking: thinkingBlocks.join('\n\n') };
 }
 function parseJSON(text) {
   const clean = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
@@ -235,6 +241,24 @@ function simulateStrategy(strategy, periods, periodType, marketEnv, baseProducts
       marginAUD: Math.round(periodMargin),
       event: eventName,
       competitorPressure: Math.round(marketState.competitorPressure * 100),
+      // Step trace: full calculation breakdown for transparency
+      stepTrace: {
+        waveDemand: Math.round(waveDemand),
+        seasonalMultiplier: Math.round(marketEnv.seasonalFactors.getSeasonalMultiplier(period, periodType) * 1000) / 1000,
+        growthFactor: Math.round(Math.pow(1 + params.marketGrowthRate, period) * 1000) / 1000,
+        eventName,
+        eventMultiplier,
+        adjustedDemand: Math.round(adjustedDemand),
+        priceEffect: Math.round(priceEffect * 1000) / 1000,
+        charmEffect,
+        campaignEffect,
+        frameEffect,
+        competitorEffect,
+        leadRate: Math.round(leadRate * 10000) / 10000,
+        avgDealValue: Math.round(avgDealValue),
+        marginPct: Math.round(estimatedMarginPct * 100),
+        competitorPressure: Math.round(marketState.competitorPressure * 100),
+      },
     });
   }
 
@@ -455,8 +479,9 @@ export async function onRequest(context) {
       narrative: '',
     };
 
+    let narrativeThinking = '';
     try {
-      const claudeRaw = await callClaude(
+      const { text: claudeRaw, thinking: claudeThinking } = await callClaude(
         apiKey,
         'You are a senior business analyst. Given simulation results for multiple strategies, explain which strategy wins and why, what market conditions drove the result, and what risks to watch. Return ONLY valid JSON: { "winner": { "strategyId": "string", "reason": "string" }, "keyInsights": [{ "insight": "string" }], "marketConditionAdvice": "string", "riskWarnings": [{ "risk": "string", "affectedStrategy": "string" }], "narrative": "string" }',
         [{
@@ -476,9 +501,11 @@ export async function onRequest(context) {
             },
           }),
         }],
-        2048
+        4096,
+        true,
       );
       claudeResult = parseJSON(claudeRaw);
+      narrativeThinking = claudeThinking || '';
     } catch (e) {
       // Fall back gracefully: pick winner by fitness score
       const sorted = [...strategyResults].sort((a, b) => b.summary.overallFitnessScore - a.summary.overallFitnessScore);
@@ -514,9 +541,11 @@ export async function onRequest(context) {
       periods,
       periodType,
       strategiesCompared: strategies.length,
-      // Abbreviated results for storage (first 4 periods only)
-      results: strategyResults.map(s => ({ ...s, timeline: s.timeline.slice(0, 4) })),
-      fullTimelines: strategyResults.reduce((acc, s) => { acc[s.strategyId] = s.timeline; return acc; }, {}),
+      // Abbreviated results for storage (first 4 periods only, no stepTrace to save space)
+      results: strategyResults.map(s => ({
+        ...s,
+        timeline: s.timeline.slice(0, 4).map(t => { const { stepTrace: _, ...rest } = t; return rest; }),
+      })),
       winner: claudeResult.winner,
       insights: claudeResult.keyInsights,
       narrative: claudeResult.narrative,
@@ -539,8 +568,10 @@ export async function onRequest(context) {
       runId: runRecord.runId,
       winner: claudeResult.winner,
       narrative: claudeResult.narrative,
-      strategyResults: strategyResults.map(s => ({ ...s })),  // full timelines in response
+      narrativeThinking: narrativeThinking || null,
+      strategyResults: strategyResults.map(s => ({ ...s })),  // full timelines + stepTraces in response
       insights: claudeResult.keyInsights,
+      riskWarnings: claudeResult.riskWarnings,
       recommendations,
     });
   }

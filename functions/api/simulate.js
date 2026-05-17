@@ -25,15 +25,21 @@ async function loadJSON(path, token, fallback = null) {
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
 }
-async function callClaude(apiKey, system, messages, maxTokens = 2048) {
+async function callClaude(apiKey, system, messages, maxTokens = 2048, enableThinking = false) {
+  const reqBody = { model: 'claude-opus-4-7', max_tokens: maxTokens, system, messages };
+  if (enableThinking) {
+    reqBody.thinking = { type: 'enabled', budget_tokens: Math.floor(maxTokens * 0.5) };
+  }
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-opus-4-7', max_tokens: maxTokens, system, messages }),
+    body: JSON.stringify(reqBody),
   });
   const d = await r.json();
   if (d.error) throw new Error(d.error.message || 'Anthropic API error');
-  return (d.content || [])[0]?.text || '';
+  const thinkingBlocks = (d.content || []).filter(b => b.type === 'thinking').map(b => b.thinking);
+  const text = (d.content || []).filter(b => b.type === 'text').map(b => b.text).join('') || '';
+  return { text, thinking: thinkingBlocks.join('\n\n') };
 }
 function parseJSON(text) {
   const clean = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
@@ -101,10 +107,11 @@ export async function onRequest(context) {
 Business context data: ${contextStr}
 
 Return ONLY valid JSON with keys: scenario (string), revenueImpact (object with pct number and direction "up"|"down"|"neutral"), marginImpact (object with pct number and direction), customerImpact (string), competitivePosition (string), recommendations (array of strings), confidence (number 0-1), timeHorizon ("immediate"|"30d"|"90d")`;
-    const raw = await callClaude(apiKey, 'You are a business scenario simulation engine for an AI hardware company. Simulate the business impact of the given scenario. Return ONLY valid JSON.', [{ role: 'user', content: prompt }], 2048);
+    const { text: raw, thinking } = await callClaude(apiKey, 'You are a business scenario simulation engine for an AI hardware company. Simulate the business impact of the given scenario. Return ONLY valid JSON.', [{ role: 'user', content: prompt }], 2048, true);
     const result = parseJSON(raw);
     result.scenario = scenarioName;
     result.confidence = typeof result.confidence === 'number' ? (result.confidence + confidence) / 2 : confidence;
+    result.thinking = thinking || null;
     return result;
   };
 

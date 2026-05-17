@@ -261,6 +261,45 @@
     /* Two-col layout for panels */
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } .brain-grid { grid-template-columns: 1fr; } }
+
+    /* ── Pricing Intelligence Tab ── */
+    .pricing-layout { display: grid; grid-template-columns: 240px 1fr 300px; gap: 0; height: 100%; overflow: hidden; }
+    .pricing-sidebar { border-right: 1px solid var(--bdr); display: flex; flex-direction: column; overflow: hidden; }
+    .pricing-center { border-right: 1px solid var(--bdr); display: flex; flex-direction: column; overflow: hidden; }
+    .pricing-right { display: flex; flex-direction: column; overflow: hidden; }
+    .pricing-sidebar-inner, .pricing-center-inner, .pricing-right-inner { flex: 1; overflow-y: auto; padding: 16px; }
+    .pricing-sidebar-header, .pricing-center-header, .pricing-right-header { padding: 12px 16px; border-bottom: 1px solid var(--bdr); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--txt3); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .sku-search { width: 100%; margin-bottom: 10px; }
+    .sku-item { padding: 8px 10px; border-radius: var(--rsm); cursor: pointer; font-size: 13px; color: var(--txt2); border: 1px solid transparent; margin-bottom: 2px; transition: var(--tr); }
+    .sku-item:hover { background: var(--bg3); color: var(--txt); }
+    .sku-item.active { background: rgba(13,115,119,.15); border-color: var(--teal-dk); color: var(--teal-lt); }
+    .sku-stat-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--bdr); font-size: 12px; }
+    .sku-stat-row:last-child { border-bottom: none; }
+    .sku-stat-label { color: var(--txt3); }
+    .sku-stat-value { color: var(--white); font-weight: 600; }
+    .comp-row { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--rsm); margin-bottom: 4px; background: var(--bg3); font-size: 12px; }
+    .comp-name { font-weight: 600; color: var(--txt); }
+    .comp-price { font-weight: 700; color: var(--white); }
+    .comp-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+    .comp-badge.under { background: rgba(248,81,73,.15); color: var(--red); }
+    .comp-badge.parity { background: rgba(20,168,174,.15); color: var(--teal-lt); }
+    .comp-badge.premium { background: rgba(61,220,132,.15); color: var(--green); }
+    .rec-price-display { font-size: 36px; font-weight: 900; color: var(--teal-lt); }
+    .rec-margin-display { font-size: 13px; color: var(--txt3); margin-top: 2px; }
+    .strategy-card { padding: 12px; border-radius: var(--r); border: 1px solid var(--bdr2); margin-bottom: 8px; cursor: pointer; transition: var(--tr); }
+    .strategy-card:hover { border-color: var(--teal-dk); }
+    .strategy-card.selected { border-color: var(--teal-lt); background: rgba(13,115,119,.1); }
+    .strategy-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .strategy-price { font-size: 15px; font-weight: 800; color: var(--teal-lt); }
+    .strategy-margin { font-size: 11px; color: var(--txt3); }
+    .strategy-impact { font-size: 12px; color: var(--txt2); margin-top: 4px; }
+    .strategy-risk { font-size: 11px; color: var(--orange); margin-top: 2px; }
+    .price-matrix-svg { width: 100%; height: 200px; }
+    .thinking-panel { background: #0a0f12; border: 1px solid var(--bdr2); border-radius: var(--rsm); padding: 12px; margin-top: 8px; font-size: 11px; font-family: monospace; color: #7ec8e3; line-height: 1.6; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+    .audit-row { display: grid; grid-template-columns: 1fr 80px 80px 80px auto; gap: 8px; align-items: center; padding: 6px 10px; border-bottom: 1px solid var(--bdr); font-size: 12px; }
+    .audit-row:last-child { border-bottom: none; }
+    .price-change-up { color: var(--red); }
+    .price-change-down { color: var(--green); }
   </style>
 </head>
 <body>
@@ -298,6 +337,7 @@
   <button class="tab-btn" onclick="switchTab('monitor')" id="tabnav-monitor"><i class="fas fa-heartbeat"></i> Monitor</button>
   <button class="tab-btn" onclick="switchTab('agents')" id="tabnav-agents"><i class="fas fa-project-diagram"></i> Agents</button>
   <button class="tab-btn" onclick="switchTab('synthesis')" id="tabnav-synthesis"><i class="fas fa-atom"></i> Synthesis</button>
+  <button class="tab-btn" onclick="switchTab('pricing')" id="tabnav-pricing"><i class="fas fa-tags"></i> Pricing</button>
 </nav>
 
 <div class="admin-body">
@@ -1098,6 +1138,67 @@
   </div>
 
 </div>
+
+  <!-- ── Pricing Intelligence tab ────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-pricing">
+    <div class="pricing-layout">
+
+      <!-- Left: SKU selector + quick stats -->
+      <div class="pricing-sidebar">
+        <div class="pricing-sidebar-header">
+          <span>Products</span>
+          <button class="btn btn-outline btn-sm" onclick="loadPricingIntelligence()" style="padding:2px 8px;font-size:11px"><i class="fas fa-sync-alt"></i></button>
+        </div>
+        <div class="pricing-sidebar-inner">
+          <input type="text" class="sku-search" id="pricing-sku-search" placeholder="Search products..." oninput="filterPricingSkus(this.value)" />
+          <div id="pricing-sku-list"><div class="panel-empty" style="font-size:12px">Loading products...</div></div>
+
+          <div style="margin-top:16px" id="pricing-sku-stats" style="display:none">
+            <div class="section-label" style="margin-bottom:8px">Quick Stats</div>
+            <div id="pricing-stats-content"></div>
+          </div>
+
+          <div style="margin-top:16px">
+            <div class="section-label" style="margin-bottom:8px">Apify Scraper</div>
+            <div id="pricing-apify-status" style="font-size:11px;color:var(--txt3);margin-bottom:8px">Not configured</div>
+            <button class="btn btn-outline btn-sm" style="width:100%;margin-bottom:6px" onclick="runApifyScrape()" id="pricing-run-apify-btn"><i class="fas fa-spider"></i> Run Apify Scrape</button>
+            <button class="btn btn-outline btn-sm" style="width:100%" onclick="loadPricingAudit()"><i class="fas fa-history"></i> View Audit Log</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Competitor landscape -->
+      <div class="pricing-center">
+        <div class="pricing-center-header">
+          <span id="pricing-center-title">Competitor Landscape</span>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-outline btn-sm" onclick="refreshCompetitorData()" style="padding:2px 8px;font-size:11px"><i class="fas fa-sync-alt"></i> Refresh</button>
+          </div>
+        </div>
+        <div class="pricing-center-inner">
+          <div id="pricing-center-content">
+            <div class="panel-empty">Select a product to view competitor landscape</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Recommendation engine -->
+      <div class="pricing-right">
+        <div class="pricing-right-header">
+          <span>Recommendation Engine</span>
+          <button class="btn btn-primary btn-sm" onclick="getPricingRecommendation()" id="pricing-rec-btn" disabled style="padding:2px 8px;font-size:11px"><i class="fas fa-brain"></i> Analyse</button>
+        </div>
+        <div class="pricing-right-inner">
+          <div id="pricing-rec-content">
+            <div class="panel-empty" style="font-size:12px">Select a product and click Analyse</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
 </div><!-- /tab-content-products -->
 
 <!-- Competitors Tab -->
@@ -1375,6 +1476,7 @@
     else if (name === 'synthesis') loadSynthesis();
     else if (name === 'simulations') loadSimHistory();
     else if (name === 'datahealth') loadDataHealth();
+    else if (name === 'pricing') loadPricingIntelligence();
   };
 
   /* ══════════════════════════════════════════════════════════════════
@@ -2117,6 +2219,7 @@
             (s.recommendations&&s.recommendations.length ? '<ul style="padding-left:16px;font-size:13px;color:var(--txt3)">' + s.recommendations.map(function(rec){ return '<li style="margin-bottom:4px">'+escHtml(rec)+'</li>'; }).join('') + '</ul>' : '') +
           '</div>' +
           '<div class="sim-meta"><span style="color:var(--txt3)">Competitive: ' + escHtml(s.competitivePosition||'') + '</span></div>' +
+          (s.thinking ? '<div style="margin-top:6px"><button onclick="var n=this.nextElementSibling;n.style.display=n.style.display===\'none\'?\'block\':\'none\'" style="width:100%;text-align:left;background:none;border:1px solid var(--bdr2);border-radius:var(--rsm);padding:5px 10px;color:var(--txt3);font-size:11px;cursor:pointer;font-family:inherit"><i class="fas fa-brain"></i> Show Agent Thinking</button><div class="thinking-panel" style="display:none">' + escHtml(s.thinking) + '</div></div>' : '') +
         '</div>';
       }).join('');
       loadSimHistory();
@@ -3171,15 +3274,49 @@
     var results = data.strategyResults || data.results || [];
     var winner = data.winner;
     var narrative = data.narrative;
-    el.innerHTML =
-      (narrative ? '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--teal-lt)"><div style="font-size:13px;color:var(--txt2)">' + escHtml(narrative) + '</div></div>' : '') +
-      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px">' +
+    var narrativeThinking = data.narrativeThinking;
+
+    var narrativeHtml = '';
+    if (narrative) {
+      narrativeHtml = '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--teal-lt)">' +
+        '<div style="font-size:13px;color:var(--txt2);margin-bottom:8px">' + escHtml(narrative) + '</div>' +
+        (narrativeThinking ? '<button onclick="var n=this.nextElementSibling;n.style.display=n.style.display===\'none\'?\'block\':\'none\'" style="width:100%;text-align:left;background:none;border:1px solid var(--bdr2);border-radius:var(--rsm);padding:5px 10px;color:var(--txt3);font-size:11px;cursor:pointer;font-family:inherit"><i class="fas fa-brain"></i> Show Claude\'s Reasoning</button><div class="thinking-panel" style="display:none">' + escHtml(narrativeThinking) + '</div>' : '') +
+      '</div>';
+    }
+
+    var strategyCardsHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px">' +
       results.map(function(s) {
         var isWinner = winner && winner.strategyId === s.strategyId;
         var sum = s.summary || {};
         var conf = s.confidence || {};
         var confPct = conf.score != null ? Math.round(conf.score * 100) : null;
         var meetsThreshold = conf.meetsThreshold;
+        var timeline = s.timeline || [];
+
+        var stepTraceHtml = '';
+        if (timeline.length && timeline[0] && timeline[0].stepTrace) {
+          var rows = timeline.slice(0, 6).map(function(t) {
+            var tr = t.stepTrace || {};
+            return '<tr style="font-size:10px;border-bottom:1px solid var(--bdr)">' +
+              '<td style="padding:3px 6px;color:var(--txt3)">' + escHtml(t.periodLabel||('P'+t.period)) + '</td>' +
+              '<td style="padding:3px 6px">' + (t.sessions||0) + '</td>' +
+              '<td style="padding:3px 6px">' + (t.leads||0) + '</td>' +
+              '<td style="padding:3px 6px">' + (t.acceptedDeals||0) + '</td>' +
+              '<td style="padding:3px 6px;color:var(--teal-lt)">A$' + Math.round((t.revenueAUD||0)/1000) + 'k</td>' +
+              '<td style="padding:3px 6px;color:' + (t.event?'var(--orange)':'var(--txt3)') + '">' + escHtml(t.event||'—') + '</td>' +
+              '<td style="padding:3px 6px;color:var(--txt3)">' + (tr.priceEffect||'') + 'x</td>' +
+            '</tr>';
+          }).join('');
+          stepTraceHtml = '<button onclick="var n=this.nextElementSibling;n.style.display=n.style.display===\'none\'?\'block\':\'none\'" style="width:100%;text-align:left;background:none;border:1px solid var(--bdr2);border-radius:var(--rsm);padding:4px 8px;color:var(--txt3);font-size:10px;cursor:pointer;font-family:inherit;margin-top:8px"><i class="fas fa-calculator"></i> Show Step Trace</button>' +
+            '<div style="display:none;margin-top:4px;overflow-x:auto">' +
+              '<table style="width:100%;border-collapse:collapse;font-size:10px">' +
+                '<thead><tr style="color:var(--txt3);border-bottom:1px solid var(--bdr2)">' +
+                  '<th style="padding:3px 6px;text-align:left">Period</th><th style="padding:3px 6px">Sessions</th>' +
+                  '<th style="padding:3px 6px">Leads</th><th style="padding:3px 6px">Deals</th>' +
+                  '<th style="padding:3px 6px">Revenue</th><th style="padding:3px 6px">Event</th><th style="padding:3px 6px">PriceEff</th>' +
+                '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+        }
+
         return '<div class="card" style="' + (isWinner ? 'border:1px solid var(--green)' : '') + '">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
             '<span style="font-weight:700;color:' + (isWinner?'var(--green)':'var(--white)') + '">' + escHtml(s.strategyName||s.strategyId) + '</span>' +
@@ -3191,13 +3328,18 @@
           (meetsThreshold ? '<div style="font-size:11px;color:var(--green);margin-bottom:6px"><i class="fas fa-check-circle"></i> Recommended — meets 95% confidence threshold</div>' : '') +
           '<div style="font-size:12px;color:var(--txt2);display:grid;gap:3px">' +
             '<div>Total Revenue: <strong>A$' + Math.round(sum.totalRevenueAUD||0).toLocaleString('en-AU') + '</strong></div>' +
-            '<div>Total Leads: <strong>' + (sum.totalLeads||0) + '</strong> · Quotes: <strong>' + (sum.totalQuotes||0) + '</strong></div>' +
-            '<div>Resilience: <strong>' + Math.round((sum.resilienceScore||0)*100) + '%</strong></div>' +
-            '<div>Growth: <strong>' + (sum.growthTrajectory >= 0 ? '+' : '') + Math.round((sum.growthTrajectory||0)*100) + '%</strong></div>' +
+            '<div>Leads: <strong>' + (sum.totalLeads||0) + '</strong> · Quotes: <strong>' + (sum.totalQuotes||0) + '</strong></div>' +
+            '<div>Resilience: <strong>' + Math.round((sum.resilienceScore||0)*100) + '%</strong> · Growth: <strong>' + (sum.growthTrajectory >= 0 ? '+' : '') + Math.round((sum.growthTrajectory||0)*100) + '%</strong></div>' +
           '</div>' +
+          stepTraceHtml +
         '</div>';
-      }).join('') + '</div>' +
+      }).join('') + '</div>';
+
+    el.innerHTML =
+      narrativeHtml +
+      strategyCardsHtml +
       (data.recommendations && data.recommendations.length ? '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--green)"><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px"><i class="fas fa-check-circle"></i> RECOMMENDED STRATEGIES (' + data.recommendations.length + ')</div>' + data.recommendations.map(function(r){ return '<div style="font-size:13px;color:var(--txt2);margin-top:4px">' + escHtml(r.strategyName) + ' — ' + Math.round(r.confidenceScore*100) + '% confidence</div>'; }).join('') + '</div>' : '') +
+      (data.riskWarnings && data.riskWarnings.length ? '<div class="card" style="margin-bottom:16px;border-left:3px solid var(--orange)"><div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px"><i class="fas fa-exclamation-triangle"></i> RISK WARNINGS</div>' + data.riskWarnings.map(function(w){ return '<div style="font-size:12px;color:var(--txt2);margin-top:4px">' + escHtml(w.risk||w) + (w.affectedStrategy ? ' <span style="color:var(--txt3)">(' + escHtml(w.affectedStrategy) + ')</span>' : '') + '</div>'; }).join('') + '</div>' : '') +
       (data.insights ? '<div style="display:grid;gap:8px">' + (data.insights||[]).slice(0,4).map(function(ins) {
         return '<div style="font-size:13px;padding:8px 12px;background:var(--bg3);border-radius:var(--rsm)">' + escHtml(ins.insight||ins) + '</div>';
       }).join('') + '</div>' : '');
@@ -3348,6 +3490,417 @@
   /* ── Init ─────────────────────────────────────────────────────── */
   loadProducts(); loadDashboard();
 })();
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRICING INTELLIGENCE TAB
+  ══════════════════════════════════════════════════════════════════ */
+
+  var _pricingState = {
+    products: [],
+    selectedProduct: null,
+    competitorData: null,
+    recommendation: null,
+  };
+
+  window.loadPricingIntelligence = async function() {
+    // Load products for SKU list
+    try {
+      var r = await fetch('/api/admin');
+      var d = await r.json();
+      _pricingState.products = d.products || [];
+    } catch(_) {
+      if (window._state && window._state.products) _pricingState.products = window._state.products;
+    }
+    renderPricingSkuList(_pricingState.products);
+    // Check Apify status
+    try {
+      var r2 = await fetch('/api/competitor-intelligence');
+      var d2 = await r2.json();
+      var statusEl = document.getElementById('pricing-apify-status');
+      if (statusEl) {
+        statusEl.textContent = d2.apifyConfigured
+          ? ('Apify connected · Last run: ' + (d2.lastRun ? new Date(d2.lastRun).toLocaleDateString() : 'never'))
+          : 'APIFY_API_KEY not set in Cloudflare env';
+        statusEl.style.color = d2.apifyConfigured ? 'var(--green)' : 'var(--orange)';
+      }
+    } catch(_) {}
+  };
+
+  function renderPricingSkuList(products) {
+    var el = document.getElementById('pricing-sku-list');
+    if (!el) return;
+    if (!products.length) { el.innerHTML = '<div class="panel-empty" style="font-size:12px">No products found</div>'; return; }
+    el.innerHTML = products.map(function(p) {
+      return '<div class="sku-item" onclick="selectPricingProduct(' + JSON.stringify(JSON.stringify(p)) + ')" data-handle="' + escAttr(p.handle||'') + '">' +
+        '<div style="font-weight:600;font-size:12px">' + escHtml(p.title||p.handle||'') + '</div>' +
+        '<div style="font-size:11px;color:var(--txt3)">' + escHtml(p.handle||'') + (p.priceIncGst ? ' · A$' + Number(p.priceIncGst).toLocaleString('en-AU') : '') + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  window.filterPricingSkus = function(query) {
+    var items = document.querySelectorAll('#pricing-sku-list .sku-item');
+    var q = query.toLowerCase();
+    items.forEach(function(item) {
+      item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  };
+
+  window.selectPricingProduct = function(productJson) {
+    var product = JSON.parse(productJson);
+    _pricingState.selectedProduct = product;
+    _pricingState.competitorData = null;
+    _pricingState.recommendation = null;
+
+    // Update active state
+    document.querySelectorAll('#pricing-sku-list .sku-item').forEach(function(item) {
+      item.classList.toggle('active', item.dataset.handle === product.handle);
+    });
+
+    // Update quick stats
+    var statsEl = document.getElementById('pricing-stats-content');
+    if (statsEl) {
+      var margin = product.costExGst && product.priceIncGst
+        ? Math.round((1 - product.costExGst / (product.priceIncGst / 1.1)) * 100)
+        : null;
+      statsEl.innerHTML =
+        '<div class="sku-stat-row"><span class="sku-stat-label">Price (inc GST)</span><span class="sku-stat-value">' + (product.priceIncGst ? 'A$' + Number(product.priceIncGst).toLocaleString('en-AU') : '—') + '</span></div>' +
+        '<div class="sku-stat-row"><span class="sku-stat-label">Cost (ex GST)</span><span class="sku-stat-value">' + (product.costExGst ? 'A$' + Number(product.costExGst).toLocaleString('en-AU') : '—') + '</span></div>' +
+        '<div class="sku-stat-row"><span class="sku-stat-label">Margin</span><span class="sku-stat-value" style="color:' + (margin != null ? (margin >= 20 ? 'var(--green)' : margin >= 10 ? 'var(--teal-lt)' : 'var(--orange)') : 'var(--txt3)') + '">' + (margin != null ? margin + '%' : '—') + '</span></div>' +
+        '<div class="sku-stat-row"><span class="sku-stat-label">Stock</span><span class="sku-stat-value">' + (product.stock != null ? product.stock + ' units' : '—') + '</span></div>' +
+        '<div class="sku-stat-row"><span class="sku-stat-label">Category</span><span class="sku-stat-value">' + escHtml(product.category||'—') + '</span></div>';
+    }
+    document.getElementById('pricing-sku-stats').style.display = 'block';
+
+    // Enable analyse button
+    var btn = document.getElementById('pricing-rec-btn');
+    if (btn) btn.disabled = false;
+
+    // Update center header
+    var titleEl = document.getElementById('pricing-center-title');
+    if (titleEl) titleEl.textContent = escHtml(product.title || product.handle);
+
+    // Load competitor data
+    loadCompetitorLandscape(product.handle);
+
+    // Clear recommendation panel
+    document.getElementById('pricing-rec-content').innerHTML = '<div class="panel-empty" style="font-size:12px">Click Analyse to get AI recommendation</div>';
+  };
+
+  async function loadCompetitorLandscape(sku) {
+    var el = document.getElementById('pricing-center-content');
+    el.innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Loading competitor data...</div>';
+    try {
+      var r = await fetch('/api/competitor-intelligence?sku=' + encodeURIComponent(sku));
+      var data = await r.json();
+      _pricingState.competitorData = data;
+      renderCompetitorLandscape(data);
+    } catch(e) {
+      el.innerHTML = '<div style="font-size:12px;color:var(--txt3)">No competitor data cached. Run Apify scrape or configure competitor sites.</div>';
+    }
+  }
+
+  function renderCompetitorLandscape(data) {
+    var el = document.getElementById('pricing-center-content');
+    var competitors = data.competitors || [];
+    var product = _pricingState.selectedProduct;
+    var ourPrice = product && product.priceIncGst ? Number(product.priceIncGst) : null;
+
+    // Price position matrix (SVG scatter)
+    var matrixHtml = renderPriceMatrix(competitors, ourPrice);
+
+    // 30-day trend if available
+    var trendHtml = '';
+    if (data.priceTrend && data.priceTrend.length) {
+      trendHtml = '<div class="section-label" style="margin:16px 0 8px">Recent Price Changes</div>' +
+        '<div style="display:grid;gap:4px">' +
+        data.priceTrend.slice(-10).reverse().map(function(t) {
+          var dir = t.newPrice < t.oldPrice ? '<span style="color:var(--green)">↓</span>' : '<span style="color:var(--red)">↑</span>';
+          return '<div style="display:flex;align-items:center;gap:8px;font-size:12px;padding:4px 0;border-bottom:1px solid var(--bdr)">' +
+            '<span style="color:var(--txt3);min-width:80px">' + escHtml(t.competitor) + '</span>' +
+            '<span style="color:var(--txt2)">A$' + Number(t.oldPrice).toLocaleString() + '</span>' +
+            dir +
+            '<span style="font-weight:600;color:var(--white)">A$' + Number(t.newPrice).toLocaleString() + '</span>' +
+            '<span style="color:var(--txt3);margin-left:auto;font-size:11px">' + new Date(t.changedAt).toLocaleDateString() + '</span>' +
+          '</div>';
+        }).join('') + '</div>';
+    }
+
+    // Active campaigns & bundles
+    var campaignsHtml = '';
+    var allCampaigns = competitors.reduce(function(acc, c) {
+      return acc.concat((c.activeCampaigns||[]).map(function(camp) { return Object.assign({}, camp, {competitor: c.competitor}); }));
+    }, []);
+    if (allCampaigns.length) {
+      campaignsHtml = '<div class="section-label" style="margin:16px 0 8px">Active Campaigns & Bundles</div>' +
+        '<div style="display:grid;gap:4px">' +
+        allCampaigns.slice(0, 5).map(function(camp) {
+          return '<div style="font-size:12px;padding:6px 10px;background:var(--bg3);border-radius:var(--rsm)">' +
+            '<div style="display:flex;justify-content:space-between">' +
+              '<span style="font-weight:600">' + escHtml(camp.competitor) + ' — ' + escHtml(camp.name||'Campaign') + '</span>' +
+              (camp.discountPercent ? '<span style="color:var(--orange)">-' + camp.discountPercent + '%</span>' : '') +
+            '</div>' +
+            (camp.effectivePrice ? '<div style="color:var(--teal-lt);margin-top:2px">Effective: A$' + Number(camp.effectivePrice).toLocaleString() + '</div>' : '') +
+            (camp.validUntil ? '<div style="color:var(--txt3);font-size:11px">Until: ' + new Date(camp.validUntil).toLocaleDateString() + '</div>' : '') +
+          '</div>';
+        }).join('') + '</div>';
+    }
+
+    var freshBadge = data.fresh === false ? '<span style="color:var(--orange);font-size:11px"><i class="fas fa-exclamation-triangle"></i> Data ' + (data.ageHours||'?') + 'h old</span>' : (data.fresh ? '<span style="color:var(--green);font-size:11px"><i class="fas fa-check-circle"></i> Fresh</span>' : '');
+
+    el.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">' +
+        '<div class="section-label">Price Position Matrix</div>' +
+        freshBadge +
+      '</div>' +
+      matrixHtml +
+      '<div class="section-label" style="margin:16px 0 8px">Competitor Prices</div>' +
+      (competitors.length ? competitors.map(function(c) {
+        if (!c.price) return '';
+        var diff = ourPrice ? ((c.price - ourPrice) / ourPrice * 100) : null;
+        var badgeClass = diff == null ? '' : (diff < -2 ? 'under' : diff > 2 ? 'premium' : 'parity');
+        var badgeLabel = diff == null ? '' : (diff < -2 ? 'Undercuts us' : diff > 2 ? 'Premium' : 'Parity');
+        return '<div class="comp-row">' +
+          '<span class="comp-name">' + escHtml(c.competitor) + '</span>' +
+          '<span class="comp-price">A$' + Number(c.price).toLocaleString('en-AU') + '</span>' +
+          (badgeClass ? '<span class="comp-badge ' + badgeClass + '">' + badgeLabel + '</span>' : '') +
+          '<span style="font-size:10px;color:' + (c.stockStatus==='in_stock'?'var(--green)':c.stockStatus==='out_of_stock'?'var(--red)':'var(--txt3)') + '">' + escHtml(c.stockStatus||'—') + '</span>' +
+        '</div>';
+      }).join('') : '<div style="font-size:12px;color:var(--txt3)">No competitor prices cached. Click Run Apify Scrape or add competitor URLs manually.</div>') +
+      trendHtml +
+      campaignsHtml;
+  }
+
+  function renderPriceMatrix(competitors, ourPrice) {
+    var allPrices = competitors.filter(function(c) { return c.price; }).map(function(c) { return c.price; });
+    if (ourPrice) allPrices.push(ourPrice);
+    if (!allPrices.length) return '<div style="font-size:12px;color:var(--txt3);padding:20px 0;text-align:center">No price data for matrix</div>';
+
+    var minP = Math.min.apply(null, allPrices) * 0.95;
+    var maxP = Math.max.apply(null, allPrices) * 1.05;
+    var W = 400, H = 120, padL = 20, padR = 20, padT = 20, padB = 30;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+
+    function xPos(price) { return padL + (price - minP) / (maxP - minP) * plotW; }
+
+    var dots = '';
+    competitors.filter(function(c) { return c.price; }).forEach(function(c) {
+      var x = xPos(c.price);
+      var diff = ourPrice ? (c.price - ourPrice) / ourPrice : 0;
+      var col = diff < -0.02 ? '#f85149' : diff > 0.02 ? '#3ddc84' : '#14a8ae';
+      dots += '<circle cx="' + x + '" cy="' + (padT + plotH/2) + '" r="8" fill="' + col + '" opacity="0.7"/>';
+      dots += '<text x="' + x + '" y="' + (padT + plotH/2 + 20) + '" text-anchor="middle" font-size="9" fill="#8fa8b2">' + escHtml(c.competitor.slice(0,8)) + '</text>';
+      dots += '<text x="' + x + '" y="' + (padT + plotH/2 - 12) + '" text-anchor="middle" font-size="9" fill="#e2eaed">$' + Math.round(c.price/1000) + 'k</text>';
+    });
+    if (ourPrice) {
+      var ox = xPos(ourPrice);
+      dots += '<circle cx="' + ox + '" cy="' + (padT + plotH/2) + '" r="10" fill="none" stroke="#14a8ae" stroke-width="2.5"/>';
+      dots += '<circle cx="' + ox + '" cy="' + (padT + plotH/2) + '" r="4" fill="#14a8ae"/>';
+      dots += '<text x="' + ox + '" y="' + (padT + plotH/2 - 14) + '" text-anchor="middle" font-size="10" fill="#14a8ae" font-weight="bold">YOU</text>';
+    }
+    var axis = '<line x1="' + padL + '" y1="' + (padT+plotH+5) + '" x2="' + (W-padR) + '" y2="' + (padT+plotH+5) + '" stroke="#2d3f4a" stroke-width="1"/>';
+    axis += '<text x="' + padL + '" y="' + (H-4) + '" font-size="9" fill="#6e8898">A$' + Math.round(minP/1000) + 'k</text>';
+    axis += '<text x="' + (W-padR) + '" y="' + (H-4) + '" text-anchor="end" font-size="9" fill="#6e8898">A$' + Math.round(maxP/1000) + 'k</text>';
+
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="price-matrix-svg" style="background:var(--bg3);border-radius:var(--rsm)">' + axis + dots + '</svg>';
+  }
+
+  window.getPricingRecommendation = async function() {
+    var product = _pricingState.selectedProduct;
+    if (!product) return;
+    var el = document.getElementById('pricing-rec-content');
+    el.innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Analysing with Claude...</div>';
+    try {
+      var payload = {
+        sku: product.handle,
+        currentPrice: product.priceIncGst ? Number(product.priceIncGst) : 0,
+        costOfGoods: product.costExGst ? Number(product.costExGst) : 0,
+        inventoryLevel: product.stock || 0,
+        daysInStock: 30,
+        marginFloor: 0.15,
+        competitorData: _pricingState.competitorData ? _pricingState.competitorData.competitors : [],
+      };
+      var r = await fetch('/api/pricing-recommendation', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      var data = await r.json();
+      if (data.error) throw new Error(data.error);
+      _pricingState.recommendation = data;
+      renderPricingRecommendation(data, product);
+    } catch(e) {
+      el.innerHTML = '<div style="font-size:12px;color:var(--red)">' + escHtml(e.message) + '</div>';
+    }
+  };
+
+  function renderPricingRecommendation(data, product) {
+    var el = document.getElementById('pricing-rec-content');
+    var margin = data.recommendedPrice && product.costExGst
+      ? Math.round((1 - Number(product.costExGst) / (data.recommendedPrice / 1.1)) * 100)
+      : null;
+    var conf = typeof data.confidenceScore === 'number' ? Math.round(data.confidenceScore * 100) : null;
+    var confColor = conf == null ? 'var(--txt3)' : conf >= 80 ? 'var(--green)' : conf >= 60 ? 'var(--orange)' : 'var(--red)';
+
+    // Strategies
+    var strategiesHtml = (data.strategies || []).map(function(s, i) {
+      var sMargin = s.price && product.costExGst ? Math.round((1 - Number(product.costExGst)/(s.price/1.1))*100) : null;
+      return '<div class="strategy-card" id="strategy-' + i + '" onclick="selectStrategy(' + i + ')">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+          '<div class="strategy-name">' + escHtml(s.strategy) + '</div>' +
+          (s.bundlePrice ? '<span class="chip" style="font-size:10px">Bundle</span>' : '') +
+        '</div>' +
+        '<div class="strategy-price">A$' + Number(s.price||s.bundlePrice||0).toLocaleString('en-AU') + '</div>' +
+        (sMargin != null ? '<div class="strategy-margin">' + sMargin + '% margin</div>' : '') +
+        (s.impact ? '<div class="strategy-impact">' + escHtml(s.impact) + '</div>' : '') +
+        (s.risk ? '<div class="strategy-risk"><i class="fas fa-exclamation-triangle"></i> ' + escHtml(s.risk) + '</div>' : '') +
+      '</div>';
+    }).join('');
+
+    // Stock insights
+    var stockHtml = data.stockInsights ? '<div class="section-label" style="margin:12px 0 6px">Stock Insights</div>' +
+      '<div style="font-size:12px;color:var(--txt2);padding:8px;background:var(--bg3);border-radius:var(--rsm)">' +
+        (data.stockInsights.recommendation ? escHtml(data.stockInsights.recommendation) : '') +
+      '</div>' : '';
+
+    // Thinking block
+    var thinkingHtml = data.thinking ? '<div style="margin-top:12px">' +
+      '<button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'" style="width:100%;text-align:left;background:none;border:1px solid var(--bdr2);border-radius:var(--rsm);padding:6px 10px;color:var(--txt3);font-size:11px;cursor:pointer;font-family:inherit"><i class="fas fa-brain"></i> Show Agent Reasoning</button>' +
+      '<div class="thinking-panel" style="display:none">' + escHtml(data.thinking) + '</div>' +
+    '</div>' : '';
+
+    // Manual override
+    var overrideHtml = '<div class="section-label" style="margin:12px 0 6px">Manual Override</div>' +
+      '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">' +
+        '<input type="number" id="pricing-manual-price" placeholder="Enter price..." style="flex:1" value="' + (data.recommendedPrice||'') + '" />' +
+        '<button class="btn btn-outline btn-sm" onclick="applyManualPrice()"><i class="fas fa-check"></i> Apply</button>' +
+      '</div>' +
+      '<textarea id="pricing-apply-reason" rows="2" placeholder="Reason for change (required for audit)..." style="width:100%;font-size:12px;margin-bottom:6px"></textarea>' +
+      '<div id="pricing-apply-status" style="font-size:11px;color:var(--txt3)"></div>';
+
+    el.innerHTML =
+      '<div style="text-align:center;padding:12px 0;border-bottom:1px solid var(--bdr);margin-bottom:12px">' +
+        '<div class="rec-price-display">A$' + Number(data.recommendedPrice||0).toLocaleString('en-AU') + '</div>' +
+        (margin != null ? '<div class="rec-margin-display">' + margin + '% margin</div>' : '') +
+        (conf != null ? '<div style="margin-top:4px"><span style="font-size:12px;color:' + confColor + '">' + conf + '% confidence</span></div>' : '') +
+      '</div>' +
+
+      (data.reasoning && data.reasoning.length ? '<div style="margin-bottom:12px">' +
+        '<div class="section-label" style="margin-bottom:6px">Reasoning</div>' +
+        '<ul style="padding-left:14px">' +
+        data.reasoning.map(function(r) { return '<li style="font-size:12px;color:var(--txt2);margin-bottom:4px">' + escHtml(r) + '</li>'; }).join('') +
+        '</ul></div>' : '') +
+
+      '<div class="section-label" style="margin-bottom:8px">Strategies</div>' +
+      strategiesHtml +
+
+      stockHtml +
+      thinkingHtml +
+      overrideHtml;
+  }
+
+  window.selectStrategy = function(idx) {
+    var data = _pricingState.recommendation;
+    if (!data || !data.strategies) return;
+    var s = data.strategies[idx];
+    document.querySelectorAll('.strategy-card').forEach(function(c, i) { c.classList.toggle('selected', i === idx); });
+    var priceInput = document.getElementById('pricing-manual-price');
+    if (priceInput) priceInput.value = s.price || s.bundlePrice || '';
+  };
+
+  window.applyManualPrice = async function() {
+    var product = _pricingState.selectedProduct;
+    if (!product) return;
+    var priceInput = document.getElementById('pricing-manual-price');
+    var reasonInput = document.getElementById('pricing-apply-reason');
+    var statusEl = document.getElementById('pricing-apply-status');
+    var price = parseFloat(priceInput.value);
+    var reason = reasonInput.value.trim();
+    if (!price || price <= 0) { statusEl.textContent = 'Enter a valid price'; statusEl.style.color = 'var(--red)'; return; }
+    if (!reason) { statusEl.textContent = 'Reason is required for audit trail'; statusEl.style.color = 'var(--red)'; return; }
+    statusEl.textContent = 'Applying...'; statusEl.style.color = 'var(--txt3)';
+    try {
+      var r = await fetch('/api/apply-price', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ sku: product.handle, newPrice: price, reason: reason }),
+      });
+      var d = await r.json();
+      if (d.error && !d.requiresApproval) throw new Error(d.error);
+      if (d.requiresApproval) {
+        statusEl.textContent = '⚠ Change >' + Math.abs(Math.round((price - Number(product.priceIncGst)) / Number(product.priceIncGst) * 100)) + '% — requires approval. Use the Force flag or review the change.';
+        statusEl.style.color = 'var(--orange)';
+        return;
+      }
+      statusEl.textContent = '✓ Price updated to A$' + Number(d.newPrice).toLocaleString('en-AU') + ' (margin: ' + (d.marginPct ? Math.round(d.marginPct*100)+'%' : '—') + ')';
+      statusEl.style.color = 'var(--green)';
+      product.priceIncGst = price;
+      reasonInput.value = '';
+    } catch(e) {
+      statusEl.textContent = e.message;
+      statusEl.style.color = 'var(--red)';
+    }
+  };
+
+  window.refreshCompetitorData = function() {
+    if (_pricingState.selectedProduct) loadCompetitorLandscape(_pricingState.selectedProduct.handle);
+  };
+
+  window.runApifyScrape = async function() {
+    var product = _pricingState.selectedProduct;
+    if (!product) { setStatus('Select a product first', 'error'); return; }
+    var btn = document.getElementById('pricing-run-apify-btn');
+    btn.disabled = true; btn.textContent = 'Running...';
+    try {
+      // Build competitor URLs from competitor-sites config
+      var sitesR = await fetch('/api/brain'); // reuse brain endpoint or add dedicated one
+      // Fallback: use known competitor URLs for the product
+      var urls = [
+        { competitor: 'Scorptec', url: 'https://www.scorptec.com.au/search?q=' + encodeURIComponent(product.title||product.handle) },
+        { competitor: 'Umart', url: 'https://www.umart.com.au/search/?q=' + encodeURIComponent(product.title||product.handle) },
+        { competitor: 'MSY', url: 'https://www.msy.com.au/search?q=' + encodeURIComponent(product.title||product.handle) },
+      ];
+      var r = await fetch('/api/competitor-intelligence', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ action: 'run', sku: product.handle, urls }),
+      });
+      var d = await r.json();
+      if (d.error) throw new Error(d.error);
+      setStatus('Apify scrape complete — ' + d.count + ' results', 'success');
+      loadCompetitorLandscape(product.handle);
+    } catch(e) {
+      setStatus('Apify error: ' + e.message, 'error');
+    } finally {
+      btn.disabled = false; btn.innerHTML = '<i class="fas fa-spider"></i> Run Apify Scrape';
+    }
+  };
+
+  window.loadPricingAudit = async function() {
+    var el = document.getElementById('pricing-center-content');
+    el.innerHTML = '<div class="panel-loading"><div class="spinner spinner-sm"></div> Loading audit log...</div>';
+    try {
+      var r = await fetch('/api/apply-price');
+      var d = await r.json();
+      var log = d.auditLog || [];
+      var titleEl = document.getElementById('pricing-center-title');
+      if (titleEl) titleEl.textContent = 'Price Change Audit Log';
+      if (!log.length) { el.innerHTML = '<div class="panel-empty">No price changes recorded yet</div>'; return; }
+      el.innerHTML =
+        '<div class="audit-row" style="font-size:11px;font-weight:700;color:var(--txt3);border-bottom:2px solid var(--bdr)">' +
+          '<span>SKU</span><span>Old</span><span>New</span><span>Margin</span><span>Date</span>' +
+        '</div>' +
+        log.slice(0, 50).map(function(entry) {
+          var dir = entry.newPrice < entry.oldPrice ? 'price-change-down' : 'price-change-up';
+          return '<div class="audit-row">' +
+            '<span style="color:var(--txt2)">' + escHtml(entry.sku||'—') + '</span>' +
+            '<span style="color:var(--txt3)">A$' + Number(entry.oldPrice||0).toLocaleString() + '</span>' +
+            '<span class="' + dir + '" style="font-weight:600">A$' + Number(entry.newPrice||0).toLocaleString() + '</span>' +
+            '<span style="color:var(--txt3)">' + (entry.marginPct ? Math.round(entry.marginPct*100)+'%' : '—') + '</span>' +
+            '<span style="color:var(--txt3);font-size:11px">' + new Date(entry.changedAt||Date.now()).toLocaleDateString() + '</span>' +
+          '</div>';
+        }).join('') +
+        '<div style="margin-top:8px;font-size:11px;color:var(--txt3)">' + log.length + ' total changes</div>';
+    } catch(e) {
+      el.innerHTML = '<div style="font-size:12px;color:var(--red)">' + escHtml(e.message) + '</div>';
+    }
+  };
 </script>
 
 </body>
