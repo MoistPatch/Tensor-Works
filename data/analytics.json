@@ -1,6 +1,16 @@
 {
   "sessions": [
     {
+      "timestamp": "2026-05-18T06:03:54.059Z",
+      "sessionId": null,
+      "page": null,
+      "referrer": null,
+      "duration": null,
+      "productViews": [],
+      "pageViews": [],
+      "device": null
+    },
+    {
       "timestamp": "2026-05-18T04:20:28.836Z",
       "sessionId": null,
       "page": null,
