@@ -25,7 +25,11 @@
       .filter(function (i) { return i.variantId; })
       .map(function (i) { return i.variantId + ':' + i.quantity; });
     if (!lines.length) return null;
-    return 'https://' + tw.shopify.domain + '/cart/' + lines.join(',');
+    var returnUrl = encodeURIComponent(
+      (tw.shopify.returnDomain || window.location.origin) + '/thank-you'
+    );
+    return 'https://' + tw.shopify.domain + '/cart/' + lines.join(',') +
+      '?return_to=' + returnUrl;
   }
 
   var CartManager = {

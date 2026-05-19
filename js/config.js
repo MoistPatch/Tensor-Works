@@ -1,6 +1,7 @@
 window.TW = {
   shopify: {
-    domain: 'yourdomain.com.au',
+    domain: 'ituspq-hc.myshopify.com',
+    returnDomain: 'https://yourdomain.com.au',
     configured: true,
   },
   dickerData: {
