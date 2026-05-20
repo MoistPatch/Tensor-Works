@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# tensorworks-web
 
-## Getting Started
+Marketing website for TensorWorks — Australian AI compute infrastructure.
 
-First, run the development server:
+Built with Next.js 16, TypeScript, Tailwind CSS v4, Prisma 7, Resend, HubSpot, and Cloudflare Turnstile.
+
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local   # fill in values
+pnpm prisma generate
+pnpm prisma migrate dev
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+See [docs/SETUP.md](docs/SETUP.md) for full setup instructions.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| | |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript (strict) |
+| Styling | Tailwind CSS v4 |
+| UI components | Radix UI + class-variance-authority |
+| Database | PostgreSQL 15 + Prisma 7 |
+| ORM adapter | `@prisma/adapter-pg` |
+| Email | Resend + react-email |
+| CRM | HubSpot (contacts + deals on RFQ submit) |
+| Spam protection | Cloudflare Turnstile |
+| Auth | Magic-link email (admin only) |
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  (marketing)/          Marketing pages (public)
+  (admin)/              Admin panel (magic-link protected)
+  api/                  Route handlers (rfq, rfq/draft, admin/auth)
+components/
+  brand/                LogoMark, LogoHorizontal, LogoVertical
+  layout/               Header, Footer, MobileNav
+  rfq/                  Multi-step RFQ form components
+  ui/                   Button, Input, Card, Badge, etc.
+content/                TypeScript content files (solutions, hardware, services, seo)
+docs/                   SETUP, DEPLOY, CONTENT, COMPLIANCE guides
+emails/transactional/   react-email HTML email templates
+lib/                    Prisma client, env, auth, hubspot, resend, audit, validation
+prisma/                 schema.prisma + migrations
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Setup guide](docs/SETUP.md)
+- [Deployment](docs/DEPLOY.md)
+- [Content management](docs/CONTENT.md)
+- [Compliance notes](docs/COMPLIANCE.md)
 
-## Deploy on Vercel
+## Admin panel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`/admin` — magic-link authentication. Set `ADMIN_EMAILS` in env.
