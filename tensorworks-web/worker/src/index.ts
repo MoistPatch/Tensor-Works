@@ -11,6 +11,10 @@ import { generateWeeklyDigestProcessor } from "./jobs/generateWeeklyDigest.js";
 import { selectDeepAnalysisTopicProcessor } from "./jobs/selectDeepAnalysisTopic.js";
 import { generateDeepAnalysisProcessor } from "./jobs/generateDeepAnalysis.js";
 import { notifyReviewProcessor } from "./jobs/notifyReview.js";
+import { sendCampaignsProcessor } from "./jobs/sendCampaigns.js";
+import { syncCampaignReportsProcessor } from "./jobs/syncCampaignReports.js";
+import { bounceRateAuditProcessor } from "./jobs/bounceRateAudit.js";
+import { consentAuditExportProcessor } from "./jobs/consentAuditExport.js";
 
 const connection = redis;
 
@@ -60,6 +64,30 @@ const jobDefinitions = [
     // Daily 08:30 AEST = 22:30 UTC prior day
     cron: "30 22 * * *",
     processor: notifyReviewProcessor,
+  },
+  {
+    name: "sendCampaigns",
+    // Tuesdays 10:00 AEST = 00:00 UTC Tuesday
+    cron: "0 0 * * 2",
+    processor: sendCampaignsProcessor,
+  },
+  {
+    name: "syncCampaignReports",
+    // Daily 04:00 AEST = 18:00 UTC prior day
+    cron: "0 18 * * *",
+    processor: syncCampaignReportsProcessor,
+  },
+  {
+    name: "bounceRateAudit",
+    // Daily 08:00 AEST = 22:00 UTC prior day
+    cron: "0 22 * * *",
+    processor: bounceRateAuditProcessor,
+  },
+  {
+    name: "consentAuditExport",
+    // 1st of month 06:00 AEST = 20:00 UTC (prior day / same day dep. on DST)
+    cron: "0 20 1 * *",
+    processor: consentAuditExportProcessor,
   },
 ] as const;
 
