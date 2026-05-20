@@ -39,33 +39,6 @@ model RFQDraft {
   expiresAt DateTime
 }
 
-model AdminSession {
-  id        String   @id @default(cuid())
-  email     String
-  token     String   @unique
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-}
-
-model MagicLinkToken {
-  id        String   @id @default(cuid())
-  email     String
-  token     String   @unique
-  used      Boolean  @default(false)
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-}
-
-model AuditLog {
-  id         String   @id @default(cuid())
-  actorEmail String
-  action     String
-  target     String?
-  metadata   Json?
-  ipAddress  String?
-  createdAt  DateTime @default(now())
-}
-
 // ─── Blog / Editorial ────────────────────────────────────────────────────────
 
 model BlogPost {
