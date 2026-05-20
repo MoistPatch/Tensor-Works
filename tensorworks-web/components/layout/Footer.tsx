@@ -38,7 +38,7 @@ export function Footer() {
               Australian AI compute infrastructure. Designed, integrated, and
               supported by a local team.
             </p>
-            <p className="mt-4 text-xs text-gray-500">ABN: [ABN pending]</p>
+            <p className="mt-4 text-xs text-gray-500">ABN: 84 544 119 830</p>
           </div>
 
           {Object.entries(footerLinks).map(([heading, links]) => (
