@@ -11,7 +11,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "seed:news": "tsx scripts/seed-news-sources.ts",
+    "seed:editorial": "tsx scripts/seed-editorial-calendar.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -64,6 +66,7 @@
     "prettier": "^3.8.3",
     "prisma": "^7.8.0",
     "tailwindcss": "^4",
+    "tsx": "^4.19.0",
     "typescript": "^5"
   }
 }

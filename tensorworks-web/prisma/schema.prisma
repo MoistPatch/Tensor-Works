@@ -65,3 +65,131 @@ model AuditLog {
   ipAddress  String?
   createdAt  DateTime @default(now())
 }
+
+// ─── Blog / Editorial ────────────────────────────────────────────────────────
+
+model BlogPost {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  subtitle        String?
+  category        String
+  tier            String    // "daily-scan" | "weekly-digest" | "deep-analysis"
+  status          String    @default("draft") // "draft" | "pending_review" | "approved" | "published" | "rejected"
+  body            String    @db.Text
+  summary         String    @db.Text
+  citations       Json      @default("[]") // Array<{ title: string; url: string; accessed: string }>
+  tags            String[]
+  coverImageUrl   String?
+  authorLabel     String    @default("TensorWorks Engineering")
+  readingTimeMin  Int       @default(5)
+  wordCount       Int       @default(0)
+  generationCost  Float?    // AUD
+  modelUsed       String?
+  promptTokens    Int?
+  completionTokens Int?
+  publishedAt     DateTime?
+  scheduledFor    DateTime?
+  reviewedBy      String?
+  reviewedAt      DateTime?
+  reviewNotes     String?   @db.Text
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  generationLog   GenerationLog?
+  editorialEntry  EditorialCalendar? @relation("CalendarPost")
+}
+
+model EditorialCalendar {
+  id              String    @id @default(cuid())
+  topic           String
+  description     String    @db.Text
+  category        String
+  tier            String
+  targetWeek      DateTime? // ISO week start
+  status          String    @default("queued") // "queued" | "assigned" | "generated" | "skipped"
+  priority        Int       @default(50)
+  adminOverride   Boolean   @default(false)
+  postId          String?   @unique
+  post            BlogPost? @relation("CalendarPost", fields: [postId], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model GenerationLog {
+  id              String   @id @default(cuid())
+  postId          String   @unique
+  post            BlogPost @relation(fields: [postId], references: [id])
+  jobName         String
+  model           String
+  promptTokens    Int
+  completionTokens Int
+  costAud         Float
+  qualityScore    Float?
+  qualityReport   Json?
+  researchUrls    String[]
+  attempts        Int      @default(1)
+  createdAt       DateTime @default(now())
+}
+
+// ─── News Monitoring ──────────────────────────────────────────────────────────
+
+model NewsSource {
+  id           String    @id @default(cuid())
+  name         String
+  url          String    @unique
+  feedUrl      String?
+  fetchType    String    // "rss" | "api" | "scrape"
+  category     String
+  active       Boolean   @default(true)
+  trustScore   Float     @default(0.5)
+  lastFetchedAt DateTime?
+  fetchErrors  Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  items        NewsItem[]
+}
+
+model NewsItem {
+  id              String    @id @default(cuid())
+  sourceId        String
+  source          NewsSource @relation(fields: [sourceId], references: [id])
+  externalId      String?
+  title           String
+  url             String
+  summary         String?   @db.Text
+  fullText        String?   @db.Text
+  publishedAt     DateTime?
+  fetchedAt       DateTime  @default(now())
+  relevanceScore  Float?
+  sentimentScore  Float?
+  banned          Boolean   @default(false)
+  clusterId       String?
+  cluster         TriangulationGroup? @relation(fields: [clusterId], references: [id])
+  createdAt       DateTime  @default(now())
+
+  @@unique([sourceId, url])
+}
+
+model TriangulationGroup {
+  id           String     @id @default(cuid())
+  topic        String
+  summary      String?    @db.Text
+  itemCount    Int        @default(0)
+  avgRelevance Float?
+  status       String     @default("pending") // "pending" | "reviewed" | "used" | "dismissed"
+  usedInPostId String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  items        NewsItem[]
+}
+
+model BannedClaim {
+  id          String   @id @default(cuid())
+  pattern     String   @unique
+  reason      String
+  addedBy     String
+  createdAt   DateTime @default(now())
+}
