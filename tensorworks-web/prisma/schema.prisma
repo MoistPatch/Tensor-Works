@@ -1,0 +1,67 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = []
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model RFQSubmission {
+  id                     String   @id @default(cuid())
+  createdAt              DateTime @default(now())
+  companyName            String
+  abn                    String?
+  contactName            String
+  role                   String
+  email                  String
+  phone                  String
+  organisationType       String
+  useCase                String
+  budgetBracket          String
+  timeline               String
+  specifications         String   @db.Text
+  procurementConstraints String[]
+  referralSource         String?
+  hubspotContactId       String?
+  hubspotDealId          String?
+  ipAddress              String?
+  userAgent              String?
+  status                 String   @default("new")
+}
+
+model RFQDraft {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  data      Json
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+model AdminSession {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+model MagicLinkToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorEmail String
+  action     String
+  target     String?
+  metadata   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+}
