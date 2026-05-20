@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { logAudit } from "@/lib/audit";
 import {
   verifyUnsubscribeToken,
   consumeUnsubscribeToken,
@@ -22,10 +21,8 @@ export async function GET(request: NextRequest) {
     redirect("/unsubscribed?reason=invalid");
   }
 
-  // Consume the token so it can't be reused
   await consumeUnsubscribeToken(token);
 
-  // Update subscriber record in our DB
   await prisma.newsletterSubscriber.updateMany({
     where: { email },
     data: {
@@ -35,20 +32,12 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  // Unsubscribe in Mailchimp — catch errors gracefully so the user still lands on the success page
   try {
     await unsubscribeContact(email);
   } catch (err) {
-    console.error("Mailchimp unsubscribeContact failed during one-click unsubscribe:", err);
+    console.error("Mailchimp unsubscribeContact failed:", err);
   }
-
-  // Audit log
-  await logAudit({
-    actorEmail: email,
-    action: "newsletter.unsubscribe",
-    target: email,
-    metadata: { method: "one_click_link" },
-  });
 
   redirect("/unsubscribed");
 }
+

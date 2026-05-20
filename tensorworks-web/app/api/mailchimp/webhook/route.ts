@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { logAudit } from "@/lib/audit";
 import { env } from "@/lib/env";
 
 // Mailchimp sends a GET request as a verification ping — just return 200
@@ -90,13 +89,6 @@ async function handleUnsubscribe(params: URLSearchParams): Promise<void> {
       unsubscribedAt: new Date(),
       unsubscribeReason: "mailchimp_webhook",
     },
-  });
-
-  await logAudit({
-    actorEmail: email,
-    action: "newsletter.unsubscribe",
-    target: email,
-    metadata: { source: "mailchimp_webhook" },
   });
 }
 
