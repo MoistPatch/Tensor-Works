@@ -1,9 +1,0 @@
-Handle,Title,Option1 Name,Option1 Value,Option2 Name,Option2 Value,Option3 Name,Option3 Value,SKU,HS Code,COO,Location,Bin name,Incoming (not editable),Unavailable (not editable),Committed (not editable),Available (not editable),On hand (current),On hand (new)
-nvidia-h100-sxm5,NVIDIA H100 SXM5 80GB,Title,Default Title,,,,, NV-H100-SXM5-80,,,,,0,0,0,0,0,0
-nvidia-h200-sxm5,NVIDIA H200 SXM5 141GB,Title,Default Title,,,,,NV-H200-SXM5,,,,,0,0,0,0,0,0
-nvidia-dgx-h200,NVIDIA DGX H200,Title,Default Title,,,,,NV-DGX-H200,,,,,0,0,0,0,0,0
-nvidia-rtx-6000-ada,NVIDIA RTX 6000 Ada Generation,Title,Default Title,,,,,NV-RTX6000-ADA,,,,,0,0,0,0,0,0
-nvidia-bluefield-3-dpu,NVIDIA BlueField-3 DPU,Title,Default Title,,,,,NV-BF3-400,,,,,0,0,0,0,0,0
-nvidia-ai-enterprise,NVIDIA AI Enterprise Software Suite,Title,Default Title,,,,,NV-AIE-SUITE,,,,,0,0,0,0,0,0
-dell-poweredge-xe9680,Dell PowerEdge XE9680,Title,Default Title,,,,,DELL-PE-XE9680,,,,,0,0,0,0,0,0
-mellanox-infiniband-ndr400,Mellanox InfiniBand NDR400 Switch,Title,Default Title,,,,,MLX-IB-NDR400,,,,,0,0,0,0,0,0
