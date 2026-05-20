@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { pageSEO } from "@/content/seo";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
 
 export const metadata: Metadata = {
   title: pageSEO.about.title,
@@ -69,6 +69,30 @@ export default function AboutPage() {
                 Australian-based distributors where available. For government and defence
                 customers, we can provide full supply chain provenance documentation,
                 ITAR compliance assessments, and Australian Industry Participation plans.
+              </p>
+
+              <h2>Security clearances</h2>
+              <p>
+                TensorWorks holds AGSVA security clearances at the levels required
+                for the engagements we undertake. Cleared personnel are available for
+                system configuration, delivery, installation, and ongoing support in
+                classified facilities. We manage personnel security requirements as part
+                of the project plan and do not subcontract classified work to personnel
+                who do not hold the required clearances.
+              </p>
+            </div>
+
+            <div className="border border-[var(--tw-blue)]/20 bg-[var(--tw-blue)]/5 rounded-xl p-6">
+              <div className="flex items-center gap-2.5 mb-3">
+                <Shield className="h-5 w-5 text-[var(--tw-blue)]" />
+                <h3 className="font-semibold text-[var(--tw-dark)]">AGSVA security clearance</h3>
+              </div>
+              <p className="text-sm text-[var(--tw-mid)] leading-relaxed">
+                Our team holds AGSVA clearances appropriate to the work we undertake
+                for defence and intelligence customers. Engagements requiring cleared
+                personnel are scoped accordingly — clearance level, need-to-know
+                basis, and personnel security management are addressed in the Statement
+                of Work.
               </p>
             </div>
 
