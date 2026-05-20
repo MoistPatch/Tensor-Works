@@ -12,12 +12,12 @@ export default function TermsPage() {
     <section className="py-16 bg-white">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-[var(--tw-dark)] mb-2">Terms of Service</h1>
-        <p className="text-sm text-[var(--tw-muted)] mb-10">Last updated: [date pending]</p>
+        <p className="text-sm text-[var(--tw-muted)] mb-10">Last updated: 20 May 2026</p>
 
         <div className="prose">
           <h2>Use of this website</h2>
           <p>
-            This website is operated by TensorWorks Pty Ltd (ABN: [ABN pending]). By
+            This website is operated by TensorWorks Pty Ltd (ABN: 84 544 119 830). By
             accessing this website, you agree to these terms. If you do not agree, please
             do not use this website.
           </p>
