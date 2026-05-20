@@ -2,11 +2,13 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSessionUser } from "@/lib/auth";
 import { LogoHorizontal } from "@/components/brand/LogoHorizontal";
-import { LayoutDashboard, FileText, Settings, ScrollText, LogOut } from "lucide-react";
+import { LayoutDashboard, FileText, Settings, ScrollText, LogOut, PenSquare, Rss } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/rfqs", label: "RFQs", icon: FileText },
+  { href: "/admin/content", label: "Content", icon: PenSquare },
+  { href: "/admin/news", label: "News", icon: Rss },
   { href: "/admin/audit", label: "Audit Log", icon: ScrollText },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];

@@ -2,13 +2,20 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
 import Link from "next/link";
-import { FileText, Clock, CheckCircle2, ArrowRight } from "lucide-react";
+import { FileText, Clock, CheckCircle2, ArrowRight, PenSquare, DollarSign } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata = { title: "Admin Dashboard — TensorWorks" };
 
+function currentMonthKey() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
+
 export default async function AdminDashboardPage() {
-  const [totalRFQs, newRFQs, recentRFQs] = await Promise.all([
+  const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+  const [totalRFQs, newRFQs, recentRFQs, pendingContent, monthlyAiCost] = await Promise.all([
     prisma.rFQSubmission.count(),
     prisma.rFQSubmission.count({ where: { status: "new" } }),
     prisma.rFQSubmission.findMany({
@@ -23,6 +30,11 @@ export default async function AdminDashboardPage() {
         budgetBracket: true,
       },
     }),
+    prisma.blogPost.count({ where: { status: "pending_review" } }),
+    prisma.generationLog.aggregate({
+      _sum: { costAud: true },
+      where: { createdAt: { gte: monthStart } },
+    }),
   ]);
 
   return (
@@ -32,7 +44,7 @@ export default async function AdminDashboardPage() {
         <p className="text-sm text-[var(--tw-muted)] mt-1">Overview of RFQ submissions</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-[var(--tw-muted)]">Total RFQs</CardTitle>
@@ -50,13 +62,29 @@ export default async function AdminDashboardPage() {
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-[var(--tw-muted)]">In progress</CardTitle>
+          <CardHeader className="pb-2 flex flex-row items-center justify-between">
+            <CardTitle className="text-sm font-medium text-[var(--tw-muted)]">Content pending review</CardTitle>
+            <PenSquare className="h-4 w-4 text-[var(--tw-muted)]" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-amber-500">{pendingContent}</div>
+            <Link href="/admin/content?status=pending_review" className="text-xs text-[var(--tw-blue)] hover:underline mt-1 block">
+              Review queue →
+            </Link>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2 flex flex-row items-center justify-between">
+            <CardTitle className="text-sm font-medium text-[var(--tw-muted)]">AI spend this month</CardTitle>
+            <DollarSign className="h-4 w-4 text-[var(--tw-muted)]" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-[var(--tw-green)]">
-              {totalRFQs - newRFQs}
+              A${(monthlyAiCost._sum.costAud ?? 0).toFixed(2)}
             </div>
+            <p className="text-xs text-[var(--tw-muted)] mt-1">
+              of A${process.env.MONTHLY_AI_BUDGET_AUD ?? "500"} budget
+            </p>
           </CardContent>
         </Card>
       </div>
