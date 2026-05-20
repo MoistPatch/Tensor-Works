@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+/* {{PENDING_BRAND_ASSETS}} — replace with values from ./brand/colors/color-palette.css */
+
+:root {
+  --tw-blue:        #1F5C99;
+  --tw-blue-dark:   #174778;
+  --tw-blue-light:  #3A7EC0;
+  --tw-green:       #76B900;
+  --tw-green-dark:  #5D9200;
+  --tw-green-light: #8FD400;
+  --tw-dark:        #333333;
+  --tw-mid:         #666666;
+  --tw-muted:       #999999;
+  --tw-border:      #D1DBE8;
+  --tw-bg:          #F5F8FB;
+  --tw-white:       #FFFFFF;
+
+  --background:     var(--tw-white);
+  --foreground:     var(--tw-dark);
+  --card:           var(--tw-white);
+  --card-foreground: var(--tw-dark);
+  --primary:        var(--tw-blue);
+  --primary-foreground: var(--tw-white);
+  --secondary:      var(--tw-bg);
+  --secondary-foreground: var(--tw-dark);
+  --muted:          var(--tw-bg);
+  --muted-foreground: var(--tw-mid);
+  --accent:         var(--tw-green);
+  --accent-foreground: var(--tw-white);
+  --destructive:    #DC2626;
+  --destructive-foreground: var(--tw-white);
+  --border:         var(--tw-border);
+  --input:          var(--tw-border);
+  --ring:           var(--tw-blue);
+  --radius:         0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background:     #0F1923;
+    --foreground:     #F0F4F8;
+    --card:           #1A2535;
+    --card-foreground: #F0F4F8;
+    --primary:        var(--tw-blue-light);
+    --primary-foreground: var(--tw-white);
+    --secondary:      #1E2D3D;
+    --secondary-foreground: #C8D8E8;
+    --muted:          #1E2D3D;
+    --muted-foreground: #8A9AB0;
+    --border:         #2A3C50;
+    --input:          #2A3C50;
+    --ring:           var(--tw-blue-light);
+  }
+}
+
+* { border-color: var(--border); }
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--tw-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.prose { color: var(--tw-dark); max-width: 72ch; line-height: 1.75; }
+.prose h1, .prose h2, .prose h3 { color: var(--tw-dark); font-weight: 700; letter-spacing: -0.02em; }
+.prose h2 { font-size: 1.5rem; margin-top: 2rem; margin-bottom: 0.75rem; }
+.prose h3 { font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+.prose p  { margin-bottom: 1rem; }
+.prose a  { color: var(--tw-blue); text-decoration: underline; }
+.prose code { font-family: monospace; font-size: 0.875em; background: var(--tw-bg); padding: 0.125rem 0.375rem; border-radius: 0.25rem; }
+.prose blockquote { border-left: 4px solid var(--tw-blue); padding-left: 1rem; color: var(--tw-mid); font-style: italic; margin: 1.5rem 0; }

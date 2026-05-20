@@ -1,0 +1,41 @@
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.string().url(),
+    HUBSPOT_API_KEY: z.string().min(1),
+    HUBSPOT_PORTAL_ID: z.string().min(1),
+    RESEND_API_KEY: z.string().min(1),
+    TURNSTILE_SECRET_KEY: z.string().min(1),
+    NOTIFICATION_EMAIL: z.string(),
+    FROM_EMAIL: z.string().email(),
+    JWT_SECRET: z.string().min(32),
+    ADMIN_EMAILS: z.string(),
+    COMPANY_NAME: z.string().default("TensorWorks Pty Ltd"),
+    COMPANY_ABN: z.string().default("84 544 119 830"),
+    COMPANY_ADDRESS: z.string().default("Bendigo, Victoria, Australia"),
+  },
+  client: {
+    NEXT_PUBLIC_SITE_URL: z.string().url(),
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
+    NEXT_PUBLIC_GA_ID: z.string().optional(),
+  },
+  runtimeEnv: {
+    DATABASE_URL: process.env.DATABASE_URL,
+    HUBSPOT_API_KEY: process.env.HUBSPOT_API_KEY,
+    HUBSPOT_PORTAL_ID: process.env.HUBSPOT_PORTAL_ID,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+    NOTIFICATION_EMAIL: process.env.NOTIFICATION_EMAIL,
+    FROM_EMAIL: process.env.FROM_EMAIL,
+    JWT_SECRET: process.env.JWT_SECRET,
+    ADMIN_EMAILS: process.env.ADMIN_EMAILS,
+    COMPANY_NAME: process.env.COMPANY_NAME,
+    COMPANY_ABN: process.env.COMPANY_ABN,
+    COMPANY_ADDRESS: process.env.COMPANY_ADDRESS,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+    NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
+  },
+});
