@@ -23,11 +23,17 @@ worker/
       apiFetcher.ts   — Generic JSON API fetcher
       scrapeFetcher.ts — Cheerio-based web scraper
     jobs/
-      monitorSources.ts      — Fetch news sources (every 30 min)
-      clusterNews.ts         — Cluster items into topic groups (hourly)
-      scoreNews.ts           — Score relevance/sentiment (hourly +15)
-      generateDailyScan.ts   — Daily scan post (weekdays 0600 AEST)
-      generateWeeklyDigest.ts — Weekly digest (Tuesdays 0700 AEST)
+      monitorSources.ts             — Fetch news sources (every 30 min)
+      clusterNews.ts                — Cluster items into topic groups (hourly)
+      scoreNews.ts                  — Score relevance/sentiment (hourly +15)
+      generateDailyScan.ts          — Daily scan post (weekdays 0600 AEST)
+      generateWeeklyDigest.ts       — Weekly digest (Tuesdays 0700 AEST)
+      assembleWeeklyDigestEmail.ts  — Assemble campaign emails when digest approved
+      generateCampaign.ts           — Trigger campaigns on post publish
+      sendCampaigns.ts              — Send scheduled campaigns (Tuesdays 1000 AEST)
+      syncCampaignReports.ts        — Sync Mailchimp stats (daily 0400 AEST)
+      bounceRateAudit.ts            — Alert on high bounce/complaint rates (daily 0800)
+      consentAuditExport.ts         — Monthly consent record export (1st of month 0600)
       selectDeepAnalysisTopic.ts — Pick deep analysis topic (Mon 1200 AEST)
       generateDeepAnalysis.ts — Deep analysis (alt Tuesdays 0800 AEST)
       notifyReview.ts        — Email notifications for review queue

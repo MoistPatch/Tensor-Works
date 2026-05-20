@@ -13,7 +13,9 @@
     "typecheck": "tsc --noEmit",
     "prepare": "husky",
     "seed:news": "tsx scripts/seed-news-sources.ts",
-    "seed:editorial": "tsx scripts/seed-editorial-calendar.ts"
+    "seed:editorial": "tsx scripts/seed-editorial-calendar.ts",
+    "mailchimp:setup": "tsx scripts/mailchimp-setup.ts",
+    "import:cold": "tsx scripts/import-cold-list.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -26,6 +28,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@prisma/config": "^7.8.0",
@@ -56,6 +59,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/mailchimp__mailchimp_marketing": "^3.0.20",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
