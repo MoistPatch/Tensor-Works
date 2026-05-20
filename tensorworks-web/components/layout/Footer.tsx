@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LogoVertical } from "@/components/brand/LogoVertical";
+import { SignupForm } from "@/components/newsletter/SignupForm";
 
 const currentYear = new Date().getFullYear();
 
@@ -31,6 +32,19 @@ export function Footer() {
   return (
     <footer className="bg-[var(--tw-dark)] text-white mt-auto">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Newsletter signup */}
+        <div className="border-b border-gray-700 py-10">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="md:shrink-0">
+              <p className="text-sm font-semibold text-white">TensorWorks Insights</p>
+              <p className="text-sm text-gray-400 mt-0.5">AI hardware and infrastructure, fortnightly.</p>
+            </div>
+            <div className="md:max-w-md w-full">
+              <SignupForm variant="compact" />
+            </div>
+          </div>
+        </div>
+
         <div className="py-14 grid grid-cols-1 gap-10 md:grid-cols-4">
           <div className="md:col-span-1">
             <LogoVertical markSize={40} inverted />

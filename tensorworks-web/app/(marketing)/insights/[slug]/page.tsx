@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { siteSEO } from "@/content/seo";
 import PostBody from "@/components/insights/PostBody";
 import RelatedPosts from "@/components/insights/RelatedPosts";
+import { SignupForm } from "@/components/newsletter/SignupForm";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -176,6 +177,14 @@ export default async function InsightPostPage({ params }: Props) {
             {/* Main body — 2/3 */}
             <main className="lg:col-span-2 min-w-0">
               <PostBody body={post.body} />
+
+              <div className="mt-12 p-6 rounded-lg bg-[var(--tw-bg,#F5F8FB)] border border-[var(--tw-border,#e5e7eb)]">
+                <h3 className="text-lg font-semibold text-[var(--tw-dark)] mb-2">Found this useful?</h3>
+                <p className="text-sm text-[var(--tw-mid)] mb-4">
+                  Get fortnightly insights on AI hardware, GPU infrastructure, and procurement in Australia.
+                </p>
+                <SignupForm variant="compact" />
+              </div>
             </main>
 
             {/* Sidebar — 1/3 */}

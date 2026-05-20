@@ -193,3 +193,72 @@ model BannedClaim {
   addedBy     String
   createdAt   DateTime @default(now())
 }
+
+// ─── Email Marketing ──────────────────────────────────────────────────────────
+
+model NewsletterSubscriber {
+  id                     String    @id @default(cuid())
+  email                  String    @unique
+  firstName              String?
+  lastName               String?
+  organisation           String?
+  roleTitle              String?
+  consentBasis           String                     // express | inferred_rfq | inferred_business | deemed_published
+  consentSource          String                     // form_blog_footer | form_post_inline | rfq_opt_in | manual_import | api
+  consentTimestamp       DateTime  @default(now())
+  consentIp              String?
+  consentNote            String?
+  mailchimpId            String?   @unique
+  tags                   String[]
+  status                 String    @default("pending") // pending | active | unsubscribed | bounced | complained
+  doubleOptInConfirmedAt DateTime?
+  unsubscribedAt         DateTime?
+  unsubscribeReason      String?
+  bouncedAt              DateTime?
+  bounceType             String?                    // soft | hard
+  complainedAt           DateTime?
+  lastEngagedAt          DateTime?
+  createdAt              DateTime  @default(now())
+
+  @@index([status])
+  @@index([tags])
+}
+
+model EmailCampaign {
+  id                  String    @id @default(cuid())
+  blogPostId          String?
+  type                String                         // weekly_digest_email | post_announcement | welcome_1 | welcome_2 | welcome_3 | cold_intro | reengagement | manual_broadcast
+  segmentTag          String
+  subjectLine         String
+  previewText         String
+  bodyMjml            String    @db.Text
+  bodyHtml            String    @db.Text
+  bodyText            String    @db.Text
+  status              String    @default("draft")    // draft | in_review | approved | scheduled | sent | failed
+  scheduledFor        DateTime?
+  sentAt              DateTime?
+  mailchimpCampaignId String?
+  recipientCount      Int?
+  deliveredCount      Int?
+  openCount           Int?
+  clickCount          Int?
+  unsubscribeCount    Int?
+  bounceCount         Int?
+  complaintCount      Int?
+  generatedBy         String?
+  reviewedBy          String?
+  approvedAt          DateTime?
+  createdAt           DateTime  @default(now())
+
+  @@index([status, scheduledFor])
+  @@index([type, sentAt])
+}
+
+model UnsubscribeToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}

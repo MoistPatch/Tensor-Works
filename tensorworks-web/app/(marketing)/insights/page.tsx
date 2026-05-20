@@ -3,6 +3,7 @@ import Link from "next/link";
 import { pageSEO } from "@/content/seo";
 import { prisma } from "@/lib/prisma";
 import PostCard from "@/components/insights/PostCard";
+import { SignupForm } from "@/components/newsletter/SignupForm";
 
 export const metadata: Metadata = {
   title: pageSEO.insights.title,
@@ -237,6 +238,20 @@ export default async function InsightsPage({ searchParams }: Props) {
               )}
             </>
           )}
+        </div>
+      </section>
+
+      <section className="py-16 bg-[var(--tw-bg,#F5F8FB)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-xl mx-auto text-center">
+            <h2 className="text-2xl font-bold text-[var(--tw-dark)] mb-2">
+              Stay current on AI hardware
+            </h2>
+            <p className="text-[var(--tw-mid)] mb-8">
+              Fortnightly insights on GPU infrastructure, procurement, and AI compute in Australia.
+            </p>
+            <SignupForm />
+          </div>
         </div>
       </section>
     </>
