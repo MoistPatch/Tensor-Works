@@ -23,26 +23,34 @@ export default function HardwarePage() {
           </p>
           <div className="flex gap-3 flex-wrap mt-6">
             {hardwareCategories.map((cat) => (
-              <a
+              <Link
                 key={cat.slug}
-                href={`#${cat.slug}`}
+                href={`/hardware/${cat.slug}`}
                 className="text-sm text-gray-300 hover:text-white border border-gray-600 hover:border-gray-400 px-3 py-1.5 rounded-full transition-colors"
               >
                 {cat.title}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
       {hardwareCategories.map((category) => (
-        <section key={category.slug} id={category.slug} className="py-16 border-b border-[var(--tw-border)] scroll-mt-16">
+        <section key={category.slug} id={category.slug} className="py-16 border-b border-[var(--tw-border)] scroll-mt-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-10">
-              <h2 className="text-2xl font-bold text-[var(--tw-dark)] mb-2">
-                {category.title}
-              </h2>
-              <p className="text-[var(--tw-mid)] max-w-2xl">{category.description}</p>
+            <div className="mb-10 flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-[var(--tw-dark)] mb-2">
+                  {category.title}
+                </h2>
+                <p className="text-[var(--tw-mid)] max-w-2xl">{category.description}</p>
+              </div>
+              <Link
+                href={`/hardware/${category.slug}`}
+                className="text-sm font-medium text-[var(--tw-blue)] hover:underline flex items-center gap-1 shrink-0"
+              >
+                Full specifications <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

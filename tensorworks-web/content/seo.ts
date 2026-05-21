@@ -74,6 +74,26 @@ export const pageSEO: Record<string, PageSEO> = {
     description:
       "Technical articles and guidance on AI compute infrastructure from the TensorWorks engineering team.",
   },
+  "hardware/training-systems": {
+    title: "Training Systems — TensorWorks Hardware",
+    description:
+      "NVIDIA H100 and H200 multi-GPU training servers and clusters. NVLink-connected, InfiniBand-capable, configured for long-run stability.",
+  },
+  "hardware/inference-servers": {
+    title: "Inference Servers — TensorWorks Hardware",
+    description:
+      "GPU inference servers for production LLM serving. H100 NVL and L40S configurations optimised for low-latency, high-throughput workloads.",
+  },
+  "hardware/workstations": {
+    title: "AI Workstations — TensorWorks Hardware",
+    description:
+      "High-performance AI workstations for researchers and engineers. RTX 6000 Ada configurations for local GPU compute.",
+  },
+  "hardware/networking": {
+    title: "Cluster Networking — TensorWorks Hardware",
+    description:
+      "InfiniBand and Ethernet fabric for multi-node GPU clusters. NVIDIA Quantum switches and Mellanox ConnectX NICs.",
+  },
   privacy: {
     title: "Privacy Policy — TensorWorks",
     description: "TensorWorks privacy policy.",

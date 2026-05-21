@@ -24,9 +24,7 @@ function checkRateLimit(ip: string): boolean {
 
 const signupSchema = z.object({
   email: z.string().email("Invalid email address"),
-  consent: z.literal(true, {
-    errorMap: () => ({ message: "Consent is required" }),
-  }),
+  consent: z.literal(true, { error: "Consent is required" }),
 });
 
 const GENERIC_RESPONSE = { message: "Check your email to confirm your subscription." };
