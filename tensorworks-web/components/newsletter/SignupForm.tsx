@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import { trackEvent } from "@/components/analytics/GoogleAnalytics";
 
 interface SignupFormProps {
   variant?: "default" | "compact";
@@ -50,6 +51,7 @@ export function SignupForm({ variant = "default" }: SignupFormProps) {
       }
 
       setState("success");
+      trackEvent("newsletter_subscribed", { source: variant });
     } catch {
       setErrorMessage("Network error. Please check your connection and try again.");
       setState("error");

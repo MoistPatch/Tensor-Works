@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 import { solutions } from "@/content/solutions";
 import { hardwareCategories } from "@/content/hardware";
+import { prisma } from "@/lib/prisma";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tensorworks.online";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -31,5 +32,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...solutionRoutes, ...hardwareRoutes];
+  // Blog posts — falls back to empty if DB is unreachable (e.g. CI build)
+  const posts = await prisma.blogPost
+    .findMany({
+      where: { status: "published" },
+      select: { slug: true, updatedAt: true, publishedAt: true },
+      orderBy: { publishedAt: "desc" },
+    })
+    .catch(() => []);
+
+  const postRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
+    url: `${BASE}/insights/${p.slug}`,
+    lastModified: p.updatedAt ?? p.publishedAt ?? now,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...solutionRoutes, ...hardwareRoutes, ...postRoutes];
 }

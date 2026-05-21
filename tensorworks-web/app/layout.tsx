@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { siteSEO } from "@/content/seo";
+import { CookieConsent } from "@/components/analytics/CookieConsent";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,6 +40,28 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "TensorWorks",
+  legalName: "TensorWorks Pty Ltd",
+  url: siteSEO.siteUrl,
+  logo: `${siteSEO.siteUrl}/og-default.png`,
+  description: siteSEO.defaultDescription,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Bendigo",
+    addressRegion: "VIC",
+    addressCountry: "AU",
+  },
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "ABN",
+    value: "84 544 119 830",
+  },
+  sameAs: ["https://www.linkedin.com/company/tensorworks"],
+};
+
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
 export default function RootLayout({
@@ -48,21 +71,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-AU" className={`${inter.variable} h-full`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col antialiased bg-[var(--background)] text-[var(--foreground)] font-sans">
         {children}
         <Toaster />
+        <CookieConsent />
       </body>
-      {gaId && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-            strategy="afterInteractive"
-          />
-          <Script id="ga-init" strategy="afterInteractive">
-            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${gaId}',{page_path:window.location.pathname});`}
-          </Script>
-        </>
-      )}
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }

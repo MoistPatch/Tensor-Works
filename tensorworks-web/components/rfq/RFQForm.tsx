@@ -17,6 +17,7 @@ import {
   type RFQFull,
 } from "@/lib/validations/rfq";
 import { AlertCircle } from "lucide-react";
+import { trackEvent } from "@/components/analytics/GoogleAnalytics";
 
 const STEPS = ["Your details", "Requirements", "Submit"];
 
@@ -92,6 +93,11 @@ export function RFQForm() {
         return;
       }
 
+      trackEvent("rfq_submitted", {
+        use_case: data.useCase,
+        budget_bracket: data.budgetBracket,
+        organisation_type: data.organisationType,
+      });
       router.push("/thank-you");
     } catch {
       setSubmitError("Network error. Please check your connection and try again.");

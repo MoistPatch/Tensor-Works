@@ -6,6 +6,7 @@ import { pageSEO } from "@/content/seo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, Clock, FileText } from "lucide-react";
+import { productJsonLd, jsonLdScript } from "@/lib/jsonLd";
 
 interface Props {
   params: Promise<{ category: string }>;
@@ -44,8 +45,16 @@ export default async function HardwareCategoryPage({ params }: Props) {
 
   const otherCategories = hardwareCategories.filter((c) => c.slug !== category);
 
+  const jsonLd = productJsonLd({
+    name: `${cat.title} — TensorWorks`,
+    description: cat.description,
+    category: cat.title,
+    path: `/hardware/${cat.slug}`,
+  });
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(jsonLd)} />
       <section className="bg-[var(--tw-dark)] text-white py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Link
