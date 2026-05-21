@@ -41,19 +41,27 @@ function TierBadge({ tier }: { tier: string }) {
 }
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
-  const posts = await prisma.blogPost.findMany({
-    where: { status: "published" },
-    select: { slug: true },
-  });
-  return posts.map((p) => ({ slug: p.slug }));
+  // Build-time DB access is optional — pages render on-demand if the database
+  // isn't reachable during the build (e.g. CI without DATABASE_URL).
+  try {
+    const posts = await prisma.blogPost.findMany({
+      where: { status: "published" },
+      select: { slug: true },
+    });
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await prisma.blogPost.findUnique({
-    where: { slug },
-    select: { title: true, summary: true, publishedAt: true, coverImageUrl: true },
-  });
+  const post = await prisma.blogPost
+    .findUnique({
+      where: { slug },
+      select: { title: true, summary: true, publishedAt: true, coverImageUrl: true },
+    })
+    .catch(() => null);
 
   if (!post) {
     return { title: "Article not found — TensorWorks" };
@@ -79,9 +87,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function InsightPostPage({ params }: Props) {
   const { slug } = await params;
 
-  const post = await prisma.blogPost.findUnique({
-    where: { slug },
-  });
+  const post = await prisma.blogPost
+    .findUnique({
+      where: { slug },
+    })
+    .catch(() => null);
 
   if (!post || post.status !== "published") {
     notFound();

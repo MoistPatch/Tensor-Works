@@ -236,7 +236,7 @@ export async function getCampaignReport(campaignId: string): Promise<{
   const client = getClient();
 
   try {
-    const report = (await (client.reports as any).getCampaignReport(
+    const report = (await (client as any).reports.getCampaignReport(
       campaignId
     )) as any;
 

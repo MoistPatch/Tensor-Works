@@ -38,21 +38,25 @@ function TierBadge({ tier }: { tier: string }) {
 export default async function RelatedPosts({ currentSlug, tags }: RelatedPostsProps) {
   if (!tags || tags.length === 0) return null;
 
-  const posts = await prisma.blogPost.findMany({
-    where: {
-      status: "published",
-      tags: { hasSome: tags },
-      slug: { not: currentSlug },
-    },
-    orderBy: { publishedAt: "desc" },
-    take: 3,
-    select: {
-      slug: true,
-      title: true,
-      tier: true,
-      publishedAt: true,
-    },
-  });
+  const posts = await prisma.blogPost
+    .findMany({
+      where: {
+        status: "published",
+        tags: { hasSome: tags },
+        slug: { not: currentSlug },
+      },
+      orderBy: { publishedAt: "desc" },
+      take: 3,
+      select: {
+        slug: true,
+        title: true,
+        tier: true,
+        publishedAt: true,
+      },
+    })
+    .catch(() => []);
+
+  if (posts.length === 0) return null;
 
   if (posts.length === 0) return null;
 
