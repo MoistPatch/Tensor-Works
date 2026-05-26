@@ -86,8 +86,8 @@ export default async function InsightsPage({ searchParams }: Props) {
         readingTimeMin: true,
         publishedAt: true,
       },
-    }),
-    prisma.blogPost.count({ where }),
+    }).catch(() => []),
+    prisma.blogPost.count({ where }).catch(() => 0),
   ]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);

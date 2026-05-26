@@ -1,68 +1,107 @@
-# Setup
+# Operations Setup
 
-## Prerequisites
+Step-by-step setup for every third-party service the site depends on. Follow in order — later steps reference earlier values.
 
-- Node.js 20+
-- pnpm 9+
-- PostgreSQL 15+
+## 1. Domain and DNS
 
-## Local development
+- Register `tensorworks.online` (or your domain) with your preferred registrar
+- Point DNS at Netlify per Netlify's "Add a custom domain" docs
+- Enable HTTPS in **Netlify → Domain management → HTTPS**
 
-```bash
-# 1. Install dependencies
-pnpm install
+## 2. PostgreSQL
 
-# 2. Copy env file and fill in values
-cp .env.example .env.local
+Pick a managed Postgres provider that supports a connection string and SSL:
 
-# 3. Generate Prisma client
-pnpm prisma generate
+- **Neon** (recommended for low cost) — `https://neon.tech`
+- **Supabase** — `https://supabase.com` (free tier available)
+- **AWS RDS / Google Cloud SQL** — for larger scale
 
-# 4. Run database migrations
-pnpm prisma migrate dev
-
-# 5. Start dev server
-pnpm dev
-```
-
-The app is available at `http://localhost:3000`.
-
-## Environment variables
-
-See `.env.example` for all required variables with descriptions.
-
-The minimum set for local dev:
-
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `RESEND_API_KEY` | Resend API key (use `re_dev_placeholder` for dev with no emails) |
-| `HUBSPOT_API_KEY` | HubSpot private app token |
-| `HUBSPOT_PORTAL_ID` | HubSpot portal/account ID |
-| `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret (use `1x0000000000000000000000000000000AA` for always-pass in dev) |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key (use `1x00000000000000000000AA` for dev) |
-| `JWT_SECRET` | Min 32-character random string |
-| `ADMIN_EMAILS` | Comma-separated list of admin email addresses |
-| `NEXT_PUBLIC_SITE_URL` | Full base URL, e.g. `http://localhost:3000` |
-
-## Database setup
-
-The schema is in `prisma/schema.prisma`. Connection URL is configured in `prisma.config.ts` (loaded from `DATABASE_URL`).
+Create a database, copy the connection string into `DATABASE_URL`. Run migrations from a dev machine:
 
 ```bash
-# Apply migrations to a fresh database
-pnpm prisma migrate deploy
-
-# Open Prisma Studio
-pnpm prisma studio
+DATABASE_URL=<prod-url> pnpm dlx prisma migrate deploy
 ```
 
-## Admin access
+## 3. Resend (transactional email)
 
-Admin panel is at `/admin`. Authentication is magic-link only.
+1. Create account at `https://resend.com`
+2. Add and verify your sending domain (`tensorworks.online`)
+3. Add the DNS records Resend provides (SPF, DKIM)
+4. Generate an API key under **API Keys**
+5. Set `RESEND_API_KEY`, `FROM_EMAIL=sales@tensorworks.online`, `NOTIFICATION_EMAIL=sam@tensorworks.online,sales@tensorworks.online`
 
-1. Set `ADMIN_EMAILS` to your email address in `.env.local`
-2. Visit `/admin/auth/login`
-3. Enter your email — a link will be logged to the dev console (Resend not required locally)
+## 4. HubSpot CRM
 
-To see the magic link without a real Resend key, temporarily add a `console.log(token)` to `lib/auth.ts:issueMagicLink` during development.
+1. Create a HubSpot account (free tier OK)
+2. Settings → Integrations → Private apps → Create
+3. Scopes required: `crm.objects.contacts.read/write`, `crm.objects.deals.read/write`
+4. Copy the token into `HUBSPOT_API_KEY`
+5. Find your portal ID under Settings → Account & Billing — `HUBSPOT_PORTAL_ID`
+
+## 5. Cloudflare Turnstile
+
+1. Cloudflare dashboard → Turnstile → Add site
+2. Domain: `tensorworks.online` (and any preview subdomains)
+3. Widget mode: Managed
+4. Copy site key → `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+5. Copy secret key → `TURNSTILE_SECRET_KEY`
+
+## 6. Mailchimp (newsletter)
+
+1. Create Mailchimp account
+2. Audience → Create new audience (e.g. "TensorWorks Insights")
+3. Copy audience ID → `MAILCHIMP_AUDIENCE_ID`
+4. Account → Extras → API keys → Create → `MAILCHIMP_API_KEY`
+5. Server prefix is the suffix of the API key (e.g. `us21`) → `MAILCHIMP_SERVER_PREFIX`
+6. Verify sending domain (same DKIM record as Resend can be reused per domain)
+7. Run `pnpm mailchimp:setup` to create segment tags and the welcome journey
+8. Configure webhook: Audience → Settings → Webhooks → New webhook
+   - URL: `https://tensorworks.online/api/mailchimp/webhook?secret=<MAILCHIMP_WEBHOOK_SECRET>`
+   - Events: Subscribes, Unsubscribes, Cleaned, Profile updates, Campaign
+
+## 7. Google Analytics 4 (optional)
+
+1. Create GA4 property at `https://analytics.google.com`
+2. Web data stream for `tensorworks.online`
+3. Copy measurement ID (`G-XXXXXXX`) → `NEXT_PUBLIC_GA_ID`
+4. The site loads GA only after the cookie consent banner is accepted
+
+## 8. Google Search Console
+
+1. Add `tensorworks.online` as a property at `https://search.google.com/search-console`
+2. Verify via DNS TXT record
+3. Submit sitemap: `https://tensorworks.online/sitemap.xml`
+
+## 9. Anthropic API (worker only)
+
+Required only if you deploy the content generation worker.
+
+1. Create account at `https://console.anthropic.com`
+2. Settings → API keys → Create → `ANTHROPIC_API_KEY`
+3. Set a billing limit
+4. `MONTHLY_AI_BUDGET_AUD=500` in worker env (worker halts when exceeded)
+
+## 10. Backup storage (S3-compatible)
+
+Required only if running the worker's consent audit export job.
+
+- Backblaze B2 (cheapest) or AWS S3
+- Create bucket, generate access key/secret
+- Set `BACKUP_S3_ENDPOINT`, `BACKUP_S3_BUCKET`, `BACKUP_S3_ACCESS_KEY`, `BACKUP_S3_SECRET_KEY`
+
+## 11. Uptime monitoring
+
+- UptimeRobot or BetterUptime
+- HTTP GET check: `https://tensorworks.online/api/health`
+- Interval: 5 minutes
+- Alert: SMS + email to operator
+
+## Initial content launch checklist
+
+- [ ] All env vars populated in Netlify dashboard
+- [ ] Database migrations applied
+- [ ] First Mailchimp campaign sent to internal test list
+- [ ] RFQ form submission test → HubSpot contact + deal created
+- [ ] Newsletter signup test → double opt-in email received and confirmed
+- [ ] Health check returns 200
+- [ ] Sitemap reachable and submitted to Search Console

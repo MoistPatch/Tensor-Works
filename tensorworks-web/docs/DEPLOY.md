@@ -1,81 +1,121 @@
 # Deployment
 
-## Production stack
+The TensorWorks site is deployed to Netlify from the `main` branch.
 
-| Layer | Technology |
-|---|---|
-| Runtime | Node.js 20 LTS |
-| Framework | Next.js 16 (standalone output) |
-| Database | PostgreSQL 15 |
-| Reverse proxy | Caddy 2 (automatic HTTPS) |
-| Process manager | Docker Compose |
+## Architecture
 
-## Quick deploy
+| Component | Location | Notes |
+|-----------|----------|-------|
+| Marketing site (Next.js 16) | Netlify | This package — `tensorworks-web/` |
+| Worker (BullMQ jobs) | Separate VPS | `worker/` package, see `docs/WORKER.md` |
+| PostgreSQL | Managed (Neon / Supabase / RDS) | Connection string in `DATABASE_URL` |
+| Redis | Managed (Upstash) or worker VPS | Only consumed by worker — not by Netlify |
+| Email | Resend (transactional) + Mailchimp (marketing) | |
+| CRM | HubSpot | |
+| Captcha | Cloudflare Turnstile | |
+| DNS | Cloudflare or registrar | A record points to Netlify |
 
-```bash
-# On the server
-git clone <repo> tensorworks-web
-cd tensorworks-web/tensorworks-web
+## Netlify configuration
 
-# Copy and fill in production env
-cp .env.example .env.production
-nano .env.production
+`/netlify.toml` at the repo root defines the build:
 
-# Build and start
-docker compose up -d --build
+```toml
+[build]
+  base    = "tensorworks-web"
+  command = "pnpm build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 ```
 
-## Required environment variables for production
+`pnpm build` runs `prisma generate && next build`. The Prisma client is generated against the schema regardless of whether `DATABASE_URL` resolves — `prisma.config.ts` falls back to a dummy URL so CI builds work without a live DB.
 
-All variables in `.env.example` are required. Key differences from dev:
+## Environment variables
 
-- `DATABASE_URL` — PostgreSQL connection string to your production database
-- `NEXT_PUBLIC_SITE_URL` — Your actual domain, e.g. `https://tensorworks.com.au`
-- `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` — Production Turnstile keys from Cloudflare dashboard
-- `RESEND_API_KEY` — Live Resend key
-- `FROM_EMAIL` — Must be a verified sender domain in Resend
-- `HUBSPOT_API_KEY` — Production private app token with contacts + deals scope
-- `JWT_SECRET` — Min 32-char random string, e.g. `openssl rand -hex 32`
-- `ADMIN_EMAILS` — Production admin email(s)
-- `NEXT_PUBLIC_GA_ID` — Google Analytics measurement ID (optional)
+Set every variable from `.env.example` in **Site settings → Environment variables** in the Netlify dashboard.
+
+Required at build time:
+- `NEXT_PUBLIC_SITE_URL` — `https://tensorworks.online`
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` — Cloudflare Turnstile public key
+- `NEXT_PUBLIC_GA_ID` — GA4 measurement ID (optional; if unset, GA does not load)
+
+Required at runtime (server-side routes / API):
+- `DATABASE_URL` — PostgreSQL connection string
+- `RESEND_API_KEY` — Resend transactional email
+- `FROM_EMAIL`, `NOTIFICATION_EMAIL`
+- `HUBSPOT_API_KEY`, `HUBSPOT_PORTAL_ID`
+- `TURNSTILE_SECRET_KEY` — Cloudflare Turnstile server-side secret
+- `MAILCHIMP_API_KEY`, `MAILCHIMP_SERVER_PREFIX`, `MAILCHIMP_AUDIENCE_ID` (if email marketing is in use)
+- `MAILCHIMP_WEBHOOK_SECRET` — random string matching the Mailchimp webhook URL query param
+
+Optional:
+- `COMPANY_NAME`, `COMPANY_ABN`, `COMPANY_ADDRESS` — override defaults
+
+## DNS
+
+Point your domain at Netlify per their docs. Netlify provisions Let's Encrypt TLS automatically. Force HTTPS in **Domain management → HTTPS**.
+
+## First deploy
+
+1. Push to `main` — Netlify auto-detects the commit and starts a build
+2. Watch the build log for the route table; confirm `/` is present (not just sub-routes)
+3. Hit `https://tensorworks.online/api/health` — should return 200 with database `ok`
+4. Hit `https://tensorworks.online/sitemap.xml` — should include all 16+ URLs plus any published posts
+5. Hit `https://tensorworks.online/robots.txt` — should reference the production sitemap URL
+
+## Subsequent deploys
+
+```bash
+git push origin main
+```
+
+Netlify rebuilds. Rollback via **Deploys → click previous deploy → Publish deploy**.
 
 ## Database migrations
 
-Run migrations before starting the app:
+Run from a dev machine pointed at production `DATABASE_URL`:
 
 ```bash
-DATABASE_URL=<prod_url> pnpm prisma migrate deploy
+DATABASE_URL=<prod-url> pnpm dlx prisma migrate deploy
 ```
 
-Or inside Docker:
-
-```bash
-docker compose exec web pnpm prisma migrate deploy
-```
-
-## Caddy configuration
-
-Place `Caddyfile` in the project root. Example:
-
-```caddyfile
-tensorworks.com.au {
-    reverse_proxy web:3000
-    encode zstd gzip
-}
-
-www.tensorworks.com.au {
-    redir https://tensorworks.com.au{uri} permanent
-}
-```
+Run inside a connection pool maintenance window if the migration is non-trivial.
 
 ## Health check
 
-The app does not expose a `/health` endpoint yet. Monitor `/api/rfq` with a HEAD request — a 405 response confirms the server is alive.
-
-## Rollback
-
-```bash
-# Roll back to previous image
-docker compose down
-docker compose up -d --no-build <previous-tag>
+`GET /api/health` returns:
+```json
+{
+  "status": "ok",
+  "timestamp": "...",
+  "checks": {
+    "app": { "status": "ok" },
+    "database": { "status": "ok", "latencyMs": 12 },
+    "redis": { "status": "skipped" }
+  }
+}
 ```
+
+`status` becomes `degraded` and the HTTP code becomes 503 if any check fails. Wire to your uptime monitor (e.g. UptimeRobot, BetterUptime) with a 5-minute interval.
+
+## Worker deployment
+
+The worker (BullMQ-based content generation, email sends, news monitoring) does NOT run on Netlify — Netlify functions are stateless and can't run BullMQ. Deploy the worker separately. See `docs/WORKER.md`.
+
+## Troubleshooting
+
+**Build fails with `Cannot find module '@prisma/client'`**
+→ `pnpm install` didn't run cleanly. Check the Netlify build log; usually a `pnpm-lock.yaml` conflict.
+
+**Build fails with TypeScript error in `lib/mailchimp.ts`**
+→ `@mailchimp/mailchimp_marketing` not installed; run `pnpm install` locally and commit lockfile.
+
+**TLS errors after DNS cutover**
+→ Netlify TLS provision can take 5–10 minutes; check **Domain management → HTTPS** for status.
+
+**Routes return 404 immediately after deploy**
+→ Check the **Deploys** tab for the published deploy; you may be looking at a deploy preview URL.
+
+**`/admin` returns 200**
+→ Should never happen; the admin route was deleted. If it appears, check git log for an accidental reintroduction.
